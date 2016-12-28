@@ -1,0 +1,7 @@
+h1 {
+	font-size: 2em;
+}
+div.infoRow {
+	border: 5px solid;
+	border-radius: 2px;
+}
