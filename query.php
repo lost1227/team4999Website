@@ -1,8 +1,8 @@
 <?php session_start(); ?>
 <?php
-echo($_SESSION["DB"]);
 if ($_SESSION["loggedIn"]){
 	$data = $_SESSION["DB"]->query("SELECT * FROM robots;");
+	echo($data);
 	if($data->num_rows > 0){
 		while($row = $data->fetch_assoc()) {
 			echo('<div class="infoRow">');
