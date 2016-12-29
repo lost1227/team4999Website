@@ -30,7 +30,7 @@ function getSys() {
 	}
 	request.open(GET,query.php,true);
 	loop = window.setTimeout(function() {
-		request.open(GET,query.php,true);
+		request.open("GET","query.php",true);
 	}, 5000);
 }
 </script>
