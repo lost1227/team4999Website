@@ -1,5 +1,6 @@
 <?php session_start(); ?>
 <?php
+echo($_SESSION["DB"]);
 if ($_SESSION["loggedIn"]){
 	$data = $_SESSION["DB"]->query("SELECT * FROM robots;");
 	if($data->num_rows > 0){
