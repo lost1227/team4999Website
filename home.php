@@ -29,10 +29,10 @@ function getSys() {
 			document.getElementById("container").innerHTML = this.responseText;
 		}
 	}
-	request.open("GET","query.php",true);
-	loop = window.setTimeout(function() {
+	request.open("GET","/query.php",false);
+	loop = window.setInterval(function() {
 		console.log("request sent");
-		request.open("GET","query.php",true);
+		request.open("GET","/query.php",true);
 	}, 5000);
 }
 </script>
