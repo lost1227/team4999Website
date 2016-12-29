@@ -20,6 +20,7 @@ if (!$_SESSION["loggedIn"]) {
 ?>
 </style>
 <script>
+var loop;
 function getSys() {
 	var request = new HMLHttpRequest();
 	reequest.onreadystatechange = function() {
@@ -27,9 +28,11 @@ function getSys() {
 			document.getElementById("container").innerHTML = this.responseText;
 		}
 	}
-	var loop = window.setTimeout(function() {
+	request.open(GET,query.php,true);
+	loop = window.setTimeout(function() {
 		request.open(GET,query.php,true);
-	}, 30000);
+	}, 5000);
+}
 </script>
 </head>
 <body onload="getSys()">
