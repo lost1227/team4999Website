@@ -24,12 +24,14 @@ var loop;
 function getSys() {
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
+		if (this.readyState == this.DONE && this.status == 200) {
+			console.log("answer recieved");
 			document.getElementById("container").innerHTML = this.responseText;
 		}
 	}
 	request.open("GET","query.php",true);
 	loop = window.setTimeout(function() {
+		console.log("request sent");
 		request.open("GET","query.php",true);
 	}, 5000);
 }
