@@ -1,7 +1,17 @@
-h1 {
+body {
+	background: linear-gradient(to right,#F0F0F0,#F7F7F7,#FAFAFA,#F7F7F7,#F0F0F0);
+}
+#title {
 	font-size: 2em;
+	text-align: center;
+	background-color: #FDFDFD;
+	border-radius: 5px;
+	padding: 10px 0px;
 }
 div.infoRow {
-	border: 5px solid;
+	border: 2px solid #DEDEDE;
 	border-radius: 2px;
+	padding: 5px 5px 5px 15px;
+}
+p {
 }
