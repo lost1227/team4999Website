@@ -13,9 +13,10 @@ function clean($data) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$user = clean($_POST["user"]);
 	$pass = clean($_POST["pass"]);
-	$_SESSION["DB"] = new mysqli("localhost",$user,$pass,"frcteam4999");
+	$DB = new mysqli("localhost",$user,$pass,"frcteam4999");
 	$_SESSION["user"] = $user;
-	if (!$_SESSION["DB"]->connect_error) {
+	$_SESSION["pass"] = $pass;
+	if (!$DB->connect_error) {
 		$_SESSION["loggedIn"] = True;
 	}
 }
@@ -26,8 +27,8 @@ if ($_SESSION["loggedIn"]) {
 </head>
 <body>
 <?php
-if ($_SESSION["DB"]->connect_error) {
-	echo('<p>' . $_SESSION["DB"]->connect_error . '</p>');
+if ($DB->connect_error) {
+	echo('<p>' . $DB->connect_error . '</p>');
 }
 ?>
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">

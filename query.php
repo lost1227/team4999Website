@@ -1,7 +1,8 @@
 <?php session_start(); ?>
 <?php
 if ($_SESSION["loggedIn"]){
-	$data = $_SESSION["DB"]->query("SELECT * FROM robots;");
+	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
+	$data = $DB->query("SELECT * FROM robots;");
 	echo($data->num_rows);
 	if($data->num_rows > 0){
 		while($row = $data->fetch_assoc()) {
