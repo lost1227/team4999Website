@@ -13,7 +13,8 @@ function clean($data) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$user = clean($_POST["user"]);
 	$pass = clean($_POST["pass"]);
-	$_SESSION["DB"] = new mysqli("127.0.0.1", $user, $pass, frcteam4999);
+	$_SESSION["DB"] = new mysqli("localhost", $user, $pass, "frcteam4999");
+	$_SESSION["user"] = $user;
 	if (!$_SESSION["DB"]->connect_error) {
 		$_SESSION["loggedIn"] = True;
 	}

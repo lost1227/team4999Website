@@ -35,6 +35,7 @@ function getSys() {
 <body onload="getSys()">
 <div id="normal">
 <h1 id="title">Scouting</h1>
+<p>Logged in as <?php echo($_SESSION["user"]); ?></p>
 <div id="container">
 <!--<div class="infoRow">
 	<p>Team: Team1</p>
