@@ -22,7 +22,7 @@ if (!$_SESSION["loggedIn"]) {
 <script>
 var loop;
 function getSys() {
-	var request = new HMLHttpRequest();
+	var request = new XMLHttpRequest();
 	reequest.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			document.getElementById("container").innerHTML = this.responseText;
