@@ -8,7 +8,7 @@ function clean($data) {
   $data = trim($data);
   $data = stripslashes($data);
   $data = htmlspecialchars($data);
-  return $data
+  return $data;
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$user = clean($_POST["user"]);
