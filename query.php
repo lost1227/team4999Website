@@ -9,6 +9,7 @@ if ($_SESSION["loggedIn"]){
 			echo('<div class="infoRow">');
 				echo('<p>Team: ' . $row["TeamNum"] . '</p>');
 				echo('<p>Drive System: ' . $row["DrvSys"] . '</p>');
+			echo('</div>');
 		}
 	} else {
 		echo('<p>No results!</p>');

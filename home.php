@@ -24,12 +24,13 @@ var loop;
 function getSys() {
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
+		console.log("readystate changed");
 		if (this.readyState == this.DONE && this.status == 200) {
 			console.log("answer recieved");
 			document.getElementById("container").innerHTML = this.responseText;
 		}
 	}
-	request.open("GET","/query.php",false);
+	request.open("GET","/query.php",true);
 	loop = window.setInterval(function() {
 		console.log("request sent");
 		request.open("GET","/query.php",true);
