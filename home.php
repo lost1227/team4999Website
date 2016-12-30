@@ -22,34 +22,27 @@ if (!$_SESSION["loggedIn"]) {
 <script>
 var request = new XMLHttpRequest();
 request.onreadystatechange = function() {
-	console.log("readystate changed");
+	//console.log("readystate changed");
 	if (this.readyState == this.DONE && this.status == 200) {
-		console.log("answer recieved");
+		//console.log("answer recieved");
 		document.getElementById("container").innerHTML = this.responseText;
 	}
 };
 request.open("GET","/query.php",true);
 request.send();
 var loop = window.setInterval(function() {
-	console.log("request sent");
+	//console.log("request sent");
 	request.open("GET","/query.php",true);
 	request.send();
 }, 5000);
 </script>
 </head>
-<body onload="getSys()">
+<body>
 <div id="normal">
 <h1 id="title">Scouting</h1>
-<p>Logged in as <?php echo($_SESSION["user"]); ?></p>
+<!--<p>Logged in as <?php echo($_SESSION["user"]); ?></p>-->
 <div id="container">
-<!--<div class="infoRow">
-	<p>Team: Team1</p>
-	<p>Drive System: sampleDriveSystem</p>
-</div>
-<div class="infoRow">
-	<p>Team: Team2</p>
-	<p>Drive System: sampleDriveSystem</p>
-</div>-->
+
 </div>
 </div>
 <div id="noLogin" <?php if ($_SESSION["loggedIn"]) { echo('style="display: none;"'); } ?>>
