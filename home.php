@@ -42,7 +42,9 @@ var loop = window.setInterval(function() {
 <h1 id="title">Scouting</h1>
 <!--<p>Logged in as <?php echo($_SESSION["user"]); ?></p>-->
 <div id="container">
-
+</div>
+<div id="login">
+<a href="logout.php"><?php echo($_SESSION["user"); ?></a>
 </div>
 </div>
 <div id="noLogin" <?php if ($_SESSION["loggedIn"]) { echo('style="display: none;"'); } ?>>
