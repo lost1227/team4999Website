@@ -28,7 +28,7 @@ if(isset($_GET["team"])){
 }
 echo('<form action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post">');
 foreach($columns as $column) {
-	if(!($column["Field"] == "Team" and isset($team)){
+	if(!($column["Field"] == "Team" and isset($team))){
 		if($column["Type"] == "text" or strpos($column["Type"], 'int') !== false) {
 			echo('<p>'.$column["Field"].'</p><br>
 				<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
