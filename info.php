@@ -10,7 +10,7 @@ if ($_SESSION["loggedIn"]){
 } else {
 	$DB = new mysqli("localhost","ro","","frcteam4999");
 }
-team = str_replace('_',' ',$_GET["team"]);
+$team = str_replace('_',' ',$_GET["team"]);
 $data = $DB->query('SELECT * FROM robots WHERE Team = "'.$team.'";');
 	if($data->num_rows > 0){
 		while($row = $data->fetch_assoc()) {
