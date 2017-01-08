@@ -34,6 +34,8 @@ var loop = window.setInterval(function() {
 <?php
 if($_SESSION["loggedIn"]){
 	echo('<a href="/edit.php">Edit</a>');
+} else {
+	echo('<a href="/login.php">Log In</a>');
 }
 ?>
 <div id="login">
