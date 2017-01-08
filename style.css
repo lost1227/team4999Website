@@ -1,5 +1,6 @@
 body {
-	background: linear-gradient(to right,#F0F0F0,#F7F7F7,#FAFAFA,#F7F7F7,#F0F0F0);
+	/*background: linear-gradient(to right,#F0F0F0,#F7F7F7,#FAFAFA,#F7F7F7,#F0F0F0);*/
+	background: linear-gradient(0deg,black,orange,brown,red,green);
 }
 #title {
 	font-size: 2em;

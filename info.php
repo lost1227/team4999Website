@@ -10,13 +10,13 @@ if ($_SESSION["loggedIn"]){
 } else {
 	$DB = new mysqli("localhost","ro","","frcteam4999");
 }
-$team = $_GET["team"];
+team = str_replace('_',' ',$_GET["team"]);
 $data = $DB->query('SELECT * FROM robots WHERE Team = "'.$team.'";');
 	if($data->num_rows > 0){
 		while($row = $data->fetch_assoc()) {
 			foreach($row as $key => $value) {
 				if ($key == "Team") {
-					echo('<a href = /info.php?team='.$value.'>');
+					echo('<a href = /edit.php?team='.str_replace(' ','_',$value).'>');
 				}
 				echo('<p>'.$key.': '.$value.'</p>');
 				if ($key == "Team") {
