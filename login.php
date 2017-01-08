@@ -19,11 +19,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	if (!$DB->connect_error) {
 		$_SESSION["loggedIn"] = True;
 	}
-	if (isset($_POST["redirect"])) {
-		header('Location: https://frcteam4999/jordanpowers.net/'.clean($_POST["redirect"]));
-	}
 }
 if ($_SESSION["loggedIn"]) {
+	if (isset($_POST["redirect"])) {
+		header('Location: https://frcteam4999/jordanpowers.net/'.clean($_POST["redirect"]));
+		exit();
+	}
 	header( 'Location: https://frcteam4999.jordanpowers.net/home.php');
 }
 ?>
