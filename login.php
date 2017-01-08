@@ -19,6 +19,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	if (!$DB->connect_error) {
 		$_SESSION["loggedIn"] = True;
 	}
+	if (isset($_POST["redirect"])) {
+		header('Location: https://frcteam4999/jordanpowers.net/'.clean($_POST["redirect"]));
+	}
 }
 if ($_SESSION["loggedIn"]) {
 	header( 'Location: https://frcteam4999.jordanpowers.net/home.php');
@@ -36,6 +39,11 @@ if ($DB->connect_error) {
 	<input type="text" name="user"><br>
 	<p>Password:</p><br>
 	<input type="password" name="pass"><br>
+	<?php
+	if(isset($_GET['redirect'])){
+		echo('<input type="hidden" name="redirect" value="'$_GET["redirect"]'">');
+	}
+	?>
 	<input type="submit" value="Submit">
 </form>
 </body>
