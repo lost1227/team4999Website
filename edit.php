@@ -8,7 +8,7 @@
 if ($_SESSION["loggedIn"]){
 	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
 } else {
-	header( 'Location: https://frcteam4999.jordanpowers.net/login.php');
+	header( 'Location: https://frcteam4999.jordanpowers.net/login.php?redirect=edit.php');
 	exit();
 }
 #get columns into an associative array
