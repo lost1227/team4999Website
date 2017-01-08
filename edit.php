@@ -20,7 +20,7 @@ if(isset($_GET["team"])){
 	$team = $_GET["team"];
 	$data = $DB->query('SELECT * FROM robots WHERE Team = "'.$team.'";');
 	if($data->num_rows > 0){
-		$row = $data->fetch_assoc())
+		$row = $data->fetch_assoc();
 	}
 }
 echo('<form action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post">');
