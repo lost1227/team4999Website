@@ -15,7 +15,7 @@ $data = $DB->query('SELECT * FROM robots WHERE Team = "'.$team.'";');
 	if($data->num_rows > 0){
 		while($row = $data->fetch_assoc()) {
 			foreach($row as $key => $value) {
-				$key = str_replace('_',' ',$row);
+				$key = str_replace('_',' ',$key);
 				if ($key == "Team") {
 					echo('<a href = /edit.php?team='.str_replace(' ','_',$value).'>');
 				}
