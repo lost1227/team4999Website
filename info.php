@@ -5,7 +5,11 @@
 <body>
 </body>
 <?php
-$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
+if ($_SESSION["loggedIn"]){
+	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
+} else {
+	$DB = new mysqli("localhost","ro","","frcteam4999");
+}
 $team = $_GET["team"];
 $data = $DB->query('SELECT * FROM robots WHERE Team = "'.$team.'";');
 	if($data->num_rows > 0){
