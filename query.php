@@ -11,6 +11,7 @@ if($data->num_rows > 0){
 	while($row = $data->fetch_assoc()) {
 		echo('<div class="infoRow">');
 		foreach($row as $key => $value) {
+			str_replace('_',' ',$key);
 			if ($key == "Team") {
 				echo('<a href = /info.php?team='.$value.'>');
 			}
