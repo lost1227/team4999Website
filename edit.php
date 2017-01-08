@@ -31,7 +31,7 @@ if(isset($_GET["team"])){
 }
 echo('<form action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post">');
 foreach($columns as $column) {
-	str_replace('_',' ',$column["Field"]);
+	$column["Field"] = str_replace('_',' ',$column["Field"]);
 	if(!($column["Field"] == "Team" and isset($team))){
 		if($column["Type"] == "text" or strpos($column["Type"], 'int') !== false) {
 			echo('<p>'.$column["Field"].':</p><br>
