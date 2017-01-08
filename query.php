@@ -8,7 +8,13 @@ if ($_SESSION["loggedIn"]){
 		while($row = $data->fetch_assoc()) {
 			echo('<div class="infoRow">');
 			foreach($row as $key => $value) {
+				if ($key == "Team") {
+					echo('<a href = /info.php?team='.$value.'>');
+				}
 				echo('<p>'.$key.': '.$value.'</p>');
+				if ($key == "Team") {
+					echo('</a>');
+				}
 			}
 			echo('</div>');
 		}
