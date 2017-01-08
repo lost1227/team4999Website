@@ -21,13 +21,18 @@ if(isset($_GET["team"])){
 	$data = $DB->query('SELECT * FROM robots WHERE Team = "'.$team.'";');
 	if($data->num_rows > 0){
 		$row = $data->fetch_assoc();
+	} else {
+		unset($_GET["team"]);
 	}
+	echo('<h1>'.$team.'</h1>');
 }
 echo('<form action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post">');
 foreach($columns as $column) {
-	if($column["Type"] == "text" or strpos($column["Type"], 'int') !== false) {
-		echo('<p>'.$column["Field"].'</p><br>
-			<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
+	if(!($column["Type"] == "Team" and isset($_GET["team"]))){
+		if($column["Type"] == "text" or strpos($column["Type"], 'int') !== false) {
+			echo('<p>'.$column["Field"].'</p><br>
+				<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
+		}
 	}
 }
 echo('<input type="submit" value="Submit"></form>');
