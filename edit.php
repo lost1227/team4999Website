@@ -15,7 +15,10 @@ $columns = array();
 while($row = $columnData->fetch_assoc()) {
 	$columns[] = $row;
 }
-
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	echo('<script>window.alert("This is still in progress.</script>');
+	# Deal with the form submission here
+}
 if(isset($_GET["team"])){
 	$team = $_GET["team"];
 	$data = $DB->query('SELECT * FROM robots WHERE Team = "'.$team.'";');
