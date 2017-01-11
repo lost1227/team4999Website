@@ -3,15 +3,6 @@
 <head>
 <title>Scouting website</title>
 <link rel="stylesheet" href="style.css">
-<style>
-#container {
-	width: 90%;
-	margin: auto;
-	background-color: #FDFDFD;
-	padding: 20px;
-	border-radius: 5px;
-}
-</style>
 <script>
 var request = new XMLHttpRequest();
 request.onreadystatechange = function() {
