@@ -31,7 +31,7 @@ if(isset($_GET["team"])){
 	} else {
 		unset($team);
 	}
-	echo('<h1>Team:'.$team.'</h1>');
+	echo('<h1>Team: '.$team.'</h1>');
 }
 #create the form
 echo('<form action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post">');
@@ -45,7 +45,7 @@ foreach($columns as $column) {
 				<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
 		}
 	} elseif ($column["Field"] == "Team" and isset($team)) {
-		echo('<input type="hidden" name="team" value="'.$team.'">');
+		echo('<input type="hidden" name="team" value="'.$row[$column["Field"]].'">');
 	}
 }
 echo('<input type="submit" value="Submit"></form>');
