@@ -41,13 +41,11 @@ if(isset($_GET["team"])){
 echo('<form action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post">');
 foreach($columns as $column) {
 	#remove underscores from column names
-	$column["Field"] = str_replace('_',' ',$column["Field"]);
+	$PrettyColumn = str_replace('_',' ',$column["Field"]);
 	#don't allow editing of established team number
 	if(!($column["Field"] == "Team" and isset($team))){
-		if($column["Type"] == "text" or strpos($column["Type"], 'int') !== false) {
-			echo('<p>'.$column["Field"].':</p><br>
-				<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
-		}
+		echo('<p>'.$PrettyColumn.':</p><br>
+			<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
 	} elseif ($column["Field"] == "Team" and isset($team)) {
 		echo('<input type="hidden" name="team" value="'.$row[$column["Field"]].'">');
 	}
