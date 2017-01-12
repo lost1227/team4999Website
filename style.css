@@ -148,7 +148,7 @@ div.infoRow:hover{
 }
 
 /*The logout box that appears in the corner of home.php when you are logged in*/
-div.login {
+#loginbox {
 	position:fixed;
 	bottom:5px;
 	left:5px;
@@ -159,7 +159,7 @@ div.login {
 }
 
 /*The login form at login.php*/
-form.login {
+#loginform {
 	margin: auto;
 	background-color:#E0E0E0;
 	border-radius: 5px;
