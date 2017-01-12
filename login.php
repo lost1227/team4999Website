@@ -43,7 +43,7 @@ if ($DB->connect_error) {
 	<p>Password:</p><br>
 	<input type="password" name="pass"><br>
 	<?php
-	if(isset($_GET['redirect'])){
+	if(isset($redirect)){
 		echo('<input type="hidden" name="redirect" value="'.$redirect.'">');
 	}
 	?>
