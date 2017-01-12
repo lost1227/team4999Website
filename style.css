@@ -24,6 +24,10 @@ body {
 	
 }
 
+#hamburger {
+	vertical-align: middle;
+}
+
 #title {
 	z-index: 999999;
 	position: fixed;
