@@ -12,9 +12,13 @@ if($data->num_rows > 0){
 		echo('<div class="infoRow">');
 		foreach($row as $key => $value) {
 			$key = str_replace('_',' ',$key);
-			echo('<a class="teamlink" href = /info.php?team='.str_replace(' ','_',$value).'>');
+			if($key == "Team"){
+				echo('<a class="teamlink" href = /info.php?team='.str_replace(' ','_',$value).'>');
+			}
 			echo('<p>'.$key.': '.$value.'</p>');
-			echo('</a>');
+			if($key == $row.count - 1){
+				echo('</a>');
+			}
 		}
 		echo('</div>');
 	}
