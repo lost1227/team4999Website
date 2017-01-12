@@ -23,7 +23,11 @@ while($row = $columnData->fetch_assoc()) {
 }
 #handle submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	
+	foreach($columns as $column) {
+		if($column["Field"]!="Team"] {
+			$DB->query('UPDATE robots SET '.$column["Field"].'="'.$_POST[$column["Field"]].'" WHERE Team = "'.$_POST["Team"].'";');
+		}
+	}
 }
 #check if creating a new entry, or editing an existing entry
 #creates an associative array the existing entry
@@ -47,7 +51,7 @@ foreach($columns as $column) {
 		echo('<p>'.$PrettyColumn.':</p><br>
 			<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
 	} elseif ($column["Field"] == "Team" and isset($team)) {
-		echo('<input type="hidden" name="team" value="'.$row[$column["Field"]].'">');
+		echo('<input type="hidden" name="Team" value="'.$row[$column["Field"]].'">');
 	}
 }
 echo('<input type="submit" value="Submit"></form>');
