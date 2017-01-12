@@ -24,7 +24,7 @@
 	</head>
 <body>
 	
-	<div id="hamburgermenu">
+	<div hidden id="hamburgermenu">
 		this is supposed to be hidden
 	</div>
 
