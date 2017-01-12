@@ -23,12 +23,17 @@
 		
 	</head>
 <body>
-	
-	<div hidden id="hamburgermenu">
-		this is supposed to be hidden
-	</div>
 
 	<h1 id="title">Scouting <img id="hamburger" src="images/hamburger.png" height="50" /></h1>
+	
+	<div hidden id="hamburgermenu">
+		<ul id="menuitems">
+			<li id="searchli">Search</li>
+			<li id="filterli">Filters</li>
+			<li id="addli">Add Robot</li>
+		</ul>
+	</div>
+	
 	<div id="container">
 	</div>
 	<?php
