@@ -17,13 +17,19 @@ body {
 }
 
 #container{
+	position:relative;
+	top: 80px;
 	background-color: transparent;
 	margin: 0px;
 	
 }
 
 #title {
-	font-size: 3em;
+	z-index: 999999;
+	position: fixed;
+	width: 100%;
+	
+	font-size: 50px;
 	text-align: center;
 	font-family: "StormFaze";
 	background-color: #9f01ff;
@@ -33,9 +39,7 @@ body {
 	color: #FFFFFF;
 	
 	margin: 0px;
-	
-    
-    
+	    
     box-shadow: 0px 10px 25px #55555544;
 }
 
