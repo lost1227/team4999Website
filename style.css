@@ -52,19 +52,49 @@ body {
 
 #hamburgermenu {
 	display: none;
-	z-index: 999999999999;
+	z-index: 99999;
 	background-color: #ffffff;
+	
 	position: fixed;
 	border-radius: 5px;
-	top: 90px;
+	top: 79px;
 	
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%)
+	margin: 0px;
+	padding: 0px;
 	
-	-moz-box-shadow:     0 0 15px #000000;
-	-webkit-box-shadow:  0 0 15px #000000;
-	box-shadow:          0px 10px 10px #55555566;
+	left: 25%;
+    width: 50%;
+	
+	
+	-moz-box-shadow:     0px 5px 20px #55555599;
+	-webkit-box-shadow:  0px 5px 20px #55555599;
+	box-shadow:          0px 5px 20px #55555599;
+}
+
+#menuitems {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+#menuitems li {
+	font-family: "StormFaze";
+	font-size: 20px;
+	display: block;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	border-top: 1px dashed #06ceff;
+
+
+}
+
+#menuitems li:hover {
+	display: block;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	background-color: #06ceff;
+	color: white;
 }
 
 #title {
@@ -126,4 +156,5 @@ div.infoRow:hover{
 	display: inline-block;
 	padding:1px 10px;
 }
+
 
