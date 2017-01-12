@@ -37,13 +37,6 @@
 	<div id="container">
 	</div>
 	<?php
-	if($_SESSION["loggedIn"]){
-		echo('<a href="/edit.php">Edit</a>');
-	} else {
-		echo('<a href="/login.php">Log In</a>');
-	}
-	?>
-	<?php
 	if($_SESSION["loggedIn"]) {
 		echo('<div id="login"><p style="margin:2px;"><a href="logout.php">Log Out: '.$_SESSION["user"].'</a></p></div>');
 	}
