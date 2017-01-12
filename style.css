@@ -1,19 +1,77 @@
+/*
+ * Our official blue color: #06ceff
+ * Our official purple color: #9f01ff
+ * Our official font: StormFaze
+ * Background image from: https://subtlepatterns.com
+ */
+
+@font-face{
+	font-family: "StormFaze";
+	src: url("fonts/stormfaze.ttf");
+}
+
 body {
-	/*background: linear-gradient(to right,#F0F0F0,#F7F7F7,#FAFAFA,#F7F7F7,#F0F0F0);*/
-	background: linear-gradient(0deg,black,orange,brown,red,green);
+	background-image: url("images/sneaker.png");
 }
+
+#container{
+	background-color: transparent;
+	background-attachment: fixed;
+}
+
 #title {
-	font-size: 2em;
+	font-size: 3em;
 	text-align: center;
+	font-family: "StormFaze";
 	background-color: #FDFDFD;
-	border-radius: 5px;
+	border-radius: 10px;
+	border: 1px solid #06ceff;
 	padding: 10px 0px;
+	
+	
+	
+	margin-left: 25px;
+	margin-right: 25px;
+	
+    background: -webkit-linear-gradient(#FDFDFD, #EEEEEE); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#FDFDFD, #EEEEEE); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#FDFDFD, #EEEEEE); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#FDFDFD, #EEEEEE); /* Standard syntax */
+    
+    box-shadow: 0px 10px 25px #55555544;
 }
+
+* {
+	font-family: "arial";
+}
+
 div.infoRow {
-	border: 2px solid #DEDEDE;
-	border-radius: 2px;
-	padding: 5px 5px 5px 15px;
+	border: 1px solid #06ceff;
+	border-radius: 10px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-right: 15px;
+	padding-left: 20px;
+	margin-top: 0px;
+	margin-bottom: 20px;
+	margin-left: 25px;
+	margin-right: 25px;
+	background-color: #ffffffaa;
+	box-shadow: 0px 0px 25px #55555555;
+	
+	background: -webkit-linear-gradient(#FDFDFD55, #EEEEEEAA); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#FDFDFD55, #EEEEEEAA); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#FDFDFD55, #EEEEEEAA); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#FDFDFD55, #EEEEEEAA); /* Standard syntax */
+
 }
+
+div.infoRow:hover{
+	box-shadow: 0px 0px 25px #06ceff;
+	cursor: pointer;
+}
+
+
 #login {
 	position:fixed;
 	bottom:5px;
