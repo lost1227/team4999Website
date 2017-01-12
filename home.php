@@ -30,7 +30,7 @@
 		<ul id="menuitems">
 			<li id="searchli">Search</li>
 			<li id="filterli">Filters</li>
-			<li id="addli">Add Robot</li>
+			<li id="addli"><a href="/edit.php">Add Robot</a></li>
 		</ul>
 	</div>
 	
