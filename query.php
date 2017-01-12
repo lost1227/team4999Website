@@ -16,7 +16,7 @@ if($data->num_rows > 0){
 				echo('<a class="teamlink" href = /info.php?team='.str_replace(' ','_',$value).'>');
 			}
 			echo('<p>'.$key.': '.$value.'</p>');
-			if($key == $row.count - 1){
+			if($key == $row[$row.count() - 1]){
 				echo('</a>');
 			}
 		}
