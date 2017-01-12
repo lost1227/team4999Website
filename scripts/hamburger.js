@@ -1,6 +1,6 @@
 //test to see if jquery is loading properly
 
-function toggleMenu(){
+var toggleMenu = function(){
 	console.log("You just clicked the hamburger menu!");
 }
 
