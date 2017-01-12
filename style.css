@@ -86,7 +86,7 @@ body {
 	padding-bottom: 20px;
 	border-top: 1px dashed #06ceff;
 
-
+	cursor: pointer;
 }
 
 #menuitems li:hover {
@@ -156,5 +156,6 @@ div.infoRow:hover{
 	display: inline-block;
 	padding:1px 10px;
 }
+
 
 
