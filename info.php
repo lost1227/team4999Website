@@ -1,6 +1,13 @@
 <?php session_start(); ?>
+<?php
+if(!isset($_GET["team"])) {
+	header( 'Location: https://frcteam4999.jordanpowers.net/home.php');
+}
+?>
 <html>
 <head>
+	<link rel="stylesheet" href="style.css">
+	<title>Team: <?php echo(str_replace('_',' ',$_GET["team"])); ?></title>
 </head>
 <body>
 </body>
