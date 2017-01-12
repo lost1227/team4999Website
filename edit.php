@@ -24,7 +24,7 @@ while($row = $columnData->fetch_assoc()) {
 #handle submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	foreach($columns as $column) {
-		if($column["Field"]!="Team"] {
+		if($column["Field"]!="Team") {
 			$DB->query('UPDATE robots SET '.$column["Field"].'="'.$_POST[$column["Field"]].'" WHERE Team = "'.$_POST["Team"].'";');
 		}
 	}
