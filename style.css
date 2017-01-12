@@ -28,10 +28,7 @@ body {
 	vertical-align: middle;
 	cursor: pointer;
 	border-radius: 10;
-	
-	-moz-box-shadow:    inset 0 0 5px #00000022;
-	-webkit-box-shadow: inset 0 0 5px #00000022;
-	box-shadow:         inset 0 0 155px #00000033;
+
 }
 
 #hamburger:hover {
@@ -86,13 +83,17 @@ body {
 	padding-bottom: 20px;
 	border-top: 1px dashed #06ceff;
 
+	text-decoration: none;
+	
 	cursor: pointer;
 }
 
+#menuitems a{
+	text-decoration: none;
+	color: 0;
+}
+
 #menuitems li:hover {
-	display: block;
-	padding-top: 20px;
-	padding-bottom: 20px;
 	background-color: #06ceff;
 	color: white;
 }
@@ -156,6 +157,7 @@ div.infoRow:hover{
 	display: inline-block;
 	padding:1px 10px;
 }
+
 
 
 
