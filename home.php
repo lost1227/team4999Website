@@ -24,7 +24,7 @@ var loop = window.setInterval(function() {
 
 </head>
 <body>
-<h1 id="title"><div id="scoutingmenu">Scouting <img id="hamburger" src="images/hamburger.png" height="50" /></div></h1>
+<h1 id="title">Scouting <img id="hamburger" src="images/hamburger.png" height="50" /></h1>
 <div id="container">
 </div>
 <?php
