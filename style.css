@@ -13,30 +13,28 @@
 body {
 	background-image: url("images/sneaker.png");
 	background-attachment: fixed;
+	margin: 0px;
 }
 
 #container{
 	background-color: transparent;
+	margin: 0px;
+	
 }
 
 #title {
 	font-size: 3em;
 	text-align: center;
 	font-family: "StormFaze";
-	background-color: #FDFDFD;
-	border-radius: 10px;
-	border: 1px solid #06ceff;
+	background-color: #9f01ff;
+
 	padding: 10px 0px;
 	
+	color: #FFFFFF;
 	
+	margin: 0px;
 	
-	margin-left: 25px;
-	margin-right: 25px;
-	
-    background: -webkit-linear-gradient(#FDFDFD55, #EEEEEEAA); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#FDFDFD55, #EEEEEEAA); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#FDFDFD55, #EEEEEEAA); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(#FDFDFD55, #EEEEEEAA); /* Standard syntax */
+    
     
     box-shadow: 0px 10px 25px #55555544;
 }
@@ -46,23 +44,18 @@ body {
 }
 
 div.infoRow {
-	border: 1px solid #06ceff;
-	border-radius: 10px;
+	width: 100%;
+	border-bottom: 1px dashed #06ceff;
+	border-radius: 0px;
 	padding-top: 15px;
 	padding-bottom: 15px;
 	padding-right: 15px;
 	padding-left: 20px;
 	margin-top: 0px;
-	margin-bottom: 20px;
-	margin-left: 25px;
-	margin-right: 25px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
 	background-color: #ffffffaa;
-	box-shadow: 0px 0px 25px #55555555;
-	
-	background: -webkit-linear-gradient(#FDFDFD, #EEEEEE); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#FDFDFD, #EEEEEE); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#FDFDFD, #EEEEEE); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(#FDFDFD, #EEEEEE); /* Standard syntax */
 
 }
 
@@ -76,7 +69,6 @@ div.infoRow {
 }
 
 div.infoRow:hover{
-	box-shadow: 0px 0px 25px #06ceff;
 	cursor: pointer;
 }
 
