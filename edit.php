@@ -23,6 +23,10 @@ while($row = $columnData->fetch_assoc()) {
 }
 #handle submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	$data = $DB->query('SELECT Team FROM robots WHERE Team="'.$_POST["Team"].'";');
+	if($data->num_rows > 0){
+		$DB->query('INSERT INTO robots VALUES Team="'.$_POST["Team"].'";');
+	}
 	foreach($columns as $column) {
 		if($column["Field"]!="Team") {
 			$DB->query('UPDATE robots SET '.$column["Field"].'="'.$_POST[$column["Field"]].'" WHERE Team = "'.$_POST["Team"].'";');
