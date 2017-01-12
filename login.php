@@ -4,6 +4,7 @@
 <title>Log in</title>
 <link rel="stylesheet" href="style.css">
 <?php
+$redirect = $_GET['redirect'];
 function clean($data) {
   $data = trim($data);
   $data = stripslashes($data);
@@ -13,6 +14,7 @@ function clean($data) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$user = clean($_POST["user"]);
 	$pass = clean($_POST["pass"]);
+	$redirect = $_POST["redirect"];
 	$DB = new mysqli("localhost",$user,$pass,"frcteam4999");
 	$_SESSION["user"] = $user;
 	$_SESSION["pass"] = $pass;
@@ -42,7 +44,7 @@ if ($DB->connect_error) {
 	<input type="password" name="pass"><br>
 	<?php
 	if(isset($_GET['redirect'])){
-		echo('<input type="hidden" name="redirect" value="'.$_GET['redirect'].'">');
+		echo('<input type="hidden" name="redirect" value="'$redirect'">');
 	}
 	?>
 	<input type="submit" value="Submit">
