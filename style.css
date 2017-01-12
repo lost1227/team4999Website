@@ -35,7 +35,7 @@ body {
 }
 
 #hamburgermenu {
-	visibility: hidden;
+	display: none;
 }
 
 #title {
