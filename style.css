@@ -26,6 +26,12 @@ body {
 
 #hamburger {
 	vertical-align: middle;
+	cursor: pointer;
+	border-radius: 10;
+}
+
+#hamburger:hover {
+	background-color: #8101ce;
 }
 
 #title {
