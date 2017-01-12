@@ -147,8 +147,8 @@ div.infoRow:hover{
 	cursor: pointer;
 }
 
-
-#login {
+/*The logout box that appears in the corner of home.php when you are logged in*/
+div.login {
 	position:fixed;
 	bottom:5px;
 	left:5px;
@@ -158,6 +158,12 @@ div.infoRow:hover{
 	padding:1px 10px;
 }
 
+/*The login form at login.php*/
+form.login {
+	margin: auto;
+	background-color:#E0E0E0;
+	border-radius: 5px;
+}
 
 
 
