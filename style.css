@@ -45,20 +45,6 @@ body {
 	margin: 0px;
 }
 
-#scoutingmenu {
-	font-family: inherit;
-	position: relative;
-	width: 400px;
-	padding-left: 30px;
-	margin: 0 auto;
-	border-radius: 15px;
-}
-
-#scoutingmenu:hover {
-	background-color: #6401a1;
-	cursor: pointer;
-}
-
 * {
 	font-family: "arial";
 }
