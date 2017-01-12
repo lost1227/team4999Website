@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$_SESSION["loggedIn"] = True;
 	}
 }
-if ($_SESSION["loggedIn"]) {
+if (isset($_SESSION["loggedIn"])) {
 	if (isset($_POST["redirect"])) {
 		header( 'Location: https://frcteam4999.jordanpowers.net/'.clean($_POST["redirect"]));
 		exit();
