@@ -39,7 +39,7 @@ if ($DB->connect_error) {
 ?>
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
 	<p>Username:</p><br>
-	<input type="text" name="user"><br>
+	<input type="text" name="user" <?php if($_SERVER["REQUEST_METHOD"] == "POST"){echo('value="'.$user.'"');}?>><br>
 	<p>Password:</p><br>
 	<input type="password" name="pass"><br>
 	<?php
