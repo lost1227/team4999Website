@@ -12,11 +12,11 @@
 
 body {
 	background-image: url("images/sneaker.png");
+	background-attachment: fixed;
 }
 
 #container{
 	background-color: transparent;
-	background-attachment: fixed;
 }
 
 #title {
