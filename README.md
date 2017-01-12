@@ -1,4 +1,4 @@
-# team4999Website
+# Scouting Website
 Any commits to this repo will be automatically deployed to the website https://frcteam4999.jordanpowers.net
 ---
 #SQL Database access
@@ -8,3 +8,4 @@ The user account "test" with password "1234567890" temporarily allows read and w
 
 #Error Logs
 Error logs can be accessed at https://frcteam4999.jordanpowers.net/logs/error.log. This is userful for debugging php.
+The error logs are cleared nightly.
