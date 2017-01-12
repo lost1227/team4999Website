@@ -32,7 +32,7 @@ if($_SESSION["loggedIn"]){
 <div id="login">
 <?php
 if($_SESSION["loggedIn"]) {
-	echo('<p style="margin:2px;"><a href="logout.php">Log Out: '.$_SESSION["user"])'.</a></p>');
+	echo('<p style="margin:2px;"><a href="logout.php">Log Out: '.$_SESSION["user"]).'</a></p>');
 }
 ?>
 </div>
