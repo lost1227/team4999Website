@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$Query = $Query . ';';
 		}
 	}
-	
+	echo($query);
 } else {
 	$query = "SELECT * FROM robots ORDER BY Team ASC;";
 }
