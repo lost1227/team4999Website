@@ -14,6 +14,6 @@ var request = new XMLHttpRequest();
 					request.send(filterData);
 				} else {
 					request.open("GET","/query.php",true);
+					request.send();
 				}
-				request.send();
 			}, 5000);
