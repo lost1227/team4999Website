@@ -10,7 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$index = 1;
 	foreach($_POST as $key => $value) {
 		$query = $query . $key . '="' . $value . '"';
-		if (++$index != count($_POST) ){
+		$index++;
+		if ($index != count($_POST) ){
 			$query = $query . ' AND ';
 		} else {
 			$query = $query . ';';
