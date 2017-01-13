@@ -54,7 +54,7 @@ foreach($columns as $column) {
 	$PrettyColumn = str_replace('_',' ',$column["Field"]);
 	if(!($column["Field"] == "Team" and isset($team))){ #Check if creating a new team
 		echo('<p>'.$PrettyColumn.':</p><br>');
-		switch($column["Field"] {
+		switch($column["Field"]) {
 			#check all numbers
 			case("Team"):
 			case("Width"):
