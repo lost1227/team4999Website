@@ -3,20 +3,7 @@
 	<head>
 		<title>Scouting website</title>
 		<link rel="stylesheet" href="style.css">
-		<script>
-			var request = new XMLHttpRequest();
-			request.onreadystatechange = function() {
-				if (this.readyState == this.DONE && this.status == 200){
-					document.getElementById("container").innerHTML = this.responseText;
-				}
-			};
-			request.open("GET","/query.php",true);
-			request.send();
-			var loop = window.setInterval(function() {
-				request.open("GET","/query.php",true);
-				request.send();
-			}, 5000);
-		</script>
+		<script src="scripts/hamburger.js"></script>
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
