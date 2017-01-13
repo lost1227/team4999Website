@@ -9,8 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$Query = 'SELECT * FROM robots WHERE ';
 	$index = 1;
 	foreach($_POST as $key => $value) {
-		$Query = $Query . $key . '="' . $value . '"'
-		if (++$index != count($_POST)){
+		$Query = $Query . $key . '="' . $value . '"';
+		if (++$index != count($_POST) ){
 			$Query = $Query . ' AND ';
 		} else {
 			$Query = $Query . ';';
