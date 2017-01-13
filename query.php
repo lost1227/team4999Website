@@ -6,7 +6,7 @@ if (isset($_SESSION["loggedIn"])){
 	$DB = new mysqli("localhost","ro","","frcteam4999");
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$query = 'SELECT * FROM robots WHERE ';
+	$query = 'SELECT Team FROM robots WHERE ';
 	$index = 1;
 	foreach($_POST as $key => $value) {
 		$query = $query . $key . '="' . $value . '"';
@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	/*echo($query);
 	echo(count($_POST));*/
 } else {
-	$query = "SELECT * FROM robots ORDER BY Team ASC;";
+	$query = "SELECT Team FROM robots ORDER BY Team ASC;";
 }
 $data = $DB->query($query);
 #echo($data->num_rows);
