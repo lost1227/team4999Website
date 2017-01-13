@@ -6,9 +6,10 @@ var request = new XMLHttpRequest();
 			};
 			request.open("GET","/query.php",true);
 			request.send();
+			filter=false;
 			var loop = window.setInterval(function() {
 				if (filter) {
-					requset.open("POST","/query.php",true);
+					request.open("POST","/query.php",true);
 					request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 					request.send(filterData);
 				} else {
