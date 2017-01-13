@@ -1,6 +1,7 @@
 <?php session_start(); ?>
 <html>
 <head>
+	<title>Edit Team</title>
 </head>
 <body>
 <?php
@@ -35,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
 }
 #check if creating a new entry, or editing an existing entry
-#creates an associative array the existing entry
+#creates an associative array of the existing entry
 if(isset($_GET["team"])){
 	$team = str_replace('_',' ',$_GET["team"]);
 	$data = $DB->query('SELECT * FROM robots WHERE Team = "'.$team.'";');
@@ -47,19 +48,43 @@ if(isset($_GET["team"])){
 	echo('<h1>Team: '.$team.'</h1>');
 }
 #create the form
-echo('<form action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post">');
+echo('<form action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post" autocomplete="off">');
 foreach($columns as $column) {
 	#remove underscores from column names
 	$PrettyColumn = str_replace('_',' ',$column["Field"]);
-	#don't allow editing of established team number
-	if(!($column["Field"] == "Team" and isset($team))){
-		echo('<p>'.$PrettyColumn.':</p><br>
-			<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
-	} elseif ($column["Field"] == "Team" and isset($team)) {
+	if(!($column["Field"] == "Team" and isset($team))){ #Check if creating a new team
+		echo('<p>'.$PrettyColumn.':</p><br>');
+		switch($column["Field"] {
+			#check all numbers
+			case("Team"):
+			case("Width"):
+			case("Depth"):
+			case("Height"):
+			case("Weight"):
+				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9]*"><br>');
+				break;
+			case("Drive_System"): #Create select menu with options for each type of drive system. The array $options can have new drive systems added to it to create more options
+				echo('<select name="'.$column["Field"].'">');
+				$options=array("West Coast","Mechanum","Tank","Swerve");
+				foreach($options as $option) {
+					if ($option == $row[$column["Field"]]) { #if the value is already set, set the option to that value
+						echo('<option value='.$option.' selected>'.$option.'</option>');
+					} else {
+						echo('<option value='.$option.'>'.$option.'</option>');
+					}
+				}
+				break;
+			default:
+				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
+		}
+		/*echo('<p>'.$PrettyColumn.':</p><br>
+			<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');*/
+	} elseif ($column["Field"] == "Team" and isset($team)) {#Set the team to a hidden value
 		echo('<input type="hidden" name="Team" value="'.$row[$column["Field"]].'">');
 	}
 }
 echo('<input type="submit" value="Submit"></form>');
 ?>
+	<p>All values are in lbs and inches</p>
 </body>
 </html>
