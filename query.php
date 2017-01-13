@@ -6,14 +6,14 @@ if (isset($_SESSION["loggedIn"])){
 	$DB = new mysqli("localhost","ro","","frcteam4999");
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$Query = 'SELECT * FROM robots WHERE ';
+	$query = 'SELECT * FROM robots WHERE ';
 	$index = 1;
 	foreach($_POST as $key => $value) {
-		$Query = $Query . $key . '="' . $value . '"';
+		$query = $query . $key . '="' . $value . '"';
 		if (++$index != count($_POST) ){
-			$Query = $Query . ' AND ';
+			$query = $query . ' AND ';
 		} else {
-			$Query = $Query . ';';
+			$query = $query . ';';
 		}
 	}
 	echo($query);
