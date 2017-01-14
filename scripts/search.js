@@ -5,8 +5,8 @@ $("#searchli").click(function() {
 			window.clearInterval(loop);
 			filter = true;
 		} else {
-			loop = window.setInterval(get(),5000);
 			filter = false;
+			loop = window.setInterval(get(),5000);
 	}});
 });
 
