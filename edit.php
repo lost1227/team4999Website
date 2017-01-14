@@ -73,6 +73,7 @@ foreach($columns as $column) {
 						echo('<option value='.$option.'>'.$option.'</option>');
 					}
 				}
+				echo('</select>');
 				break;
 			default:
 				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
