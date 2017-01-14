@@ -21,6 +21,10 @@
 		</ul>
 	</div>
 	
+	<div hidden id="search">
+	<input name="searchbox">
+	</div>
+	
 	<div id="container">
 	</div>
 	<?php
