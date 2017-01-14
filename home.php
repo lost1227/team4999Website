@@ -23,7 +23,7 @@
 	
 	<div hidden id="search">
 		<input name="searchbox" placeholder="Search for something!">
-		<div id="closesearchbar"></div>
+		<div id="closesearchbar"> X </div>
 	</div>
 	
 	<div id="container">
