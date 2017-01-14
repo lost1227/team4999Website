@@ -19,6 +19,7 @@
 			<li id="filterli">Filters</li>
 			<a href="/edit.php"><li id="addli">Add Robot</li></a>
 		</ul>
+		<div id="closesearchbar">x</div>
 	</div>
 	
 	<div hidden id="search">
