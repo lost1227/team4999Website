@@ -4,7 +4,7 @@ $(function() {
     
     $("#hamburger").click(function(){
 		console.log("You just clicked the hamburger menu!");
-		$("#hamburgermenu").slideToggle();
+		$("#hamburgermenu").slideToggle(200);
 	});
 	
 });
