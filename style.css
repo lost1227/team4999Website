@@ -171,7 +171,23 @@ div.infoRow:hover{
 	border-radius: 5px;
 }
 
-
+/*The Searchbox container*/
+#search {
+	position: fixed;
+	top: 79px;
+	height: 30px;
+	z-index: 1;
+	width: 100%;
+	
+}
+/*The Searchbox element*/
+#search.input {
+	height:50px;
+	width: inherit;
+	font-family: "StormFaze";
+	font-size: 25px;
+	text-align: center;
+}
 
 
 
