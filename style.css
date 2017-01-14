@@ -185,7 +185,7 @@ div.infoRow:hover{
 	
 }
 /*The Searchbox element*/
-#search.input {
+#search input {
 	height:50px;
 	width: inherit;
 	font-family: "StormFaze";
