@@ -134,6 +134,10 @@ div.infoRow {
 
 }
 
+div.infoRow p{
+	font-family: "StormFaze";
+}
+
 .teamlink{
 	color: #000000;
 	text-decoration: none;
