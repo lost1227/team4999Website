@@ -206,7 +206,9 @@ div.infoRow:hover{
 	font-family: "StormFaze";
 	color: #ffffff;
 	font-size: 25;
+	cursor: pointer;
 }
+
 
 
 
