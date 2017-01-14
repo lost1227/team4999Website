@@ -18,5 +18,5 @@ $("#search > input").on('input', function() {
 
 $("#closesearchbar").click(function(){
 	$("#search").slideUp();
-	$("#searchbox").text(""); //empty contents of searchbar
+	$("#search > input").val(''); //empty contents of searchbar
 });
