@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if ($index != count($_POST) ){
 			$query = $query . ' AND ';
 		} else {
-			$query = $query . ';';
+			$query = $query . 'ORDER BY ASC;';
 		}
 		$index++;
 	}

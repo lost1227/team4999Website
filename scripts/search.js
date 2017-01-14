@@ -13,7 +13,7 @@ $("#searchli").click(function() {
 });
 
 $("#search > input").on('input', function() {
-	filterData = '*=%' + $('#search > input').val() + "%";
+	filterData = 'Team=%' + $('#search > input').val() + "%";
 	
 	if($("#search > input").val() === '')
 		filter = false;
