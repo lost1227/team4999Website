@@ -59,8 +59,8 @@ body {
 	margin: 0px;
 	padding: 0px;
 	
-	left: 25%;
-    width: 50%;
+	left: 0;
+    width: 100%;
 	
 	
 	-moz-box-shadow:     0px 5px 20px #55555599;
@@ -170,6 +170,7 @@ div.infoRow:hover{
 	background-color:#E0E0E0;
 	border-radius: 5px;
 }
+
 
 
 
