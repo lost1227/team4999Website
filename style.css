@@ -193,6 +193,21 @@ div.infoRow:hover{
 	text-align: center;
 }
 
+#closesearchbar {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	height: 50px;
+	width: 50px;
+	z-index: 9999000000000000;
+	background-color: red;
+	text-align: center;
+	font-family: "StormFaze";
+	color: #ffffff;
+	font-size: 25;
+}
+
+
 
 
 
