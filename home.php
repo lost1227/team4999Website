@@ -35,5 +35,6 @@
 	
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 	<script src="scripts/hamburger.js"></script>
+	<script src="scripts/search.js"></script>
 </body>
 </html>
