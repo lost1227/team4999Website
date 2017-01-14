@@ -34,9 +34,9 @@ body {
 #hamburger:active {
 	background-color: #8101ce;
 	
-	-moz-box-shadow:    inset 0 0 15px #000000;
-	-webkit-box-shadow: inset 0 0 15px #000000;
-	box-shadow:         inset 0 0 15px #000000;
+	-moz-box-shadow:    inset 0 0 15px #00000022;
+	-webkit-box-shadow: inset 0 0 15px #00000022;
+	box-shadow:         inset 0 0 15px #00000022;
 }
 
 #hamburgermenu {
@@ -205,6 +205,7 @@ div.infoRow:hover{
 #closesearchbar:active {
 	background-color: #cc0000;
 }
+
 
 
 
