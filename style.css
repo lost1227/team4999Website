@@ -202,10 +202,12 @@ div.infoRow:hover{
 	z-index: 9999000000000000;
 	background-color: red;
 	text-align: center;
+	line-height: 50px;
 	font-family: "StormFaze";
 	color: #ffffff;
 	font-size: 25;
 }
+
 
 
 
