@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$index = 1;
 	#loop through all the filters and apply each one, adding an 'AND' between each
 	foreach($_POST as $key => $value) {
-		$query = $query . $key . '="' . $value . '"';
+		$query = $query . $key . ' LIKE "' . $value . '"';
 		if ($index != count($_POST) ){
 			$query = $query . ' AND ';
 		} else {
