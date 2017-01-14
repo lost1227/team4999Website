@@ -34,9 +34,9 @@ body {
 #hamburger:active {
 	background-color: #8101ce;
 	
-	-moz-box-shadow:    inset 0 0 15px #00000022;
-	-webkit-box-shadow: inset 0 0 15px #00000022;
-	box-shadow:         inset 0 0 15px #00000022;
+	-moz-box-shadow:    inset 0 0 15px rgba(0, 0, 0, 0.13);
+	-webkit-box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.13);
+	box-shadow:         inset 0 0 15px rgba(0, 0, 0, 0.13);
 }
 
 #hamburgermenu {
@@ -55,9 +55,9 @@ body {
     width: 100%;
 	
 	
-	-moz-box-shadow:     0px 5px 20px #55555599;
-	-webkit-box-shadow:  0px 5px 20px #55555599;
-	box-shadow:          0px 5px 20px #55555599;
+	-moz-box-shadow:     0px 5px 20px rgba(85, 85, 85, 0.6);
+	-webkit-box-shadow:  0px 5px 20px rgba(85, 85, 85, 0.6);
+	box-shadow:          0px 5px 20px rgba(85, 85, 85, 0.6);
 }
 
 #menuitems {
@@ -126,7 +126,7 @@ div.infoRow {
 	margin-bottom: 0px;
 	margin-left: 0px;
 	margin-right: 0px;
-	background-color: #ffffffaa;
+	background-color: rgba(255, 255, 255, 0.67);
 
 }
 
