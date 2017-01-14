@@ -136,6 +136,8 @@ div.infoRow {
 
 div.infoRow p{
 	font-family: "StormFaze";
+	font-size: 25px;
+	text-align: center;
 }
 
 .teamlink{
@@ -168,6 +170,7 @@ div.infoRow:hover{
 	background-color:#E0E0E0;
 	border-radius: 5px;
 }
+
 
 
 
