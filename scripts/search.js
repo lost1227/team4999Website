@@ -8,8 +8,9 @@ $("#searchli").click(function() {
 		loop = window.setInterval(get(),5000);
 		filter = false;
 	}
-}
+};
 
 $("#search > input").on('input', function() {
 	filterData = 'team=' + $('#search > input').val();
 	get();
+};
