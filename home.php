@@ -19,11 +19,11 @@
 			<li id="filterli">Filters</li>
 			<a href="/edit.php"><li id="addli">Add Robot</li></a>
 		</ul>
-		<div id="closesearchbar"></div>
 	</div>
 	
 	<div hidden id="search">
-	<input name="searchbox" placeholder="Search for something!">
+		<input name="searchbox" placeholder="Search for something!">
+		<div id="closesearchbar"></div>
 	</div>
 	
 	<div id="container">
