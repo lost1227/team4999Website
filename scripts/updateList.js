@@ -1,3 +1,7 @@
+function clearFilters(){
+	filter = false;
+	get();
+}
 function get() {
 				if (filter) {
 					request.open("POST","/query.php",true);
