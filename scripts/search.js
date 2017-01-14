@@ -1,7 +1,7 @@
 
 $("#searchli").click(function() {
 	$("#hamburgermenu").slideUp(100);
-	$("#search").slideToggle(400, function() {
+	$("#search").slideDown(400, function() {
 		if($("#search").is(':visible')) {
 			window.clearInterval(loop);
 			filter = true;
