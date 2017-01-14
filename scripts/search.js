@@ -16,6 +16,8 @@ $("#search > input").on('input', function() {
 	
 	if($("#search > input").val() === '')
 		filter = false;
+	else
+		filter = true;
 		
 	get();
 });
