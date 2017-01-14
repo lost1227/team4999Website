@@ -1,6 +1,7 @@
 
 $("#searchli").click(function() {
 	$("#hamburgermenu").slideUp(100);
+	$("#container").css('top','130px');
 	$("#search").show(0, function() {
 		if($("#search").is(':visible')) {
 			window.clearInterval(loop);
@@ -25,5 +26,6 @@ $("#search > input").on('input', function() {
 $("#closesearchbar").click(function(){
 	$("#search").slideUp();
 	$("#search > input").val(''); //empty contents of searchbar
+	$("#container").css('top','80px');
 	clearFilters();
 });
