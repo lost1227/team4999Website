@@ -13,8 +13,10 @@ $("#searchli").click(function() {
 
 $("#search > input").on('input', function() {
 	filterData = 'team=' + $('#search > input').val();
+	
 	if($("#search > input").val() === '')
-		filterData = '';
+		filter = false;
+		
 	get();
 });
 
