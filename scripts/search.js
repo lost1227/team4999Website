@@ -15,3 +15,7 @@ $("#search > input").on('input', function() {
 	filterData = 'team=' + $('#search > input').val();
 	get();
 });
+
+$("#closesearchbar").click(function(){
+	$("#search").slideUp();
+});
