@@ -24,7 +24,7 @@ $("#search > input").on('input', function() {
 });
 
 $("#closesearchbar").click(function(){
-	$("#search").slideUp();
+	$("#search").hide(0);
 	$("#search > input").val(''); //empty contents of searchbar
 	$("#container").css('top','80px');
 	clearFilters();
