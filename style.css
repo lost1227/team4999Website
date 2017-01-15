@@ -256,7 +256,7 @@ div.infoRow:hover{
 	background-color: white;
 	border: 2px solid  #06ceff;
 	text-align: center;
-	
+	cursor: pointer;
 	
 }
 
@@ -264,6 +264,7 @@ div.infoRow:hover{
 	background-color: #06ceff;
 	color: white;
 }
+
 
 
 
