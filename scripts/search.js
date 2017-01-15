@@ -5,7 +5,6 @@ $("#searchli").click(function() {
 	$("#TeamSearch").show(0, function() {
 		if($("#TeamSearch").is(':visible')) {
 			window.clearInterval(loop);
-			filter.enabled = true;
 		} else {
 			filter.enabled = false;
 			loop = window.setInterval(get(),5000);
