@@ -99,12 +99,15 @@ body {
 	position: fixed;
 	width: 100%;
 	
-	font-size: 50px;
 	text-align: center;
 	font-family: "StormFaze";
 	background-color: #9f01ff;
 
-	padding: 10px 0px;
+	font-size: 40px;
+	line-height: 80px;
+	height: 80px;
+	
+	padding: 0px;
 	
 	color: #FFFFFF;
 	
@@ -205,6 +208,7 @@ div.infoRow:hover{
 #closesearchbar:active {
 	background-color: #cc0000;
 }
+
 
 
 
