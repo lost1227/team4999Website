@@ -223,17 +223,19 @@ div.infoRow:hover{
 
 #loginform > p{
 	font-family: "StormFaze";
-	font-size: 25px;
+	font-size: 30px;
 }
 
 #loginform > input {
-	font-size: 15px;
+	font-size: 20px;
 	font-family: "StormFaze";
+	padding: 10px;
 }
 
 #submitbtn {
 	
 }
+
 
 
 
