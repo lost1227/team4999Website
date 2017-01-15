@@ -12,18 +12,18 @@ $("#searchli").click(function() {
 	}});
 });
 
-$("#TeamSearchbox").on('input', function() {
-	if($("#TeamSearchbox").val() === '')
+$("#TeamSearchbox > input").on('input', function() {
+	if($("#TeamSearchbox > input").val() === '')
 		clearFilters();
 	else
 		filter.enabled = true;
-		filter.Team = $("#TeamSearchbox").val();
+		filter.Team = $("#TeamSearchbox > input").val();
 	get();
 });
 
 $("#closesearchbar").click(function(){
 	$("#TeamSearch").hide(0);
-	$("#TeamSearchbox").val(''); //empty contents of searchbar
+	$("#TeamSearchbox > input").val(''); //empty contents of searchbar
 	$("#container").css('top','80px');
 	clearFilters();
 });
