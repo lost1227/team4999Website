@@ -177,7 +177,7 @@ div.infoRow:hover{
 	
 }
 /*The Searchbox element*/
-#TeamSearchbox {
+#TeamSearch input {
 	height:50px;
 	width: inherit;
 	font-family: "StormFaze";
