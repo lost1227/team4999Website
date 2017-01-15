@@ -5,11 +5,10 @@ function clearFilters(){
 var filter = {
 	enabled : false,
 	filterData : function () {
-		var data;
 		for (index in this) {
 			if (!(index == 'enabled' || index == 'filterData')) {
 				if (index) {
-					data += index = '=' + this[index];
+					data += index + '=' + this[index];
 				} else {
 					data += index + '=%';
 				}
