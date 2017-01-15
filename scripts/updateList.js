@@ -5,7 +5,7 @@ function clearFilters(){
 var filter = {
 	enabled : false,
 	filterData : function () {
-		var data;
+		var data = '';
 		for (index in this) {
 			if (!(index == 'enabled' || index == 'filterData')) {
 				if (index) {
