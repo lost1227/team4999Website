@@ -53,7 +53,7 @@
 				echo('<input type="hidden" name="redirect" value="'.$redirect.'">');
 			}
 			?>
-			<input id="submitbtn" type="submit" value="Submit">
+			<div id="submitbtn" onclick="javascript:parentNode.submit();"></div>
 		</form>
 	</body>
 </html>
