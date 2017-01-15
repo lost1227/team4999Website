@@ -75,6 +75,18 @@ foreach($columns as $column) {
 				}
 				echo('</select>');
 				break;
+			case("Can_pickup_gear_from_floor"):
+			case("Can_place_gear_on_lift"):
+				echo('<select name="'.$column["Field"].'">');
+				if ($row[$column["Field"]] == 0) {
+					echo('<option value="0" selected>No</option>
+					<option value="1">Yes</option>');
+				} else {
+					echo('<option value="0">No</option>
+					<option value="1" selected>Yes</option>');
+				}
+				echo('</select>');
+				break;
 			default:
 				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
 		}
