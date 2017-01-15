@@ -2,9 +2,9 @@ function clearFilters(){
 	filter.enabled = false;
 	get();
 }
-var filter = {
-	enabled: false,
-	filterData: function() {
+function createFilter() {
+	this.enabled = false,
+	this.filterData = function() {
 		var data;
 		for (value in this) {
 			if (value) {
@@ -17,6 +17,8 @@ var filter = {
 		return data.substring(0, data.length-1);
 	}
 }
+filter = new createFilter();
+
 function get() {
 				if (filter.enabled) {
 					request.open("POST","/query.php",true);
