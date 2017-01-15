@@ -229,7 +229,7 @@ div.infoRow:hover{
 
 #loginform > input {
 	font-size: 20px;
-	font-family: "StormFaze";
+	font-family: "arial";
 	padding: 10px;
 	width: 300px;
 }
@@ -237,6 +237,7 @@ div.infoRow:hover{
 #submitbtn {
 	
 }
+
 
 
 
