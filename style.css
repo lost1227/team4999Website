@@ -99,6 +99,8 @@ body {
 	position: fixed;
 	width: 100%;
 	
+	top: 0px;
+	
 	text-align: center;
 	font-family: "StormFaze";
 	background-color: #9f01ff;
