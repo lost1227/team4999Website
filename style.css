@@ -246,7 +246,8 @@ div.infoRow:hover{
 #submitbtn {
 	position: relative;
 	margin: 0px;
-	margin-top: 50px;
+	margin-top: 30px;
+	margin-bottom: 10px;
 	padding: 0px;
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -266,6 +267,7 @@ div.infoRow:hover{
 	background-color: #06ceff;
 	color: white;
 }
+
 
 
 
