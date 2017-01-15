@@ -1,0 +1,14 @@
+
+* {
+	font-family: arial;
+}
+
+body {
+	margin: 0;
+	background-image: url("../images/sneaker.png");
+	background-attachment: fixed;
+}
+
+p {
+	
+}
