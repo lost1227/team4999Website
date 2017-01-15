@@ -6,7 +6,7 @@ if(!isset($_GET["team"])) {
 ?>
 <html>
 <head>
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="styles/info.css">
 	<title>Team: <?php echo(str_replace('_',' ',$_GET["team"])); ?></title>
 </head>
 <body>
