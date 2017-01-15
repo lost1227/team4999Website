@@ -12,6 +12,9 @@ $("#searchli").click(function() {
 });
 
 $("#TeamSearch > input").keypress( function(e) {
+	if(e.keyCode === 27) //if you hit esc, close the searchbar
+		closeSearchbar();
+		
 	var chr = String.fromCharCode(e.which);
 	if ("1234567890".indexOf(chr) < 0)
 		return false;
@@ -27,8 +30,12 @@ $("#TeamSearch > input").on('input', function() {
 });
 
 $("#closesearchbar").click(function(){
+	closeSearchbar();
+});
+
+function closeSearchbar(){
 	$("#TeamSearch").hide(0);
 	$("#TeamSearch > input").val(''); //empty contents of searchbar
 	$("#container").css('top','80px');
 	clearFilters();
-});
+}
