@@ -11,7 +11,7 @@
 }
 
 body {
-	background-image: url("images/sneaker.png");
+	background-image: url("images/grey.png");
 	background-attachment: fixed;
 	margin: 0px;
 }
@@ -219,7 +219,7 @@ div.infoRow:hover{
 #loginform {
 	z-index: 2;
 	position: relative;
-	background-color: #ffffffbb;
+	background-color: #ffffff88;
 	padding: 20px;
 	text-align: center;
 	top: 25px;
@@ -228,7 +228,7 @@ div.infoRow:hover{
 	border: 1px solid #06ceff;
 	border-radius: 5px;
 	
-	box-shadow: 0px 0px 50px #00000044;
+	box-shadow: 0px 0px 50px #00000033;
 }
 
 #loginform > p{
@@ -270,6 +270,7 @@ div.infoRow:hover{
 	background-color: #06ceff;
 	color: white;
 }
+
 
 
 
