@@ -11,6 +11,12 @@ $("#searchli").click(function() {
 	}});
 });
 
+$("#TeamSearch > input").keypress( function(e) {
+	var chr = String.fromCharCode(e.which);
+	if ("1234567890".indexOf(chr) < 0)
+		return false;
+});
+
 $("#TeamSearch > input").on('input', function() {
 	if(!$("#TeamSearch > input").val())
 		clearFilters();
