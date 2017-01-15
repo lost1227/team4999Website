@@ -11,7 +11,7 @@ $("#searchli").click(function() {
 	}});
 });
 
-$(document).keypress(function(e){
+$(window).keypress(function(e){
 	if(e.keyCode === 27) //if you hit esc, close the searchbar
 		closeSearchbar();
 });
