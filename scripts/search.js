@@ -16,7 +16,7 @@ $("#TeamSearch > input").on('input', function() {
 		clearFilters();
 	else
 		filter.enabled = true;
-		filter.Team = "%" + $("#TeamSearch > input").val() + "%";
+		filter.Team = "%25" + $("#TeamSearch > input").val() + "%25";
 	get();
 });
 

@@ -20,9 +20,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		}
 		$index++;
 	}
-	echo($_POST["Team"]);
+	/*echo($_POST["Team"]);
 	echo($query);
-	/*echo(count($_POST));*/
+	echo(count($_POST));*/
 } else {
 	#If not accessed by POST, show all rows
 	$query = "SELECT Team FROM robots ORDER BY Team ASC;";
