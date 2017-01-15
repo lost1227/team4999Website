@@ -214,12 +214,16 @@ div.infoRow:hover{
 /************** LOGIN.PHP STYLES **************/
 
 #loginform {
+	z-index: 2;
 	position: relative;
-	background-color: #ffffffbb;
+	background-color: #ffffff;
 	padding: 20px;
 	text-align: center;
 	top: 25px;
 	width: 350px;
+	
+	border-radius: 15px;
+	
 }
 
 #loginform > p{
@@ -232,20 +236,34 @@ div.infoRow:hover{
 	font-family: "arial";
 	padding: 10px;
 	width: 300px;
+	
+	border: 2px solid  #06ceff;
+
 }
 
 #submitbtn {
+	position: relative;
+	margin: 0px;
 	margin-top: 25px;
+	padding: 0px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	left: 25px;
 	width: 300px;
-	padding: 10px;
 	font-size: 20px;
 	font-family: "StormFaze";
 	color: black;
 	background-color: white;
 	border: 2px solid  #06ceff;
 	text-align: center;
+	
+	
 }
 
+#submitbtn:hover{
+	background-color: #06ceff;
+	color: white;
+}
 
 
 
