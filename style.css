@@ -240,10 +240,12 @@ div.infoRow:hover{
 	padding: 10px;
 	font-size: 20px;
 	font-family: "StormFaze";
-	color: white;
-	background-color: #06ceff;
+	color: black;
+	background-color: white;
+	border: 2px solid  #06ceff;
 	text-align: center;
 }
+
 
 
 
