@@ -235,8 +235,16 @@ div.infoRow:hover{
 }
 
 #submitbtn {
-	
+	margin-top: 25px;
+	width: 300px;
+	padding: 10px;
+	font-size: 20px;
+	font-family: "StormFaze";
+	color: white;
+	background-color: #06ceff;
+	text-align: center;
 }
+
 
 
 
