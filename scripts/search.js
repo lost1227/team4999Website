@@ -11,10 +11,12 @@ $("#searchli").click(function() {
 	}});
 });
 
-$("#TeamSearch > input").keypress( function(e) {
+$(document).keypress(function(e){
 	if(e.keyCode === 27) //if you hit esc, close the searchbar
 		closeSearchbar();
-		
+});
+
+$("#TeamSearch > input").keypress( function(e) {		
 	var chr = String.fromCharCode(e.which);
 	if ("1234567890".indexOf(chr) < 0)
 		return false;
