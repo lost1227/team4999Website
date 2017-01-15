@@ -17,8 +17,7 @@ $(document).keypress(function(e){
 });
 
 $("#TeamSearch > input").keypress( function(e) {
-	if(e.keyCode === 27) //if you hit esc, close the searchbar
-		closeSearchbar();
+
 		
 	var chr = String.fromCharCode(e.which);
 	if ("1234567890".indexOf(chr) < 0)
