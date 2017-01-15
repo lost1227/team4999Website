@@ -12,7 +12,7 @@ $("#searchli").click(function() {
 });
 
 $("#TeamSearch > input").on('input', function() {
-	if(!$("#TeamSearch > input").val())
+	if(!($("#TeamSearch > input").val())
 		clearFilters();
 	else
 		filter.enabled = true;
