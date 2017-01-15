@@ -6,13 +6,15 @@ var filter = {
 	enabled : false,
 	filterData : function () {
 		var data;
-		for (value in this) {
-			if (value) {
-				data += this[value] + '=' + value;
-			} else {
-				data += this[value] + '=%';
+		for (index in this) {
+			if (!(index == 'enabled' || index == 'filterData')) {
+				if (index) {
+					data += index = '=' + this[index];
+				} else {
+					data += index + '=%';
+				}
+				data += '&';
 			}
-			data += '&';
 		}
 		return data.substring(0, data.length-1);
 	}
