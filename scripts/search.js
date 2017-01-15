@@ -2,30 +2,28 @@
 $("#searchli").click(function() {
 	$("#hamburgermenu").slideUp(100);
 	$("#container").css('top','130px');
-	$("#search").show(0, function() {
-		if($("#search").is(':visible')) {
+	$("#TeamSearch").show(0, function() {
+		if($("#TeamSearch").is(':visible')) {
 			window.clearInterval(loop);
-			filter = true;
+			filter.enabled = true;
 		} else {
-			filter = false;
+			filter.enabled = false;
 			loop = window.setInterval(get(),5000);
 	}});
 });
 
-$("#search > input").on('input', function() {
-	filterData = 'Team=%' + $('#search > input').val() + "%";
-	
-	if($("#search > input").val() === '')
-		filter = false;
+$("#TeamSearchbox").on('input', function() {
+	if($("#TeamSearchbox").val() === '')
+		clearFilters();
 	else
-		filter = true;
-		
+		filter.enabled = true;
+		filter.Team = $("#TeamSearchbox").val();
 	get();
 });
 
 $("#closesearchbar").click(function(){
-	$("#search").hide(0);
-	$("#search > input").val(''); //empty contents of searchbar
+	$("#TeamSearch").hide(0);
+	$("#TeamSearchbox").val(''); //empty contents of searchbar
 	$("#container").css('top','80px');
 	clearFilters();
 });

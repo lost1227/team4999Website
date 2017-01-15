@@ -168,7 +168,7 @@ div.infoRow:hover{
 }
 
 /*The Searchbox container*/
-#search {
+#TeamSearch {
 	position: fixed;
 	top: 79px;
 	height: 30px;
@@ -177,7 +177,7 @@ div.infoRow:hover{
 	
 }
 /*The Searchbox element*/
-#search input {
+#TeamSearchbox {
 	height:50px;
 	width: inherit;
 	font-family: "StormFaze";

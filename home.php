@@ -21,8 +21,8 @@
 		</ul>
 	</div>
 	
-	<div hidden id="search">
-		<input name="searchbox" placeholder="Search here!">
+	<div hidden id="TeamSearch">
+		<input name="TeamSearchbox" placeholder="Search for a team here!">
 		<div id="closesearchbar"> X </div>
 	</div>
 	
