@@ -22,7 +22,7 @@
 	</div>
 	
 	<div hidden id="TeamSearch">
-		<input name="TeamSearchbox" placeholder="Search for a team here!" type="number">
+		<input name="TeamSearchbox" placeholder="Search for a team here!" pattern="[0-9]*" type="number">
 		<div id="closesearchbar"> X </div>
 	</div>
 	
