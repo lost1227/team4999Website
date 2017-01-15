@@ -216,14 +216,16 @@ div.infoRow:hover{
 #loginform {
 	z-index: 2;
 	position: relative;
-	background-color: #ffffff;
+	background-color: #ffffffbb;
 	padding: 20px;
 	text-align: center;
 	top: 25px;
 	width: 250px;
 	
-	border-radius: 15px;
+	border: 1px solid #06ceff;
+	border-radius: 5px;
 	
+	box-shadow: 0px 0px 50px #00000044;
 }
 
 #loginform > p{
@@ -244,7 +246,7 @@ div.infoRow:hover{
 #submitbtn {
 	position: relative;
 	margin: 0px;
-	margin-top: 25px;
+	margin-top: 50px;
 	padding: 0px;
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -264,6 +266,7 @@ div.infoRow:hover{
 	background-color: #06ceff;
 	color: white;
 }
+
 
 
 
