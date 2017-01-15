@@ -2,9 +2,9 @@ function clearFilters(){
 	filter.enabled = false;
 	get();
 }
-function createFilter() {
-	this.enabled = false,
-	this.filterData = function() {
+var filter = {
+	enabled : false,
+	filterData : function () {
 		var data;
 		for (value in this) {
 			if (value) {
@@ -17,7 +17,6 @@ function createFilter() {
 		return data.substring(0, data.length-1);
 	}
 }
-filter = new createFilter();
 
 function get() {
 				if (filter.enabled) {
