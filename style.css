@@ -142,6 +142,7 @@ div.infoRow p{
 .teamlink{
 	color: #000000;
 	text-decoration: none;
+	cursor: pointer;
 }
 
 .teamlink:hover{
