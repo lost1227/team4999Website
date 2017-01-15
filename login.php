@@ -38,16 +38,16 @@ if ($DB->connect_error) {
 }
 ?>
 <form id="loginform" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
-	<p>Username:</p><br>
-	<input type="text" name="user" <?php if($_SERVER["REQUEST_METHOD"] == "POST"){echo('value="'.$user.'"');}?>><br>
-	<p>Password:</p><br>
-	<input type="password" name="pass"><br>
+	<p id="userlabel">Username:</p><br>
+	<input id="usernamefield" type="text" name="user" <?php if($_SERVER["REQUEST_METHOD"] == "POST"){echo('value="'.$user.'"');}?>><br>
+	<p id="passlabel">Password:</p><br>
+	<input id="passwordfield" type="password" name="pass"><br>
 	<?php
 	if(isset($redirect)){
 		echo('<input type="hidden" name="redirect" value="'.$redirect.'">');
 	}
 	?>
-	<input type="submit" value="Submit">
+	<input id="submitbtn" type="submit" value="Submit">
 </form>
 </body>
 </html>
