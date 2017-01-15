@@ -211,8 +211,29 @@ div.infoRow:hover{
 
 
 
+/************** LOGIN.PHP STYLES **************/
 
+#loginform {
+	background-color: #ffffffaa;
+	padding: 20px;
+	text-align: center;
+	height: 100%;
+	width: 100%;
+}
 
+#loginform > p{
+	font-family: "StormFaze";
+	font-size: 25px;
+}
+
+#loginform > input {
+	font-size: 15px;
+	font-family: "StormFaze";
+}
+
+#submitbtn {
+	
+}
 
 
 
