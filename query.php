@@ -20,6 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		}
 		$index++;
 	}
+	echo($_POST["Team"]);
 	echo($query);
 	/*echo(count($_POST));*/
 } else {
