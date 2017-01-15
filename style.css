@@ -220,7 +220,7 @@ div.infoRow:hover{
 	padding: 20px;
 	text-align: center;
 	top: 25px;
-	width: 350px;
+	width: 250px;
 	
 	border-radius: 15px;
 	
@@ -235,7 +235,7 @@ div.infoRow:hover{
 	font-size: 20px;
 	font-family: "arial";
 	padding: 10px;
-	width: 300px;
+	width: 200px;
 	
 	border: 2px solid  #06ceff;
 
@@ -249,7 +249,7 @@ div.infoRow:hover{
 	padding-top: 10px;
 	padding-bottom: 10px;
 	left: 25px;
-	width: 300px;
+	width: 200px;
 	font-size: 20px;
 	font-family: "StormFaze";
 	color: black;
@@ -264,6 +264,7 @@ div.infoRow:hover{
 	background-color: #06ceff;
 	color: white;
 }
+
 
 
 
