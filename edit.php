@@ -79,6 +79,7 @@ foreach($columns as $column) {
 				}
 				echo('</select>');
 				break;
+				#need textarea for text fields
 			case("Can_pickup_gear_from_floor"):
 			case("Can_place_gear_on_lift"):
 			case("Can_catch_fuel_from_hoppers"):
