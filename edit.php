@@ -57,6 +57,8 @@ foreach($columns as $column) {
 		switch($column["Field"]) {
 			#check all numbers
 			case("Team"):
+				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9]*" required><br>');
+				break;
 			case("Width"):
 			case("Depth"):
 			case("Height"):
