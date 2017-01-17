@@ -79,6 +79,10 @@ foreach($columns as $column) {
 				break;
 			case("Can_pickup_gear_from_floor"):
 			case("Can_place_gear_on_lift"):
+			case("Can_catch_fuel_from_hoppers"):
+			case("Can_pickup_fuel_from_floor"):
+			case("Can_shoot_in_low_goal"):
+			case("Can_shoot_in_high_goal"):
 				echo('<select name="'.$column["Field"].'">');
 				if ($row[$column["Field"]] == 0) {
 					echo('<option value="0" selected>No</option>
