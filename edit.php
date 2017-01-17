@@ -62,8 +62,10 @@ foreach($columns as $column) {
 			case("Width"):
 			case("Depth"):
 			case("Height"):
+				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9]*"><p>inches</p><br>');
+				break;
 			case("Weight"):
-				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9]*"><br>');
+				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9]*"><p>lbs</p><br>');
 				break;
 			case("Drive_System"): #Create select menu with options for each type of drive system. The array $options can have new drive systems added to it to create more options
 				echo('<select name="'.$column["Field"].'">');
