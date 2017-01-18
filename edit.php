@@ -8,6 +8,12 @@
 function writeToLog($string, $log) {
 	file_put_contents("/var/www/frcteam4999.jordanpowers.net/logs/".$log.".log", date("d-m-Y_h:i:s")."-- ".$string."\r\n", FILE_APPEND);
 }
+function clean($data) {
+		  $data = trim($data);
+		  $data = mysqli_real_escape_string($data);
+		  $data = htmlspecialchars($data);
+		  return $data;
+		}
 
 #check if logged in and redirect if not
 if ($_SESSION["loggedIn"]){
@@ -28,17 +34,17 @@ while($row = $columnData->fetch_assoc()) {
 }
 #handle submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$data = $DB->query('SELECT Team FROM robots WHERE Team="'.$_POST["Team"].'";');
+	$data = $DB->query('SELECT Team FROM robots WHERE Team="'.clean($_POST["Team"]).'";');
 	if($data->num_rows == 0){
-		$DB->query('INSERT INTO robots (Team) VALUES ('.$_POST["Team"].');');
+		$DB->query('INSERT INTO robots (Team) VALUES ('.clean($_POST["Team"]).');');
 	}
 	foreach($columns as $column) {
 		if($column["Field"]!="Team") {
-			$DB->query('UPDATE robots SET '.$column["Field"].'="'.$_POST[$column["Field"]].'" WHERE Team = "'.$_POST["Team"].'";');
+			$DB->query('UPDATE robots SET '.$column["Field"].'="'.$_POST[$column["Field"]].'" WHERE Team = "'.clean($_POST["Team"]).'";');
 			writeToLog("Set ".$column["Field"]." to ".$_POST[$column["Field"]],"EditData");
 		}
 	}
-	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
+	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.clean($_POST["Team"]));
 }
 #check if creating a new entry, or editing an existing entry
 #creates an associative array of the existing entry
