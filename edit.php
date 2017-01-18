@@ -35,11 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	foreach($columns as $column) {
 		if($column["Field"]!="Team") {
 			$DB->query('UPDATE robots SET '.$column["Field"].'="'.$_POST[$column["Field"]].'" WHERE Team = "'.$_POST["Team"].'";');
+			writeToLog("Set ".$column["Field"]." to ".$_POST[$column["Field"]],"EditData");
 		}
-	}
-	writeToLog("Dumping POST data!!","EditData");
-	foreach($_POST as $postData) {
-		writeToLog(array_search($postData,$_POST)." - ".$postData,"EditData");
 	}
 	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
 }
