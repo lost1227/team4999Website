@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 	writeToLog("Dumping POST data!!","EditData");
 	foreach($_POST as $postData) {
-		writeToLog($postData,"EditData");
+		writeToLog(array_search($postData,$_POST)." - ".$postData,"EditData");
 	}
 	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
 }
