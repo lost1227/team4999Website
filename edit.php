@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if(isset($_GET["team"])){
 	$team = str_replace('_',' ',$_GET["team"]);
 	$query = $DB->prepare('SELECT * FROM robots WHERE Team = ?;');
-	$query->bind_param('i',$_POST["Team"]);
+	$query->bind_param('i',$_GET["Team"]);
 	$query->execute();
 	$data = $query->get_result();
 	if($data->num_rows > 0){
