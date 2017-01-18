@@ -8,12 +8,6 @@
 function writeToLog($string, $log) {
 	file_put_contents("/var/www/frcteam4999.jordanpowers.net/logs/".$log.".log", date("d-m-Y_h:i:s")."-- ".$string."\r\n", FILE_APPEND);
 }
-function clean($data) {
-		  $data = trim($data);
-		  $data = mysqli_real_escape_string($data);
-		  $data = htmlspecialchars($data);
-		  return $data;
-		}
 
 #check if logged in and redirect if not
 if ($_SESSION["loggedIn"]){
@@ -34,23 +28,33 @@ while($row = $columnData->fetch_assoc()) {
 }
 #handle submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$data = $DB->query('SELECT Team FROM robots WHERE Team="'.clean($_POST["Team"]).'";');
+	$query = $DB->prepare('SELECT Team FROM robots WHERE Team = ?;');
+	$query->bind_param('i',$_POST["Team"]);
+	$query->execute();
+	$data = $query->get_result();
 	if($data->num_rows == 0){
-		$DB->query('INSERT INTO robots (Team) VALUES ('.clean($_POST["Team"]).');');
+		$query = $DB->prepare('INSERT INTO robots (Team) VALUES (?);');
+		$query->bind_param('i',$_POST["Team"]);
+		$query->execute();
 	}
+	$query = $DB->prepare('UPDATE robots SET ?=? WHERE Team = ?;');
 	foreach($columns as $column) {
 		if($column["Field"]!="Team") {
-			$DB->query('UPDATE robots SET '.$column["Field"].'="'.$_POST[$column["Field"]].'" WHERE Team = "'.clean($_POST["Team"]).'";');
+			$query->bind_param('ssi',$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
+			$query->execute();
 			writeToLog("Set ".$column["Field"]." to ".$_POST[$column["Field"]],"EditData");
 		}
 	}
-	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.clean($_POST["Team"]));
+	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
 }
 #check if creating a new entry, or editing an existing entry
 #creates an associative array of the existing entry
 if(isset($_GET["team"])){
 	$team = str_replace('_',' ',$_GET["team"]);
-	$data = $DB->query('SELECT * FROM robots WHERE Team = "'.$team.'";');
+	$query = $DB->prepare('SELECT * FROM robots WHERE Team = ?;');
+	$query->bind_param('i',$_POST["Team"]);
+	$query->execute();
+	$data = $query->get_result();
 	if($data->num_rows > 0){
 		$row = $data->fetch_assoc();
 	} else {
