@@ -5,6 +5,10 @@
 </head>
 <body>
 <?php
+function writeToLog($string, $log) {
+	file_put_contents("/var/www/frcteam4999.jordanpowers.net/logs/".$log.".log", date("d-m-Y h:i:s")."--".$string, FILE_APPEND);
+}
+
 #check if logged in and redirect if not
 if ($_SESSION["loggedIn"]){
 	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
@@ -33,6 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$DB->query('UPDATE robots SET '.$column["Field"].'="'.$_POST[$column["Field"]].'" WHERE Team = "'.$_POST["Team"].'";');
 		}
 	}
+	writeToLog($_POST,"EditData");
 	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
 }
 #check if creating a new entry, or editing an existing entry
