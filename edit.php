@@ -48,7 +48,7 @@ if(isset($_GET["team"])){
 	echo('<h1>Team: '.$team.'</h1>');
 }
 #create the form
-echo('<form action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post" autocomplete="off">');
+echo('<form id="edit" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post" autocomplete="off">');
 foreach($columns as $column) {
 	#remove underscores from column names
 	$PrettyColumn = str_replace('_',' ',$column["Field"]);
@@ -99,7 +99,7 @@ foreach($columns as $column) {
 				break;
 			case("Autonomous_capabilities"):
 			case("Other_info"):
-				echo('<textarea rows="4" cols="50" name='.$column["Field"].'">'.$row[$column["Field"]].'</textarea><br>');
+				echo('<textarea form="edit" rows="4" cols="50" name='.$column["Field"].'">'.$row[$column["Field"]].'</textarea><br>');
 				break;
 			default:
 				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
