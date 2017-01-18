@@ -6,7 +6,7 @@
 <body>
 <?php
 function writeToLog($string, $log) {
-	file_put_contents("/var/www/frcteam4999.jordanpowers.net/logs/".$log.".log", date("d-m-Y_h:i:s")."-- ".$string, FILE_APPEND);
+	file_put_contents("/var/www/frcteam4999.jordanpowers.net/logs/".$log.".log", date("d-m-Y_h:i:s")."-- ".$string."\r\n", FILE_APPEND);
 }
 
 #check if logged in and redirect if not
