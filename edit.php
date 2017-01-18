@@ -79,7 +79,6 @@ foreach($columns as $column) {
 				}
 				echo('</select>');
 				break;
-				#need textarea for text fields
 			case("Can_pickup_gear_from_floor"):
 			case("Can_place_gear_on_lift"):
 			case("Can_catch_fuel_from_hoppers"):
@@ -97,6 +96,10 @@ foreach($columns as $column) {
 					<option value="1" selected>Yes</option>');
 				}
 				echo('</select>');
+				break;
+			case("Autonomous_capabilities"):
+			case("Other_info"):
+				echo('<textarea rows="4" cols="50" name='.$column["Field"].'">'.$row[$column["Field"]].'</textarea><br>');
 				break;
 			default:
 				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
