@@ -29,16 +29,16 @@ while($row = $columnData->fetch_assoc()) {
 }
 #handle submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$query->prepare('SELECT Team FROM robots WHERE Team = ?;');
+	$query->prepare('SELECT Team FROM robots WHERE Team = ?');
 	$query->bind_param('i',$_POST["Team"]);
 	$query->execute();
 	$data = $query->get_result();
 	if($data->num_rows == 0){
-		$query->prepare('INSERT INTO robots (Team) VALUES (?);');
+		$query->prepare('INSERT INTO robots (Team) VALUES (?)');
 		$query->bind_param('i',$_POST["Team"]);
 		$query->execute();
 	}
-	$query->prepare('UPDATE robots SET ? = ? WHERE Team = ?;');
+	$query->prepare('UPDATE robots SET ? = ? WHERE Team = ?');
 	$query->bind_param('ssi',$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
 	foreach($columns as $column) {
 		if($column["Field"]!="Team") {
@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 #creates an associative array of the existing entry
 if(isset($_GET["team"])){
 	$team = str_replace('_',' ',$_GET["team"]);
-	$query->prepare('SELECT * FROM robots WHERE Team = ?;');
+	$query->prepare('SELECT * FROM robots WHERE Team = ?');
 	$query->bind_param('i',$team);
 	$query->execute();
 	$data = $query->get_result();
