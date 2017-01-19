@@ -38,9 +38,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$query->execute();
 	}
 	$query = $DB->prepare('UPDATE robots SET ?=? WHERE Team = ?;');
+	$query->bind_param('ssi',$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
 	foreach($columns as $column) {
 		if($column["Field"]!="Team") {
-			$query->bind_param('ssi',$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
 			$query->execute();
 			writeToLog("Set ".$column["Field"]." to ".$_POST[$column["Field"]],"EditData");
 		}
@@ -52,15 +52,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if(isset($_GET["team"])){
 	$team = str_replace('_',' ',$_GET["team"]);
 	$query = $DB->prepare('SELECT * FROM robots WHERE Team = ?;');
-	$query->bind_param('i',$_GET["Team"]);
+	$query->bind_param('i',$team);
 	$query->execute();
 	$data = $query->get_result();
 	if($data->num_rows > 0){
 		$row = $data->fetch_assoc();
+		echo('<h1>Team: '.$team.'</h1>');
 	} else {
 		unset($team);
 	}
-	echo('<h1>Team: '.$team.'</h1>');
 }
 #create the form
 echo('<form id="edit" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post" autocomplete="off">');
