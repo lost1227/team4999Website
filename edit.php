@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$query->bind_param('i',$_POST["Team"]);
 		$query->execute();
 	}
-	$query->prepare('UPDATE robots SET ?=? WHERE Team = ?;');
+	$query->prepare('UPDATE robots SET ? = ? WHERE Team = ?;');
 	$query->bind_param('ssi',$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
 	foreach($columns as $column) {
 		if($column["Field"]!="Team") {
