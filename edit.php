@@ -12,6 +12,7 @@ function writeToLog($string, $log) {
 #check if logged in and redirect if not
 if ($_SESSION["loggedIn"]){
 	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
+	$query = $DB->stmt_init();
 } else {
 	if(isset($_GET["team"])){
 		header( 'Location: https://frcteam4999.jordanpowers.net/login.php?redirect=edit.php?team='.$_GET["team"]);
@@ -28,16 +29,16 @@ while($row = $columnData->fetch_assoc()) {
 }
 #handle submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$query = $DB->prepare('SELECT Team FROM robots WHERE Team = ?;');
+	$query->prepare('SELECT Team FROM robots WHERE Team = ?;');
 	$query->bind_param('i',$_POST["Team"]);
 	$query->execute();
 	$data = $query->get_result();
 	if($data->num_rows == 0){
-		$query = $DB->prepare('INSERT INTO robots (Team) VALUES (?);');
+		$query->prepare('INSERT INTO robots (Team) VALUES (?);');
 		$query->bind_param('i',$_POST["Team"]);
 		$query->execute();
 	}
-	$query = $DB->prepare('UPDATE robots SET ?=? WHERE Team = ?;');
+	$query->prepare('UPDATE robots SET ?=? WHERE Team = ?;');
 	$query->bind_param('ssi',$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
 	foreach($columns as $column) {
 		if($column["Field"]!="Team") {
@@ -51,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 #creates an associative array of the existing entry
 if(isset($_GET["team"])){
 	$team = str_replace('_',' ',$_GET["team"]);
-	$query = $DB->prepare('SELECT * FROM robots WHERE Team = ?;');
+	$query->prepare('SELECT * FROM robots WHERE Team = ?;');
 	$query->bind_param('i',$team);
 	$query->execute();
 	$data = $query->get_result();
