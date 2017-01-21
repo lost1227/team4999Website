@@ -8,11 +8,11 @@
 function writeToLog($string, $log) {
 	file_put_contents("/var/www/frcteam4999.jordanpowers.net/logs/".$log.".log", date("d-m-Y_h:i:s")."-- ".$string."\r\n", FILE_APPEND);
 }
-function formatAndQuery() { #first argument should be the query. %s for string and $d for int. the rest of the arguments should be the values in order
+function formatAndQuery() { #first argument should be the query. %sv for strings to be escaped, %s for string and $d for int. the rest of the arguments should be the values in order
 	global $DB;
 	$args  = func_get_args();
     $query = array_shift($args); #remove the first element of the array as its own variable
-    $query = str_replace("%s","'%s'",$query);
+    $query = str_replace("%sv","'%s'",$query);
 	foreach ($args as $key => $val)
     {
         $args[$key] = $DB->real_escape_string($val);
@@ -47,9 +47,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	#check if team exists
 	$data = formatAndQuery('SELECT Team FROM robots WHERE Team = %d;',$_POST["Team"]);
 	if($data->num_rows == 0){ # add team if it doesn't exist yet
-		formatAndQuery('INSERT INTO robots (Team) VALUES (%d);',$_POST["Team"]);
+		if($column["Field"] != "Team") {
+			formatAndQuery('INSERT INTO robots (Team) VALUES (%d);',$_POST["Team"]);
+		}
 	}
-	$update = 'UPDATE robots SET %s = %s WHERE Team = %d;';
+	$update = 'UPDATE robots SET %s = %sv WHERE Team = %d;';
 	foreach($columns as $column) {
 		formatAndQuery($update,$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
 	}
