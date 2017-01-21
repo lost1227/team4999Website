@@ -23,7 +23,7 @@
 		$DB = new mysqli("localhost","ro","","frcteam4999");
 	}
 	$team = str_replace('_',' ',$_GET["team"]);
-	formatAndQuery('SELECT * FROM robots WHERE Team = %d;',$team);
+	$data = formatAndQuery('SELECT * FROM robots WHERE Team = %d;',$team);
 	#$data = $DB->query('SELECT * FROM robots WHERE Team = "'.$team.'";');
 	if($data->num_rows > 0){
 		while($row = $data->fetch_assoc()) {
@@ -52,6 +52,6 @@
 	} else {
 		echo('<p>No results!</p>');
 	}
-	echo('<p id="edit"><a href=/edit.php?team='.str_replace(' ','_',$value).'>Edit</a></p>');
+	echo('<p id="edit"><a href=/edit.php?team='.str_replace(' ','_',$_GET["Team"]).'>Edit</a></p>');
 	?>
 </html>
