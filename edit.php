@@ -38,13 +38,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$stmt->bind_param('ssi',$Field,$Value,$Team);
 		foreach($columns as $column) {
 			if($column["Field"]!="Team") {
-				#$update->execute();
 				$Field = $column["Field"];
 				$Value = $_POST[$column["Field"]];
 				$Team = $_POST["Team"];
+				$update->execute();
 				writeToLog("Set ".$column["Field"]." to ".$_POST[$column["Field"]],"EditData");
 			}
 		}
+		$stmt->close();
 		header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
 	}
 }
