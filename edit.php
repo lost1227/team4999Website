@@ -72,9 +72,9 @@ foreach($columns as $column) {
 				$options=array("West Coast","Mechanum","Tank","Swerve");
 				foreach($options as $option) {
 					if ($option == $row[$column["Field"]]) { #if the value is already set, set the option to that value
-						echo('<option value='.$option.' selected>'.$option.'</option>');
+						echo('<option value="'.$option.'" selected>'.$option.'</option>');
 					} else {
-						echo('<option value='.$option.'>'.$option.'</option>');
+						echo('<option value="'.$option.'">'.$option.'</option>');
 					}
 				}
 				echo('</select>');
