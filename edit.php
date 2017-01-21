@@ -34,12 +34,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if($data->num_rows == 0){
 			$DB->query('INSERT INTO robots (Team) VALUES ('.$_POST["Team"].');');
 		}
-		$update = $DB->stmt_init();
-		$update->prepare('UPDATE robots SET ? = ? WHERE Team = ?');
-		$update->bind_param('ssi',$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
+		$stmt = $DB->prepare('UPDATE robots SET ? = ? WHERE Team = ?');
+		$stmt->bind_param('ssi',$Field,$Value,$Team);
 		foreach($columns as $column) {
 			if($column["Field"]!="Team") {
-				$update->execute();
+				#$update->execute();
+				$Field = $column["Field"];
+				$Value = $_POST[$column["Field"]];
+				$Team = $_POST["Team"];
 				writeToLog("Set ".$column["Field"]." to ".$_POST[$column["Field"]],"EditData");
 			}
 		}
