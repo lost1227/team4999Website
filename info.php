@@ -62,6 +62,6 @@
 	} else {
 		echo('<p>No results!</p>');
 	}
-	echo('<p id="edit"><a href=/edit.php?team='.str_replace(' ','_',$_GET["Team"]).'>Edit</a></p>');
+	echo('<p id="edit"><a href=/edit.php?team='.$_GET["Team"].'>Edit</a></p>');
 	?>
 </html>
