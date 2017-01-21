@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				$Field = $column["Field"];
 				$Value = $_POST[$column["Field"]];
 				$Team = $_POST["Team"];
-				$update->execute();
+				$stmt->execute();
 				writeToLog("Set ".$column["Field"]." to ".$_POST[$column["Field"]],"EditData");
 			}
 		}
