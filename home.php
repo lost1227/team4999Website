@@ -26,6 +26,17 @@
 		<div id="closesearchbar"> X </div>
 	</div>
 	
+	<div hidden id="Filters">
+		<input type="checkbox" id="DriveSystemCheck">
+			<select id="DriveSystemSelect">
+				<option value="West Coast">West Coast</option>
+				<option value="Mechanum">Mechanum</option>
+				<option value="Tank">Tank</option>
+				<option value="Swerve">Swerve</option>
+			</select>
+		</input>
+	</div>
+	
 	<div id="container">
 	</div>
 	<?php
