@@ -12,7 +12,6 @@ function writeToLog($string, $log) {
 #check if logged in and redirect if not
 if ($_SESSION["loggedIn"]){
 	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
-	$query = $DB->stmt_init();
 } else {
 	if(isset($_GET["team"])){
 		header( 'Location: https://frcteam4999.jordanpowers.net/login.php?redirect=edit.php?team='.$_GET["team"]);
@@ -34,7 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if($data->num_rows == 0){
 			$DB->query('INSERT INTO robots (Team) VALUES ('.$_POST["Team"].');');
 		}
-		$stmt = $DB->prepare('UPDATE robots SET ? = ? WHERE Team = ?');
+		$stmt = $DB->stmt_init();
+		$stmt->prepare('UPDATE robots SET ? = ? WHERE Team = ?');
 		$stmt->bind_param('ssi',$Field,$Value,$Team);
 		foreach($columns as $column) {
 			if($column["Field"]!="Team") {
