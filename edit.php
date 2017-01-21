@@ -29,7 +29,7 @@ while($row = $columnData->fetch_assoc()) {
 }
 #handle submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	if(is_int($_POST["Team"]) {
+	if(is_int($_POST["Team"])) {
 		$data = $DB->query('SELECT Team FROM robots WHERE Team = ' . $_POST["Team"] . ';');
 		if($data->num_rows == 0){
 			$DB->query('INSERT INTO robots (Team) VALUES ('.$_POST["Team"].');');
