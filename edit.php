@@ -8,7 +8,23 @@
 function writeToLog($string, $log) {
 	file_put_contents("/var/www/frcteam4999.jordanpowers.net/logs/".$log.".log", date("d-m-Y_h:i:s")."-- ".$string."\r\n", FILE_APPEND);
 }
-
+function formatAndQuery() { #first argument should be the query. %s for string and $d for int. the rest of the arguments should be the values in order
+	global $DB;
+	$args  = func_get_args();
+    $query = array_shift($args); #remove the first element of the array as its own variable
+    $query = str_replace("%s","'%s'",$query);
+	foreach ($args as $key => $val)
+    {
+        $args[$key] = $DB->real_escape_string($val);
+    }
+	$query  = vsprintf($query, $args);
+    $result = $DB->query($query);
+    if (!$result)
+    {
+        throw new Exception($mysqli->error()." [$query]");
+    }
+    return $result;
+}
 #check if logged in and redirect if not
 if ($_SESSION["loggedIn"]){
 	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
@@ -28,34 +44,22 @@ while($row = $columnData->fetch_assoc()) {
 }
 #handle submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	if(is_numeric($_POST["Team"])) {
-		$data = $DB->query('SELECT Team FROM robots WHERE Team = ' . $_POST["Team"] . ';');
-		if($data->num_rows == 0){
-			$DB->query('INSERT INTO robots (Team) VALUES ('.$_POST["Team"].');');
-		}
-		$stmt = $DB->prepare('UPDATE robots SET ? = ? WHERE Team = ?');
-		if($stmt == FALSE) {
-			die($DB->error);
-		}
-		$stmt->bind_param('ssi',$Field,$Value,$Team);
-		foreach($columns as $column) {
-			if($column["Field"]!="Team") {
-				$Field = $column["Field"];
-				$Value = $_POST[$column["Field"]];
-				$Team = $_POST["Team"];
-				$stmt->execute();
-				writeToLog("Set ".$column["Field"]." to ".$_POST[$column["Field"]],"EditData");
-			}
-		}
-		$stmt->close();
-		header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
+	#check if team exists
+	$data = formatAndQuery('SELECT Team FROM robots WHERE Team = %d;',$_POST["Team"]);
+	if($data->num_rows == 0){ # add team if it doesn't exist yet
+		formatAndQuery('INSERT INTO robots (Team) VALUES (%d);',$_POST["Team"]);
 	}
+	$update = 'UPDATE robots SET %s = %s WHERE Team = %d;';
+	foreach($columns as $column) {
+		formatAndQuery($update,$_POST[$column["Field"]],$_POST["Team"]);
+	}
+	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
 }
 #check if creating a new entry, or editing an existing entry
 #creates an associative array of the existing entry
 if(isset($_GET["team"])){
 	if(is_numeric($_GET["team"])) {
-		$data = $DB->query('SELECT * FROM robots WHERE Team = '.$_GET["team"].';');
+		formatAndQuery('SELECT * FROM robots WHERE Team = %d;',$_GET["team"]);
 		if($data->num_rows > 0){
 			$row = $data->fetch_assoc();
 			echo('<h1>Team: '.$_GET["team"].'</h1>');
