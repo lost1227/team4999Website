@@ -30,6 +30,14 @@
 			foreach($row as $key => $value) {
 				$key = str_replace('_',' ',$key);
 				switch($key) {
+					case("Width"):
+					case("Depth"):
+					case("Height"):
+						echo('<p>'.$key.': '.$value.' inches</p>');
+						break;
+					case("Weight"):
+						echo('<p>'.$key.': '.$value.' lbs</p>');
+						break;
 					case("Can pickup gear from floor"):
 					case("Can place gear on lift"):
 					case("Can catch fuel from hoppers"):
@@ -44,6 +52,7 @@
 							echo('<p>'.$key.': No</p>');
 						}
 						break;
+					
 					default:
 						echo('<p>'.$key.': '.$value.'</p>');
 						break;
