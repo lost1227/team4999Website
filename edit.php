@@ -21,7 +21,7 @@ function formatAndQuery() { #first argument should be the query. %s for string a
     $result = $DB->query($query);
     if (!$result)
     {
-        throw new Exception($DB->error()." [$query]");
+        throw new Exception($DB->error." [$query]");
     }
     return $result;
 }
@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 	$update = 'UPDATE robots SET %s = %s WHERE Team = %d;';
 	foreach($columns as $column) {
-		formatAndQuery($update,$_POST[$column["Field"]],$_POST["Team"]);
+		formatAndQuery($update,$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
 	}
 	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
 }
