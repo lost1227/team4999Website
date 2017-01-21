@@ -64,7 +64,7 @@ echo('<form id="edit" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method
 foreach($columns as $column) {
 	#remove underscores from column names
 	$PrettyColumn = str_replace('_',' ',$column["Field"]);
-	if(!($column["Field"] == "Team" and isset($team))){ #Check if creating a new team
+	if(!($column["Field"] == "Team" and isset($_GET["team"]))){ #Check if creating a new team
 		echo('<p>'.$PrettyColumn.':</p><br>');
 		switch($column["Field"]) {
 			#check all numbers
@@ -118,7 +118,7 @@ foreach($columns as $column) {
 		}
 		/*echo('<p>'.$PrettyColumn.':</p><br>
 			<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');*/
-	} elseif ($column["Field"] == "Team" and isset($team)) {#Set the team to a hidden value
+	} elseif ($column["Field"] == "Team" and isset($_GET["team"])) {#Set the team to a hidden value
 		echo('<input type="hidden" name="Team" value="'.$row[$column["Field"]].'">');
 	}
 }
