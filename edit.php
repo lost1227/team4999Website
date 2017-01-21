@@ -21,7 +21,7 @@ function formatAndQuery() { #first argument should be the query. %s for string a
     $result = $DB->query($query);
     if (!$result)
     {
-        throw new Exception($mysqli->error()." [$query]");
+        throw new Exception($DB->error()." [$query]");
     }
     return $result;
 }
@@ -58,12 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 #check if creating a new entry, or editing an existing entry
 #creates an associative array of the existing entry
 if(isset($_GET["team"])){
-	if(is_numeric($_GET["team"])) {
-		$data = formatAndQuery('SELECT * FROM robots WHERE Team = %d;',$_GET["team"]);
-		if($data->num_rows > 0){
-			$row = $data->fetch_assoc();
-			echo('<h1>Team: '.$_GET["team"].'</h1>');
-		}
+	$data = formatAndQuery('SELECT * FROM robots WHERE Team = %d;',$_GET["team"]);
+	if($data->num_rows > 0){
+		$row = $data->fetch_assoc();
+		echo('<h1>Team: '.$_GET["team"].'</h1>');
 	}
 }
 #create the form
