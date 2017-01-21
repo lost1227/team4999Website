@@ -30,14 +30,14 @@
 			foreach($row as $key => $value) {
 				$key = str_replace('_',' ',$key);
 				switch($key) {
-					case("Can_pickup_gear_from_floor"):
-					case("Can_place_gear_on_lift"):
-					case("Can_catch_fuel_from_hoppers"):
-					case("Can_pickup_fuel_from_floor"):
-					case("Can_shoot_in_low_goal"):
-					case("Can_shoot_in_high_goal"):
-					case("Can_climb_rope"):
-					case("Brought_own_rope"):
+					case("Can pickup gear from floor"):
+					case("Can place gear on lift"):
+					case("Can catch fuel from hoppers"):
+					case("Can pickup fuel from floor"):
+					case("Can shoot in low goal"):
+					case("Can shoot in high goal"):
+					case("Can climb rope"):
+					case("Brought own rope"):
 						if($value = 1) {
 							echo('<p>'.$key.': Yes</p>');
 						} else {
