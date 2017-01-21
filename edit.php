@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 #check if creating a new entry, or editing an existing entry
 #creates an associative array of the existing entry
 if(isset($_GET["team"])){
-	if(is_int($_GET["Team"]) {
+	if(is_int($_GET["Team"])) {
 		$data = $DB->query('SELECT * FROM robots WHERE Team = '.$_GET["Team"].';');
 		if($data->num_rows > 0){
 			$row = $data->fetch_assoc();
