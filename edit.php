@@ -29,38 +29,32 @@ while($row = $columnData->fetch_assoc()) {
 }
 #handle submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$query->prepare('SELECT Team FROM robots WHERE Team = ?');
-	$query->bind_param('i',$_POST["Team"]);
-	$query->execute();
-	$data = $query->get_result();
-	if($data->num_rows == 0){
-		$query->prepare('INSERT INTO robots (Team) VALUES (?)');
-		$query->bind_param('i',$_POST["Team"]);
-		$query->execute();
-	}
-	$query->prepare('UPDATE robots SET ? = ? WHERE Team = ?');
-	$query->bind_param('ssi',$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
-	foreach($columns as $column) {
-		if($column["Field"]!="Team") {
-			$query->execute();
-			writeToLog("Set ".$column["Field"]." to ".$_POST[$column["Field"]],"EditData");
+	if(is_int($_POST["Team"]) {
+		$data = $DB->query('SELECT Team FROM robots WHERE Team = ' . $_POST["Team"] . ';');
+		if($data->num_rows == 0){
+			$DB->query('INSERT INTO robots (Team) VALUES ('.$_POST["Team"].');');
 		}
+		$update = $DB->stmt_init();
+		$update->prepare('UPDATE robots SET ? = ? WHERE Team = ?');
+		$update->bind_param('ssi',$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
+		foreach($columns as $column) {
+			if($column["Field"]!="Team") {
+				$update->execute();
+				writeToLog("Set ".$column["Field"]." to ".$_POST[$column["Field"]],"EditData");
+			}
+		}
+		header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
 	}
-	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
 }
 #check if creating a new entry, or editing an existing entry
 #creates an associative array of the existing entry
 if(isset($_GET["team"])){
-	$team = str_replace('_',' ',$_GET["team"]);
-	$query->prepare('SELECT * FROM robots WHERE Team = ?');
-	$query->bind_param('i',$team);
-	$query->execute();
-	$data = $query->get_result();
-	if($data->num_rows > 0){
-		$row = $data->fetch_assoc();
-		echo('<h1>Team: '.$team.'</h1>');
-	} else {
-		unset($team);
+	if(is_int($_GET["Team"]) {
+		$data = $DB->query('SELECT * FROM robots WHERE Team = '.$_GET["Team"].';');
+		if($data->num_rows > 0){
+			$row = $data->fetch_assoc();
+			echo('<h1>Team: '.$_GET["Team"].'</h1>');
+		}
 	}
 }
 #create the form
