@@ -33,8 +33,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if($data->num_rows == 0){
 			$DB->query('INSERT INTO robots (Team) VALUES ('.$_POST["Team"].');');
 		}
-		$stmt = $DB->stmt_init();
-		$stmt->prepare('UPDATE robots SET ? = ? WHERE Team = ?');
+		$stmt = $DB->prepare('UPDATE robots SET ? = ? WHERE Team = ?');
+		if($stmt == FALSE) {
+			die($DB->error);
+		}
 		$stmt->bind_param('ssi',$Field,$Value,$Team);
 		foreach($columns as $column) {
 			if($column["Field"]!="Team") {
