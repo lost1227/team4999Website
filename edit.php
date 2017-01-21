@@ -99,7 +99,7 @@ foreach($columns as $column) {
 				break;
 			case("Autonomous_capabilities"):
 			case("Other_info"):
-				echo('<textarea form="edit" rows="4" cols="50" name='.$column["Field"].'">'.$row[$column["Field"]].'</textarea><br>');
+				echo('<textarea rows="4" cols="50" name="'.$column["Field"].'">'.$row[$column["Field"]].'</textarea><br>');
 				break;
 			default:
 				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
