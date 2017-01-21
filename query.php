@@ -1,5 +1,6 @@
 <?php session_start(); ?>
 <?php
+require 'functions.php';
 #Check if logged in and use read-only account if not
 if (isset($_SESSION["loggedIn"])){
 	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
@@ -12,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$index = 1;
 	#loop through all the filters and apply each one, adding an 'AND' between each
 	foreach($_POST as $key => $value) {
-		$query = $query . $key . ' LIKE "' . $value . '"';
+		$query = $query . $DB->real_escape_string($key) . ' LIKE "' . $DB->real_escape_string($value) . '"';
 		if ($index != count($_POST) ){
 			$query = $query . ' AND ';
 		} else {
@@ -39,6 +40,6 @@ if($data->num_rows > 0){
 			</div></a>');
 	}
 } else {
-	echo('<p>No results!</p>');
+	echo('<p style="margins: auto; font-family: StormFaze; width: inherit; font-size: 25px;">No results!</p>');
 }
 ?>
