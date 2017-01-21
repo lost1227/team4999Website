@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 #creates an associative array of the existing entry
 if(isset($_GET["team"])){
 	if(is_numeric($_GET["team"])) {
-		formatAndQuery('SELECT * FROM robots WHERE Team = %d;',$_GET["team"]);
+		$data = formatAndQuery('SELECT * FROM robots WHERE Team = %d;',$_GET["team"]);
 		if($data->num_rows > 0){
 			$row = $data->fetch_assoc();
 			echo('<h1>Team: '.$_GET["team"].'</h1>');
