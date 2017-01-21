@@ -29,7 +29,7 @@ while($row = $columnData->fetch_assoc()) {
 }
 #handle submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	if(is_int($_POST["Team"])) {
+	if(is_numeric($_POST["Team"])) {
 		$data = $DB->query('SELECT Team FROM robots WHERE Team = ' . $_POST["Team"] . ';');
 		if($data->num_rows == 0){
 			$DB->query('INSERT INTO robots (Team) VALUES ('.$_POST["Team"].');');
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 #check if creating a new entry, or editing an existing entry
 #creates an associative array of the existing entry
 if(isset($_GET["team"])){
-	if(is_int($_GET["Team"])) {
+	if(is_numeric($_GET["Team"])) {
 		$data = $DB->query('SELECT * FROM robots WHERE Team = '.$_GET["Team"].';');
 		if($data->num_rows > 0){
 			$row = $data->fetch_assoc();
