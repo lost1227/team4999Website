@@ -43,6 +43,7 @@
 						} else {
 							echo('<p>'.$key.': No</p>');
 						}
+						break;
 					default:
 						echo('<p>'.$key.': '.$value.'</p>');
 						break;
