@@ -35,6 +35,12 @@
 				<option value="Swerve">Swerve</option>
 			</select>
 		</input>
+		<?php
+		$bools = array("Can pickup gear from floor","Can place gear on lift","Can catch fuel from hoppers","Can pickup fuel from floor","Can shoot in low goal","Can shoot in hight goal","Can climb rope","Brought own rope");
+		foreach($bools as $bool) {
+			echo('<input type="checkbox" id="'.$bool.'">'.$bool.'</input>');
+		}
+		?>
 	</div>
 	
 	<div id="container">

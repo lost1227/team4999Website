@@ -212,6 +212,13 @@ div.infoRow:hover{
 	background-color: #cc0000;
 }
 
+#Filters {
+	position: fixed;
+	top: 79px;
+	height: 30px;
+	z-index: 3;
+	width: 100%;
+}
 
 
 /************** LOGIN.PHP STYLES **************/
@@ -270,15 +277,3 @@ div.infoRow:hover{
 	background-color: #06ceff;
 	color: white;
 }
-
-
-
-
-
-
-
-
-
-
-
-
