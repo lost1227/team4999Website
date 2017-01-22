@@ -10,6 +10,11 @@ $("#filterli").click(function() {
 	$("#Filters").show();
 });
 
+	
+$("#DriveSystemSelect").click(function() {
+	$("#DriveSystemCheck").prop('checked',false);
+});
+
 $("#Filters input").on("change",function() {
 	var filterIDs = $("#filters input").map(function() { return this.id; }).get(); // get ids of each filter element
 	for (var i = 0; i < filterIDs.length; i++) {
