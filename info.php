@@ -46,7 +46,7 @@
 					case("Can shoot in high goal"):
 					case("Can climb rope"):
 					case("Brought own rope"):
-						if($value = 1) {
+						if($value == 1) {
 							echo('<p>'.$key.': Yes</p>');
 						} else {
 							echo('<p>'.$key.': No</p>');
