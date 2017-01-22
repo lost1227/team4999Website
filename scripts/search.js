@@ -5,12 +5,20 @@ $("#searchli").click(function() {
 		if($("#TeamSearch").is(':visible')) {
 			window.clearInterval(loop);
 			$("#Filters").css('top','130px');
-			$("#container").css('top',(130 + $('#Filters').height()) + 'px');
+			if($("#Filters").is(':visible')) {
+				$("#container").css('top',(130 + $('#Filters').height()) + 'px');
+			} else {
+				$("#container").css('top',"130px");
+			}
 		} else {
 			filter.enabled = false;
 			loop = window.setInterval(get(),5000);
 			$("#Filters").css('top','80px');
-			$("#container").css('top',(80 + $('#Filters').height()) + 'px');
+			if($("#Filters").is(':visible')) {
+				$("#container").css('top',(80 + $('#Filters').height()) + 'px');
+			} else {
+				$("#container").css('top',"80px");
+			}
 	}});
 });
 
@@ -32,7 +40,7 @@ $("#TeamSearch > input").on('input', function() {
 });
 
 //close search bar on click of x
-$("#closesearchbar").click(closeSearchbar());
+$("#closesearchbar").click(function() { closeSearchbar(); });
 
 function closeSearchbar(){
 	$("#TeamSearch").hide(0);
