@@ -16,6 +16,7 @@ $("#Filters > input").on("change",function() {
 		if($("#"+filterIDs[i]).checked) {
 			window.clearInterval(loop);
 			filter.enabled = true;
+			break;
 		} else {
 			filter.enabled = false;
 		}
