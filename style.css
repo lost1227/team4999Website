@@ -213,9 +213,8 @@ div.infoRow:hover{
 }
 
 #Filters {
-	position: fixed;
+	position: relative;
 	top: 79px;
-	height: 30px;
 	z-index: 3;
 	width: 100%;
 }

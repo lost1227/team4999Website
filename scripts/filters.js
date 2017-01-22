@@ -13,5 +13,6 @@ $("#filterli").click(function() {
 $("#Filters > input").on("change",function() {
 	if(this.checked) {
 		alert(this.id);
+		//add to filter object the filters in the filterboxes
 	}
 });
