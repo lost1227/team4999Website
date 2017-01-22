@@ -12,7 +12,17 @@ $("#filterli").click(function() {
 
 $("#Filters > input").on("change",function() {
 	if(this.checked) {
-		alert(this.id);
-		//add to filter object the filters in the filterboxes
+		//alert(this.id);
+		if(this.id == "DriveSystemCheck") {
+			filter.Drive_System = $("#DriveSystemSelect").val();
+		} else {
+			filter[this.id] == 1;
+		}
+	} else {
+		if(this.id == "DriveSystemCheck") {
+			delete filter.Drive_System;
+		} else {
+			delete filter[this.id];
+		}
 	}
 });

@@ -1,30 +1,27 @@
-
+//show searchbar on click on menu option
 $("#searchli").click(function() {
 	$("#hamburgermenu").slideUp(100);
-	$("#container").css('top','130px');
 	$("#TeamSearch").show(0, function() {
 		if($("#TeamSearch").is(':visible')) {
 			window.clearInterval(loop);
+			$("#Filters").css('top','130px');
+			$("#container").css('top',(130 + $('#Filters').height()) + 'px');
 		} else {
 			filter.enabled = false;
 			loop = window.setInterval(get(),5000);
+			$("#Filters").css('top','80px');
+			$("#container").css('top',(80 + $('#Filters').height()) + 'px');
 	}});
 });
 
-$(document).keypress(function(e){
-	if(e.keyCode === 27) //if you hit esc, close the searchbar
-		closeSearchbar();
-});
-
+//only allow numerical input
 $("#TeamSearch > input").keypress( function(e) {
-	if(e.keyCode === 27) //if you hit esc, close the searchbar
-		closeSearchbar();
-		
 	var chr = String.fromCharCode(e.which);
 	if ("1234567890".indexOf(chr) < 0)
 		return false;
 });
 
+//update the results on input into the search box
 $("#TeamSearch > input").on('input', function() {
 	if(!$("#TeamSearch > input").val())
 		clearFilters();
@@ -34,14 +31,13 @@ $("#TeamSearch > input").on('input', function() {
 	get();
 });
 
-$("#closesearchbar").click(function(){
-	closeSearchbar();
-});
+//close search bar on click of x
+$("#closesearchbar").click(closeSearchbar());
 
 function closeSearchbar(){
 	$("#TeamSearch").hide(0);
 	$("#TeamSearch > input").val(''); //empty contents of searchbar
-	filter.Team = ''; //empty team filter in filter object
+	delete filter.Team //delete the team filter from the object
 	$("#container").css('top','80px');
 	clearFilters();
 }
