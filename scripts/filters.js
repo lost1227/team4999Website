@@ -13,6 +13,7 @@ $("#filterli").click(function() {
 	
 $("#DriveSystemSelect").click(function() {
 	$("#DriveSystemCheck").prop('checked',false);
+	$("#Filters input").trigger("change");
 });
 
 $("#Filters input").on("change",function() {
