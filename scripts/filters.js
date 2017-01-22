@@ -11,7 +11,7 @@ $("#filterli").click(function() {
 });
 
 	
-$("#DriveSystemSelect").on("change",(function() {
+$("#DriveSystemSelect").on("change",function() {
 	$("#DriveSystemCheck").prop('checked',false);
 	$("#Filters input").trigger("change");
 });
