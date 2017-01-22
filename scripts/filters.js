@@ -13,7 +13,7 @@ $("#filterli").click(function() {
 $("#Filters > input").on("change",function() {
 	var filterIDs = $("#filters > input").map(function() { return this.id; }).get(); // get ids of each filter element
 	for (var i = 0; i < filterIDs.length; i++) {
-		if($("#"+filterIDs[i]).checked) {
+		if(document.getElementById(filterIDs[i]).checked) {
 			window.clearInterval(loop);
 			filter.enabled = true;
 			break;
