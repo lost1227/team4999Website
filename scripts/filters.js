@@ -1,4 +1,4 @@
-$("#searchli").click(function() {
+$("#filterli").click(function() {
 	$("#hamburgermenu").slideUp(100);
 	if($('#TeamSearch').is(':visible')) {
 		$("#Filters").css('top','130px');
@@ -7,4 +7,4 @@ $("#searchli").click(function() {
 		("#Filters").css('top','80px');
 		$("#container").css('top',(80 + $('#Filters').height()) + 'px');
 	}
-}
+});
