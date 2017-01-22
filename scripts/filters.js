@@ -9,3 +9,9 @@ $("#filterli").click(function() {
 	}
 	$("#Filters").show();
 });
+
+$("#Filters > input").on("change",function() {
+	if(this.checked) {
+		Window.alert(this.innerHTML);
+	}
+});
