@@ -12,6 +12,6 @@ $("#filterli").click(function() {
 
 $("#Filters > input").on("change",function() {
 	if(this.checked) {
-		alert(this.innerHTML);
+		alert(this.id);
 	}
 });
