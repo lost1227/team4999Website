@@ -19,6 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		} else {
 			$query = $query . ' ORDER BY Team ASC;';
 		}
+		writeToLog("WHERE "+real_escape_string($key)." LIKE ".$DB->real_escape_string($value),"filters");
 		$index++;
 	}
 	/*echo($_POST["Team"]);

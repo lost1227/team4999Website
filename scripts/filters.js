@@ -29,7 +29,7 @@ $("#Filters > input").on("change",function() {
 		if(this.id == "DriveSystemCheck") {
 			filter.Drive_System = $("#DriveSystemSelect").val();
 		} else {
-			filter[this.id.replace(/ /g,"_")] == 1;
+			filter[this.id.replace(/ /g,"_")] = 1;
 		}
 	} else {
 		if(this.id == "DriveSystemCheck") {
