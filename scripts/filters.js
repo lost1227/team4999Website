@@ -10,8 +10,8 @@ $("#filterli").click(function() {
 	$("#Filters").show();
 });
 
-$("#Filters > input").on("change",function() {
-	var filterIDs = $("#filters  input").map(function() { return this.id; }).get(); // get ids of each filter element
+$("#Filters input").on("change",function() {
+	var filterIDs = $("#filters input").map(function() { return this.id; }).get(); // get ids of each filter element
 	for (var i = 0; i < filterIDs.length; i++) {
 		if(document.getElementById(filterIDs[i]).checked) {
 			window.clearInterval(loop);
