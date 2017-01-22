@@ -4,7 +4,7 @@ $("#filterli").click(function() {
 		$("#Filters").css('top','130px');
 		$("#container").css('top',(130 + $('#Filters').height()) + 'px');
 	} else {
-		("#Filters").css('top','80px');
+		$("#Filters").css('top','80px');
 		$("#container").css('top',(80 + $('#Filters').height()) + 'px');
 	}
 });
