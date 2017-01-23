@@ -42,6 +42,6 @@ if($data->num_rows > 0){
 			</div></a>');
 	}
 } else {
-	echo('<p style="margins: auto; font-family: StormFaze; width: inherit; font-size: 25px;">No results!</p>');
+	echo('<p style="text-align: center; font-family: StormFaze; width: inherit; font-size: 25px; padding: 10px;">No results!</p>');
 }
 ?>
