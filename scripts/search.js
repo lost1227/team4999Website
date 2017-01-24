@@ -25,8 +25,9 @@ $("#searchli").click(function() {
 //only allow numerical input
 $("#TeamSearch > input").keypress( function(e) {
 	var chr = String.fromCharCode(e.which);
-	if ("1234567890".indexOf(chr) < 0)
+	if ("1234567890".indexOf(chr) < 0 && e.which != 8) {
 		return false;
+	}
 });
 
 //update the results on input into the search box
