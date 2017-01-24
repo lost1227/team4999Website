@@ -27,29 +27,18 @@
 	</div>
 	
 	<div hidden id="Filters">
-		<div id="driveSelect" style="text-align: center">
-			<input type="checkbox" id="DriveSystemCheck">
-				<select id="DriveSystemSelect">
-					<option value="West Coast">West Coast</option>
-					<option value="Mechanum">Mechanum</option>
-					<option value="Tank">Tank</option>
-					<option value="Swerve">Swerve</option>
-				</select>
-			</input>
-		</div>
+		<input type="checkbox" id="DriveSystemCheck">
+			<select id="DriveSystemSelect">
+				<option value="West Coast">West Coast</option>
+				<option value="Mechanum">Mechanum</option>
+				<option value="Tank">Tank</option>
+				<option value="Swerve">Swerve</option>
+			</select>
+		</input>
 		<?php
-		$bools = array(
-			"Can pickup gear from floor",
-			"Can place gear on lift",
-			"Can catch fuel from hoppers",
-			"Can pickup fuel from floor",
-			"Can shoot in low goal",
-			"Can shoot in hight goal",
-			"Can climb rope",
-			"Brought own rope"
-			);
+		$bools = array("Can pickup gear from floor","Can place gear on lift","Can catch fuel from hoppers","Can pickup fuel from floor","Can shoot in low goal","Can shoot in hight goal","Can climb rope","Brought own rope");
 		foreach($bools as $bool) {
-			echo('<p class="check"><input type="checkbox" id="'.$bool.'">'.$bool.'</p>');
+			echo('<label><input type="checkbox" id="'.$bool.'">'.$bool.'</label>');
 		}
 		?>
 	</div>
