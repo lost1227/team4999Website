@@ -2,6 +2,18 @@
 <html>
 <head>
 	<title>Edit Team</title>
+	<style>
+	p {
+		margin: 0px;
+	}
+	#image {
+		max-width: 25%;
+		display: block;
+	}
+	#image:hover {
+		max-width: 100%;
+	}
+	</style>
 </head>
 <body>
 <?php
@@ -80,19 +92,19 @@ foreach($columns as $column) {
 	#remove underscores from column names
 	$PrettyColumn = str_replace('_',' ',$column["Field"]);
 	if(!($column["Field"] == "Team" and isset($_GET["team"]))){ #Check if creating a new team
-		echo('<p>'.$PrettyColumn.':</p><br>');
+		echo('<p>'.$PrettyColumn.':</p>');
 		switch($column["Field"]) {
 			#check all numbers
 			case("Team"):
-				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9]*" required><br>');
+				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9]*" required>');
 				break;
 			case("Width"):
 			case("Depth"):
 			case("Height"):
-				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9.]*"><span>inches</span><br>');
+				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9.]*"><span>inches</span>');
 				break;
 			case("Weight"):
-				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9.]*"><span>lbs</span><br>');
+				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9.]*"><span>lbs</span>');
 				break;
 			case("Drive_System"): #Create select menu with options for each type of drive system. The array $options can have new drive systems added to it to create more options
 				echo('<select name="'.$column["Field"].'">');
@@ -126,16 +138,16 @@ foreach($columns as $column) {
 				break;
 			case("Autonomous_capabilities"):
 			case("Other_info"):
-				echo('<textarea rows="4" cols="50" name="'.$column["Field"].'">'.$row[$column["Field"]].'</textarea><br>');
+				echo('<textarea rows="4" cols="50" name="'.$column["Field"].'">'.$row[$column["Field"]].'</textarea>');
 				break;
 			case("Image_Path"):
 				echo('<input type="file" name="image">');
 				if(isset($row[$column["Field"]])) {
-					echo('<img src='.$row[$column["Field"]].'alt="Image">');
+					echo('<img id="image" src="'.$row[$column["Field"]].'" alt="Image">');
 				}
 				break;
 			default:
-				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
+				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'">');
 		}
 		/*echo('<p>'.$PrettyColumn.':</p><br>
 			<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');*/
