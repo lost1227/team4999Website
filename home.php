@@ -67,5 +67,6 @@
 	<script src="scripts/hamburger.js"></script>
 	<script src="scripts/search.js"></script>
 	<script src="scripts/filters.js"></script>
+	<script src="scripts/universal.js"></script>
 </body>
 </html>

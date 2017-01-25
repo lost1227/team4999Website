@@ -173,5 +173,6 @@ foreach($columns as $column) {
 echo('<input type="submit" value="Submit"></form>');
 ?>
 	<p>All values are in lbs and inches</p>
+<script src="scripts/universal.js"></script>
 </body>
 </html>

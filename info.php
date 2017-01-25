@@ -39,8 +39,6 @@
 </head>
 	</head>
 	<body>
-	
-	</body>
 	<?php
 	require 'functions.php';
 	if ($_SESSION["loggedIn"]){
@@ -94,4 +92,6 @@
 	}
 	echo('<p id="edit"><a href=/edit.php?team='.$_GET["team"].'>Edit</a></p>');
 	?>
+<script src="scripts/universal.js"></script>
+</body>
 </html>

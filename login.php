@@ -67,5 +67,6 @@
 			<input type="submit" hidden value="Login"><!-- Push enter to login -->
 			<div id="submitbtn" onclick="javascript:parentNode.submit();">login</div>
 		</form>
+		<script src="scripts/universal.js"></script>
 	</body>
 </html>
