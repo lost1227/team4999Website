@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$continueUpload = FALSE;
 		}
 		if($continueUpload) {
-			foreach($oldFiles = glob($image_dir . . $_POST["Team"] .".*") as $oldFile) {
+			foreach($oldFiles = glob($image_dir . $_POST["Team"] . ".*") as $oldFile) {
 				unlink($oldFile);
 			}
 			if (!move_uploaded_file($_FILES["image"]["tmp_name"], $target_file_path)) {
