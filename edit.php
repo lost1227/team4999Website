@@ -28,13 +28,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	#check if team exists
 	$data = formatAndQuery('SELECT Team FROM robots WHERE Team = %d;',$_POST["Team"]);
 	if($data->num_rows == 0){ # add team if it doesn't exist yet
-		if($column["Field"] != "Team") {
-			formatAndQuery('INSERT INTO robots (Team) VALUES (%d);',$_POST["Team"]);
-		}
+		formatAndQuery('INSERT INTO robots (Team) VALUES (%d);',$_POST["Team"]);
 	}
 	$update = 'UPDATE robots SET %s = %sv WHERE Team = %d;';
 	foreach($columns as $column) {
-		formatAndQuery($update,$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
+		if($column["Field"] != "Team" and $column["Field"] != "Image_Path"){
+			formatAndQuery($update,$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
+		}
+	}
+	if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
+		$image_dir = "photos/";
+		$imageFileType = pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
+		$target_file_path = $image_dir . $_POST["Team"] . pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
+		$continueUpload = TRUE;
+		//check if is image
+		if(getimagesize($_FILES["image"]["tmp_name"]) == FALSE) {
+			writeToLog("INVALID FILE","images");
+			$continueUpload = FALSE;
+		}
+		//check if acceptable image (trusts extension)
+		$acceptableFileTypes = array("jpg","png","jpeg","gif");
+		if(!in_array($imageFileType,$acceptableFileTypes)) {
+			writeToLog("INVALID FILE","images");
+			$continueUpload = FALSE;
+		}
+		if($continueUpload) {
+			if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file_path)) {
+				writeToLog("ERROR MOVING UPLOADED FILE","images");
+			} else {
+				formatAndQuery("UPDATE robots SET Image_Path = %sv WHERE Team = %d",$target_file_path,$_POST["Team"]);
+			}
+		}
 	}
 	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
 }
@@ -48,7 +72,7 @@ if(isset($_GET["team"])){
 	}
 }
 #create the form
-echo('<form id="edit" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post" autocomplete="off">');
+echo('<form id="edit" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post" autocomplete="off" enctype="multipart/form-data">');
 foreach($columns as $column) {
 	#remove underscores from column names
 	$PrettyColumn = str_replace('_',' ',$column["Field"]);
@@ -100,6 +124,12 @@ foreach($columns as $column) {
 			case("Autonomous_capabilities"):
 			case("Other_info"):
 				echo('<textarea rows="4" cols="50" name="'.$column["Field"].'">'.$row[$column["Field"]].'</textarea><br>');
+				break;
+			case("Image_Path"):
+				echo('<input type="file" name="image">');
+				if(isset($row[$column["Field"]])) {
+					echo('<img src='.$row[$column["Field"]].'alt="Image">');
+				}
 				break;
 			default:
 				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');
