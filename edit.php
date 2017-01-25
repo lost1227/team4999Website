@@ -38,8 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 	if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
 		$image_dir = "photos/";
+		if (!file_exists($image_dir)) {
+			mkdir($image_dir,0777,true);
+		}
 		$imageFileType = pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
-		$target_file_path = $image_dir . $_POST["Team"] . pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
+		$target_file_path = $image_dir . $_POST["Team"] .".". pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
 		$continueUpload = TRUE;
 		//check if is image
 		if(getimagesize($_FILES["image"]["tmp_name"]) == FALSE) {
