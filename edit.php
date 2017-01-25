@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$continueUpload = FALSE;
 		}
 		if($continueUpload) {
-			if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file_path)) {
+			if (!move_uploaded_file($_FILES["image"]["tmp_name"], $target_file_path)) {
 				writeToLog("ERROR MOVING UPLOADED FILE","images");
 			} else {
 				formatAndQuery("UPDATE robots SET Image_Path = %sv WHERE Team = %d",$target_file_path,$_POST["Team"]);
