@@ -11,6 +11,19 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<style>
+			p {
+				margin: 0px;
+			}
+			#image {
+				max-width: 25%;
+				display: block;
+			}
+			#image:hover {
+				max-width: 100%;
+			}
+		</style>
+</head>
 	</head>
 	<body>
 	
@@ -52,7 +65,11 @@
 							echo('<p>'.$key.': No</p>');
 						}
 						break;
-					
+					case("Image Path"):
+						if(isset($value)) {
+							echo('<img id="image" src="'.$value.'" alt="Image">');
+						}
+						break;
 					default:
 						echo('<p>'.$key.': '.$value.'</p>');
 						break;
