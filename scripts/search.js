@@ -33,7 +33,7 @@ $("#TeamSearch > input").keypress( function(e) {
 //update the results on input into the search box
 $("#TeamSearch > input").on('input', function() {
 	if(!$("#TeamSearch > input").val())
-		clearFilters();
+		delete fitler.Team;
 	else
 		filter.enabled = true;
 		filter.Team = "%25" + $("#TeamSearch > input").val() + "%25";
@@ -46,7 +46,7 @@ $("#closesearchbar").click(function() { closeSearchbar(); });
 function closeSearchbar(){
 	$("#TeamSearch").hide(0);
 	$("#TeamSearch > input").val(''); //empty contents of searchbar
-	delete filter.Team //delete the team filter from the object
+	delete filter.Team; //delete the team filter from the object
 	$("#container").css('top','80px');
 	clearFilters();
 }
