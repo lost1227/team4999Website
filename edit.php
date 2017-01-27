@@ -172,7 +172,7 @@ foreach($columns as $column) {
 	}
 }
 echo('<input type="file" name="image">');
-imageGallery($_GET["Team"]);
+imageGallery($_GET["team"]);
 echo('<input type="submit" value="Submit"></form>');
 ?>
 	<p>All values are in lbs and inches</p>

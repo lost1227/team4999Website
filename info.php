@@ -85,7 +85,7 @@
 	} else {
 		echo('<p>No results!</p>');
 	}
-	imageGallery($_GET["Team"]);
+	imageGallery($_GET["team"]);
 	echo('<p id="edit"><a href=/edit.php?team='.$_GET["team"].'>Edit</a></p>');
 	?>
 <script src="scripts/universal.js"></script>
