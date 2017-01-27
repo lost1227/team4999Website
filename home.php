@@ -39,14 +39,15 @@
 	</div>
 	
 	<div hidden id="Filters">
-		<input type="checkbox" id="DriveSystemCheck">
-			<select id="DriveSystemSelect">
-				<option value="West Coast">West Coast</option>
-				<option value="Mechanum">Mechanum</option>
-				<option value="Tank">Tank</option>
-				<option value="Swerve">Swerve</option>
-			</select>
-		</input>
+		<div id="driveSystemDiv">
+			<input type="checkbox" id="DriveSystemCheck">
+				<select id="DriveSystemSelect">
+					<option value="West Coast">West Coast</option>
+					<option value="Mechanum">Mechanum</option>
+					<option value="Tank">Tank</option>
+					<option value="Swerve">Swerve</option>
+				</select>
+			</div>
 		<?php
 		$bools = array("Can pickup gear from floor","Can place gear on lift","Can catch fuel from hoppers","Can pickup fuel from floor","Can shoot in low goal","Can shoot in hight goal","Can climb rope","Brought own rope");
 		foreach($bools as $bool) {

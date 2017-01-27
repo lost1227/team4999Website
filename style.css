@@ -218,6 +218,13 @@ div.infoRow:hover{
 	z-index: 3;
 	width: 100%;
 }
+/* The filter checkboxes */
+label {
+	display: block;
+}
+#filters {
+	padding: 0px, 10px;
+}
 
 
 /************** LOGIN.PHP STYLES **************/
