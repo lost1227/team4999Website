@@ -28,8 +28,8 @@ function imageGallery($team) {
 	$image_dir = $image_root . $team . "/";
 	if(file_exists($image_dir)){
 		$files = scandir($image_dir);
-		$images = array();
 		foreach( $files as $file ) {
+			writeToLog("File in image dir: " . $file, "images");
 			if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
 				echo('<img src="'.$image_dir.$file.'" class="gallery">');
 			}
