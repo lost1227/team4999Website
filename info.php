@@ -76,9 +76,6 @@
 							echo('<p>'.$key.': No</p>');
 						}
 						break;
-					case("Stored Images"):
-						#Put code to create image gallery here
-						break;
 					default:
 						echo('<p>'.$key.': '.$value.'</p>');
 						break;
@@ -88,6 +85,7 @@
 	} else {
 		echo('<p>No results!</p>');
 	}
+	imageGallery($_GET["Team"]);
 	echo('<p id="edit"><a href=/edit.php?team='.$_GET["team"].'>Edit</a></p>');
 	?>
 <script src="scripts/universal.js"></script>

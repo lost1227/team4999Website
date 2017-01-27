@@ -61,7 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		}
 	}
 	if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
-		$image_root = "photos/";
 		if (!file_exists($image_root)) {
 			mkdir($image_root,0777,true);
 		}
@@ -69,9 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (!file_exists($image_dir)) {
 			mkdir($image_dir,0777,true);
 		}
-		$acceptableFileTypes = array("jpg","png","jpeg","gif");
 		$files = scandir($image_dir);
-		$images = array();
 		$biggestFile = 0;
 		foreach( $files as $file ) {
 			if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
@@ -175,7 +172,7 @@ foreach($columns as $column) {
 	}
 }
 echo('<input type="file" name="image">');
-# TODO: Put code here to display the gallery of images
+imageGallery($_GET["Team"]);
 echo('<input type="submit" value="Submit"></form>');
 ?>
 	<p>All values are in lbs and inches</p>
