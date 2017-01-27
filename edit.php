@@ -30,6 +30,8 @@
 <body>
 <?php
 require 'functions.php';
+$image_root = "photos/";
+$acceptableFileTypes = array("jpg","png","jpeg","gif");
 #check if logged in and redirect if not
 if ($_SESSION["loggedIn"]){
 	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
@@ -78,6 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				}
 			}
 		}
+		$imgeFileExtension = pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
 		$imgeFileExtension = pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
 		$target_file_path = $image_dir . ($biggestFile + 1) .".". $imgeFileExtension;
 		$continueUpload = TRUE;

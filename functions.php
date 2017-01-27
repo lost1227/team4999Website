@@ -1,8 +1,4 @@
 <?php
-#vars
-$image_root = "photos/";
-$acceptableFileTypes = array("jpg","png","jpeg","gif");
-
 function writeToLog($string, $log) {
 	file_put_contents("/var/www/frcteam4999.jordanpowers.net/logs/".$log.".log", date("d-m-Y_h:i:s")."-- ".$string."\r\n", FILE_APPEND);
 }
@@ -27,7 +23,8 @@ function imageGallery($team) {
 	if(!isset($team)) {
 		return;
 	}
-	global $image_root;
+	$image_root = "photos/";
+	$acceptableFileTypes = array("jpg","png","jpeg","gif");
 	$image_dir = $image_root . $team . "/";
 	if(file_exists($image_dir)){
 		$files = scandir($image_dir);
