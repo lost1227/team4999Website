@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			}
 		}
 		$imgeFileExtension = pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
-		$target_file_path = $image_dir . ($biggestFile + 1) .".". $imgeFileExtension);
+		$target_file_path = $image_dir . ($biggestFile + 1) .".". $imgeFileExtension;
 		$continueUpload = TRUE;
 		//check if is image
 		if(getimagesize($_FILES["image"]["tmp_name"]) == FALSE) {
@@ -165,12 +165,6 @@ foreach($columns as $column) {
 			case("Other_info"):
 				echo('<textarea rows="4" cols="50" name="'.$column["Field"].'">'.$row[$column["Field"]].'</textarea>');
 				break;
-			case("Stored_Images"):
-				echo('<input type="file" name="image">');
-				/*if(isset($row[$column["Field"]])) {
-					echo('<img id="image" src="'.$row[$column["Field"]].'" alt="Image">');
-				}*/
-				break;
 			default:
 				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'">');
 		}
@@ -180,6 +174,8 @@ foreach($columns as $column) {
 		echo('<input type="hidden" name="Team" value="'.$row[$column["Field"]].'">');
 	}
 }
+echo('<input type="file" name="image">');
+# TODO: Put code here to display the gallery of images
 echo('<input type="submit" value="Submit"></form>');
 ?>
 	<p>All values are in lbs and inches</p>
