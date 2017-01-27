@@ -27,7 +27,7 @@ function imageGallery($team) {
 	if(!isset($team)) {
 		return;
 	}
-	$image_dir = $image_root . $team . "/";
+	$image_dir = $GLOBALS[$image_root] . $team . "/";
 	if(file_exists($image_dir)){
 		$files = scandir($image_dir);
 		$images = array();
