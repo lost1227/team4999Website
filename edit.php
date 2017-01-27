@@ -94,9 +94,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$images = $_POST["images"];
 	if(!empty($images)) {
 		foreach($images as $image ) {
-			$target_file_path = $image_root . $_GET["team"] . "/" . $image;
+			$target_file_path = $image_root . $_POST["team"] . "/" . $image;
 			unset($target_file_path);
 		}
+	} else {
+		writeToLog("Images was empty!","images");
 	}
 	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
 }
