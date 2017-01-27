@@ -25,7 +25,7 @@ function imageGallery($team) {
 		return;
 	}
 	$image_root = "photos/";
-	$acceptableFileTypes = array("jpg","png","jpeg","gif");
+	$acceptableFileTypes = array("jpg","png","jpeg","gif","bmp","svg");
 	$image_dir = $image_root . $team . "/";
 	#writeToLog("Imagedir: " . $image_dir, "images");
 	if(file_exists($image_dir)){

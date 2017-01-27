@@ -31,7 +31,7 @@
 <?php
 require 'functions.php';
 $image_root = "photos/";
-$acceptableFileTypes = array("jpg","png","jpeg","gif");
+$acceptableFileTypes = array("jpg","png","jpeg","gif","bmp","svg");
 #check if logged in and redirect if not
 if ($_SESSION["loggedIn"]){
 	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
@@ -174,7 +174,7 @@ foreach($columns as $column) {
 		echo('<input type="hidden" name="Team" value="'.$row[$column["Field"]].'">');
 	}
 }
-echo('<input type="file" name="image">');
+echo('<input type="file" name="image" accept="image/jpeg,image/png,image/gif,image/bmp,image/svg+xml">');
 imageGallery($_GET["team"]);
 echo('<input type="submit" value="Submit"></form>');
 ?>
