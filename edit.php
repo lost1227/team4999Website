@@ -95,7 +95,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	if(!empty($images)) {
 		foreach($images as $image ) {
 			$target_file_path = $image_root . $_POST["Team"] . "/" . $image;
-			unset($target_file_path);
+			writeToLog("Will unset: ". $target_file_path,"images");
+			unlink($target_file_path);
 		}
 	} else {
 		writeToLog("Images was empty!","images");
