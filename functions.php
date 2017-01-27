@@ -21,11 +21,13 @@ function formatAndQuery() { #first argument should be the query. %sv for strings
 }
 function imageGallery($team) {
 	if(!isset($team)) {
+		writeToLog("Team is invalid", "images");
 		return;
 	}
 	$image_root = "photos/";
 	$acceptableFileTypes = array("jpg","png","jpeg","gif");
 	$image_dir = $image_root . $team . "/";
+	writeToLog("Imagedir: " . $image_dir, "images");
 	if(file_exists($image_dir)){
 		$files = scandir($image_dir);
 		foreach( $files as $file ) {
