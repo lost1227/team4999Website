@@ -51,6 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			formatAndQuery($update,$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
 		}
 	}
+	#handle file submission
 	if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
 		if (!file_exists($image_root)) {
 			mkdir($image_root,0777,true);
@@ -73,12 +74,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$imgeFileExtension = pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
 		$target_file_path = $image_dir . ($biggestFile + 1) .".". $imgeFileExtension;
 		$continueUpload = TRUE;
-		//check if is image
+		#check if is image
 		if(getimagesize($_FILES["image"]["tmp_name"]) == FALSE) {
 			writeToLog("INVALID FILE","images");
 			$continueUpload = FALSE;
 		}
-		//check if acceptable image (trusts extension)
+		#check if acceptable image (trusts extension)
 		if(!in_array($imgeFileExtension,$acceptableFileTypes)) {
 			writeToLog("INVALID FILE","images");
 			$continueUpload = FALSE;
@@ -87,6 +88,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			if (!move_uploaded_file($_FILES["image"]["tmp_name"], $target_file_path)) {
 				writeToLog("ERROR MOVING UPLOADED FILE","images");
 			}
+		}
+	}
+	#handle deletions
+	$images = $_POST["images"];
+	if(!empty($images)) {
+		foreach($images as $image ) {
+			$target_file_path = $image_root . $_GET["team"] . "/" . $image;
+			unset($target_file_path);
 		}
 	}
 	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
@@ -164,7 +173,17 @@ foreach($columns as $column) {
 	}
 }
 echo('<input type="file" name="image" accept="image/jpeg,image/png,image/gif,image/bmp,image/svg+xml">');
-imageGallery($_GET["team"]);
+$image_dir = $image_root . $_GET["team"] . "/";
+#writeToLog("Imagedir: " . $image_dir, "images");
+if(file_exists($image_dir)){
+	$files = scandir($image_dir);
+	foreach( $files as $file ) {
+		#writeToLog("File in image dir: " . $file, "images");
+		if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
+			echo('<label><input type="checkbox" name="images[]" value="'.$file.'"><img src="'.$image_dir.$file.'" class="gallery"></label>');
+		}
+	}
+}
 echo('<input type="submit" value="Submit"></form>');
 ?>
 	<p>All values are in lbs and inches</p>

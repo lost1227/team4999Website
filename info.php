@@ -24,19 +24,6 @@
 		<meta name="application-name" content="Scouting">
 		<meta name="msapplication-config" content="/favicons/browserconfig.xml">
 		<meta name="theme-color" content="#ffffff">
-		<style>
-			p {
-				margin: 0px;
-			}
-			#image {
-				max-width: 25%;
-				display: block;
-			}
-			#image:hover {
-				max-width: 100%;
-			}
-		</style>
-</head>
 	</head>
 	<body>
 	<?php
@@ -85,7 +72,17 @@
 	} else {
 		echo('<p>No results!</p>');
 	}
-	imageGallery($_GET["team"]);
+	$image_dir = $image_root . $team . "/";
+	#writeToLog("Imagedir: " . $image_dir, "images");
+	if(file_exists($image_dir)){
+		$files = scandir($image_dir);
+		foreach( $files as $file ) {
+			#writeToLog("File in image dir: " . $file, "images");
+			if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
+				echo('<img src="'.$image_dir.$file.'" class="gallery">');
+			}
+		}
+	}
 	echo('<p id="edit"><a href=/edit.php?team='.$_GET["team"].'>Edit</a></p>');
 	?>
 <script src="scripts/universal.js"></script>

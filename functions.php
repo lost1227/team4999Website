@@ -1,4 +1,7 @@
 <?php
+$image_root = "photos/";
+$acceptableFileTypes = array("jpg","png","jpeg","gif","bmp","svg");
+
 function writeToLog($string, $log) {
 	file_put_contents("/var/www/frcteam4999.jordanpowers.net/logs/".$log.".log", date("d-m-Y_h:i:s")."-- ".$string."\r\n", FILE_APPEND);
 }
@@ -18,24 +21,5 @@ function formatAndQuery() { #first argument should be the query. %sv for strings
         throw new Exception($DB->error." [$query]");
     }
     return $result;
-}
-function imageGallery($team) {
-	if(!isset($team)) {
-		#writeToLog("Team is invalid", "images");
-		return;
-	}
-	$image_root = "photos/";
-	$acceptableFileTypes = array("jpg","png","jpeg","gif","bmp","svg");
-	$image_dir = $image_root . $team . "/";
-	#writeToLog("Imagedir: " . $image_dir, "images");
-	if(file_exists($image_dir)){
-		$files = scandir($image_dir);
-		foreach( $files as $file ) {
-			#writeToLog("File in image dir: " . $file, "images");
-			if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
-				echo('<img src="'.$image_dir.$file.'" class="gallery">');
-			}
-		}
-	}
 }
 ?>
