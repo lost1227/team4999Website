@@ -69,29 +69,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (!file_exists($image_dir)) {
 			mkdir($image_dir,0777,true);
 		}
-		#the files are stored in the DB as a comma-separated list of paths. Separate that into an array of strings
-		$filesResultObj = formatAndQuery("SELECT Stored_Images FROM robots WHERE Team = %d",$_POST["Team"]);
-		$filesResult = $filesResultObj->fetch_assoc();
-		writeToLog("Results: ".$filesResult["Stored_Images"],"images");
-		if(!empty($filesResult["Stored_Images"])) {
-			$files = explode(",",$filesResult["Stored_Images"]);
-		} else {
-			$files = array();
-		}
+		$acceptableFileTypes = array("jpg","png","jpeg","gif");
+		$files = scandir($image_dir);
+		$images = array();
 		$biggestFile = 0;
-		if (!empty($files)) {
-			foreach($files as $file) {
-				#get file base without extension
-				writeToLog("File from results before basename: ".$file,"images");
-				$file = basename($file, "." . pathinfo(basename($file),PATHINFO_EXTENSION));
-				writeToLog("File from results after basename: ".$file,"images");
-				if($file > $biggestFile) {
-					$biggestFile = $file;
+		foreach( $files as $file ) {
+			if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
+				$base = basename($file, "." . pathinfo(basename($file),PATHINFO_EXTENSION));
+				if ( $base > $biggestFile) {
+					$biggestFile = $base;
 				}
 			}
 		}
 		$imgeFileExtension = pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
-		$target_file_path = $image_dir . ($biggestFile + 1) .".". pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
+		$target_file_path = $image_dir . ($biggestFile + 1) .".". $imgeFileExtension);
 		$continueUpload = TRUE;
 		//check if is image
 		if(getimagesize($_FILES["image"]["tmp_name"]) == FALSE) {
@@ -99,7 +90,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$continueUpload = FALSE;
 		}
 		//check if acceptable image (trusts extension)
-		$acceptableFileTypes = array("jpg","png","jpeg","gif");
 		if(!in_array($imgeFileExtension,$acceptableFileTypes)) {
 			writeToLog("INVALID FILE","images");
 			$continueUpload = FALSE;
@@ -107,20 +97,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if($continueUpload) {
 			if (!move_uploaded_file($_FILES["image"]["tmp_name"], $target_file_path)) {
 				writeToLog("ERROR MOVING UPLOADED FILE","images");
-			} else {
-				# add the new file to the files array
-				$files[] = basename($target_file_path);
-				
-				#create a string by placing every member of the array in a string, separated by commas
-				$DB_entry = "";
-				foreach($files as $file) {
-					writeToLog("New file result: ".$file,"images");
-					$DB_entry = $DB_entry . $file . ",";
-				}
-				writeToLog("New DB entry: ".$DB_entry,"images");
-				$DB_entry = rtrim($DB_entry,",");
-				writeToLog($DB_entry,"images");
-				formatAndQuery("UPDATE robots SET Stored_Images = %sv WHERE Team = %d",$DB_entry,$_POST["Team"]);
 			}
 		}
 	}
