@@ -183,7 +183,7 @@ if(file_exists($image_dir)){
 	foreach( $files as $file ) {
 		#writeToLog("File in image dir: " . $file, "images");
 		if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
-			echo('<label><input type="checkbox" name="images[]" value="'.$file.'"><img src="'.$image_dir.$file.'" class="gallery"></label>');
+			echo('<label><input id="deletePix" type="checkbox" name="images[]" value="'.$file.'"><img src="'.$image_dir.$file.'" class="gallery"></label>');
 		}
 	}
 }
