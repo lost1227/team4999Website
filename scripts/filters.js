@@ -1,5 +1,6 @@
 $("#filterli").click(function() {
 	$("#hamburgermenu").slideUp(100);
+	$("#Filters").show();
 	if($('#TeamSearch').is(':visible')) {
 		$("#Filters").css('top','130px');
 		$("#container").css('top',(130 + $('#Filters').height()) + 'px');
@@ -7,7 +8,6 @@ $("#filterli").click(function() {
 		$("#Filters").css('top','80px');
 		$("#container").css('top',(80 + $('#Filters').height()) + 'px');
 	}
-	$("#Filters").show();
 });
 
 	
