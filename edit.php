@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$images = $_POST["images"];
 	if(!empty($images)) {
 		foreach($images as $image ) {
-			$target_file_path = $image_root . $_POST["team"] . "/" . $image;
+			$target_file_path = $image_root . $_POST["Team"] . "/" . $image;
 			unset($target_file_path);
 		}
 	} else {
