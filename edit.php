@@ -56,17 +56,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 	$update = 'UPDATE robots SET %s = %sv WHERE Team = %d;';
 	foreach($columns as $column) {
-		if($column["Field"] != "Team" and $column["Field"] != "Image_Path"){
+		if($column["Field"] != "Team" and $column["Field"] != "Stored_Images"){
 			formatAndQuery($update,$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
 		}
 	}
 	if (is_uploaded_file($_FILES["image"]["tmp_name"])) {
-		$image_dir = "photos/";
+		$image_root = "photos/";
+		if (!file_exists($image_root)) {
+			mkdir($image_root,0777,true);
+		}
+		$image_dir = $image_root . $_POST["Team"] ."/";
 		if (!file_exists($image_dir)) {
 			mkdir($image_dir,0777,true);
 		}
-		$imageFileType = pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
-		$target_file_path = $image_dir . $_POST["Team"] .".". pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
+		#the files are stored in the DB as a comma-separated list of paths. Separate that into an array of strings
+		$filesResultObj = formatAndQuery("SELECT Stored_Images FROM robots WHERE Team = %d",$_POST["Team"]);
+		$filesResult = $filesResultObj->fetch_assoc();
+		writeToLog("Results: ".$filesResult["Stored_Images"],"images");
+		if(!empty($filesResult["Stored_Images"])) {
+			$files = explode(",",$filesResult["Stored_Images"]);
+		} else {
+			$files = array();
+		}
+		$biggestFile = 0;
+		if (!empty($files)) {
+			foreach($files as $file) {
+				#get file base without extension
+				writeToLog("File from results before basename: ".$file,"images");
+				$file = basename($file, "." . pathinfo(basename($file),PATHINFO_EXTENSION));
+				writeToLog("File from results after basename: ".$file,"images");
+				if($file > $biggestFile) {
+					$biggestFile = $file;
+				}
+			}
+		}
+		$imgeFileExtension = pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
+		$target_file_path = $image_dir . ($biggestFile + 1) .".". pathinfo(basename($_FILES["image"]["name"]),PATHINFO_EXTENSION);
 		$continueUpload = TRUE;
 		//check if is image
 		if(getimagesize($_FILES["image"]["tmp_name"]) == FALSE) {
@@ -75,18 +100,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		}
 		//check if acceptable image (trusts extension)
 		$acceptableFileTypes = array("jpg","png","jpeg","gif");
-		if(!in_array($imageFileType,$acceptableFileTypes)) {
+		if(!in_array($imgeFileExtension,$acceptableFileTypes)) {
 			writeToLog("INVALID FILE","images");
 			$continueUpload = FALSE;
 		}
 		if($continueUpload) {
-			foreach($oldFiles = glob($image_dir . $_POST["Team"] . ".*") as $oldFile) {
-				unlink($oldFile);
-			}
 			if (!move_uploaded_file($_FILES["image"]["tmp_name"], $target_file_path)) {
 				writeToLog("ERROR MOVING UPLOADED FILE","images");
 			} else {
-				formatAndQuery("UPDATE robots SET Image_Path = %sv WHERE Team = %d",$target_file_path,$_POST["Team"]);
+				# add the new file to the files array
+				$files[] = basename($target_file_path);
+				
+				#create a string by placing every member of the array in a string, separated by commas
+				$DB_entry = "";
+				foreach($files as $file) {
+					writeToLog("New file result: ".$file,"images");
+					$DB_entry = $DB_entry . $file . ",";
+				}
+				writeToLog("New DB entry: ".$DB_entry,"images");
+				$DB_entry = rtrim($DB_entry,",");
+				writeToLog($DB_entry,"images");
+				formatAndQuery("UPDATE robots SET Stored_Images = %sv WHERE Team = %d",$DB_entry,$_POST["Team"]);
 			}
 		}
 	}
@@ -155,11 +189,11 @@ foreach($columns as $column) {
 			case("Other_info"):
 				echo('<textarea rows="4" cols="50" name="'.$column["Field"].'">'.$row[$column["Field"]].'</textarea>');
 				break;
-			case("Image_Path"):
+			case("Stored_Images"):
 				echo('<input type="file" name="image">');
-				if(isset($row[$column["Field"]])) {
+				/*if(isset($row[$column["Field"]])) {
 					echo('<img id="image" src="'.$row[$column["Field"]].'" alt="Image">');
-				}
+				}*/
 				break;
 			default:
 				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'">');

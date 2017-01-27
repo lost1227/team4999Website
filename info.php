@@ -76,10 +76,8 @@
 							echo('<p>'.$key.': No</p>');
 						}
 						break;
-					case("Image Path"):
-						if(isset($value)) {
-							echo('<img id="image" src="'.$value.'" alt="Image">');
-						}
+					case("Stored Images"):
+						#Put code to create image gallery here
 						break;
 					default:
 						echo('<p>'.$key.': '.$value.'</p>');
