@@ -11,6 +11,7 @@
 	$commands = array(
 		'echo $PWD',
 		'whoami',
+		'git reset --hard origin/master',
 		'git pull',
 		'git status',
 		'git submodule sync',
