@@ -1,0 +1,14 @@
+/* Image Gallery style */
+img.gallery {
+	max-width: 25%;
+}
+p {
+		margin: 0px;
+	}
+	#image {
+		max-width: 25%;
+		display: block;
+	}
+	#image:hover {
+		max-width: 100%;
+	}
