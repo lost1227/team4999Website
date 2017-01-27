@@ -21,17 +21,17 @@ function formatAndQuery() { #first argument should be the query. %sv for strings
 }
 function imageGallery($team) {
 	if(!isset($team)) {
-		writeToLog("Team is invalid", "images");
+		#writeToLog("Team is invalid", "images");
 		return;
 	}
 	$image_root = "photos/";
 	$acceptableFileTypes = array("jpg","png","jpeg","gif");
 	$image_dir = $image_root . $team . "/";
-	writeToLog("Imagedir: " . $image_dir, "images");
+	#writeToLog("Imagedir: " . $image_dir, "images");
 	if(file_exists($image_dir)){
 		$files = scandir($image_dir);
 		foreach( $files as $file ) {
-			writeToLog("File in image dir: " . $file, "images");
+			#writeToLog("File in image dir: " . $file, "images");
 			if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
 				echo('<img src="'.$image_dir.$file.'" class="gallery">');
 			}
