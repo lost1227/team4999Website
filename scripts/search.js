@@ -6,7 +6,7 @@ $("#searchli").click(function() {
 			window.clearInterval(loop);
 			$("#Filters").css('top','130px');
 			if($("#Filters").is(':visible')) {
-				$("#container").css('top',(130 + $('#Filters').height()) + 'px');
+				$("#container").css('top','130px');
 			} else {
 				$("#container").css('top',"130px");
 			}
@@ -15,7 +15,7 @@ $("#searchli").click(function() {
 			loop = window.setInterval(get(),5000);
 			$("#Filters").css('top','80px');
 			if($("#Filters").is(':visible')) {
-				$("#container").css('top',(80 + $('#Filters').height()) + 'px');
+				$("#container").css('top','80px');
 			} else {
 				$("#container").css('top',"80px");
 			}

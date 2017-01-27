@@ -3,10 +3,10 @@ $("#filterli").click(function() {
 	$("#Filters").show();
 	if($('#TeamSearch').is(':visible')) {
 		$("#Filters").css('top','130px');
-		$("#container").css('top',(130 + $('#Filters').height()) + 'px');
+		$("#container").css('top','130px');
 	} else {
 		$("#Filters").css('top','80px');
-		$("#container").css('top',(80 + $('#Filters').height()) + 'px');
+		$("#container").css('top','80px');
 	}
 });
 
