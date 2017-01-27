@@ -1,4 +1,4 @@
-$("#filterli").click(function() {
+function ShowFilters(){
 	$("#hamburgermenu").slideUp(100);
 	$("#Filters").show();
 	if($('#TeamSearch').is(':visible')) {
@@ -8,6 +8,10 @@ $("#filterli").click(function() {
 		$("#Filters").css('top','80px');
 		$("#container").css('top','80px');
 	}
+}
+
+$("#filterli").click(function() {
+	ShowFilters();
 });
 
 	

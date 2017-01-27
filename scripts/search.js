@@ -45,6 +45,9 @@ $("#closesearchbar").click(function() { closeSearchbar(); });
 
 function closeSearchbar(){
 	$("#TeamSearch").hide(0);
+	if($("#Filters").is(':visible')) {
+		ShowFilters();
+	}
 	$("#TeamSearch > input").val(''); //empty contents of searchbar
 	delete filter.Team; //delete the team filter from the object
 	$("#container").css('top','80px');
