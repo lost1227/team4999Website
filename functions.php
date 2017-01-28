@@ -13,11 +13,9 @@ function formatAndQuery() { #first argument should be the query. %sv for strings
 	foreach ($args as $key => $val)
     {
         $args[$key] = $DB->real_escape_string($val);
-		if(empty($args[$key])) {
-			$args[$key] = 'null';
-		}
     }
 	$query  = vsprintf($query, $args);
+	str_replace("''","null",$query);
     $result = $DB->query($query);
     if (!$result)
     {
