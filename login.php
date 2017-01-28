@@ -29,7 +29,7 @@
 				header( 'Location: https://frcteam4999.jordanpowers.net/'.clean($_POST["redirect"]));
 				exit();
 			}
-			header( 'Location: https://frcteam4999.jordanpowers.net/home.php');
+			header( 'Location: https://frcteam4999.jordanpowers.net/index.php');
 		}
 		?>
 	

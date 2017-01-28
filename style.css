@@ -155,7 +155,7 @@ div.infoRow:hover{
 	cursor: pointer;
 }
 
-/*The logout box that appears in the corner of home.php when you are logged in*/
+/*The logout box that appears in the corner of index.php when you are logged in*/
 #loginbox {
 	position:fixed;
 	bottom:5px;

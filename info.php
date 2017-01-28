@@ -1,7 +1,7 @@
 <?php session_start(); ?>
 <?php
 	if(!isset($_GET["team"])) {
-		header( 'Location: https://frcteam4999.jordanpowers.net/home.php');
+		header( 'Location: https://frcteam4999.jordanpowers.net/index.php');
 	}
 ?>
 <html>
