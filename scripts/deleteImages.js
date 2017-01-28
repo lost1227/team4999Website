@@ -1,4 +1,4 @@
-$("img.deletePix").click(function() {
+$(".deletePix").on("change",function() {
 	var imageId = this.value;
 	if(this.checked) {
 		$(imageId).css("filter","greyscale(100%)");
