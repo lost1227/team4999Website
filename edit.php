@@ -52,8 +52,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		}
 	}
 	#handle file submission
-	for( i = 0; i < count($_FILES["image"]["tmp_name"]); i++) {
-		if (is_uploaded_file($_FILES["image"]["tmp_name"][i])) {
+	for( $i = 0; $i < count($_FILES["image"]["tmp_name"]); $i++) {
+		if (is_uploaded_file($_FILES["image"]["tmp_name"][$i])) {
 			if (!file_exists($image_root)) {
 				mkdir($image_root,0777,true);
 			}
@@ -71,12 +71,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 					}
 				}
 			}
-			$imgeFileExtension = pathinfo(basename($_FILES["image"]["name"][i]),PATHINFO_EXTENSION);
-			$imgeFileExtension = pathinfo(basename($_FILES["image"]["name"][i]),PATHINFO_EXTENSION);
+			$imgeFileExtension = pathinfo(basename($_FILES["image"]["name"][$i]),PATHINFO_EXTENSION);
+			$imgeFileExtension = pathinfo(basename($_FILES["image"]["name"][$i]),PATHINFO_EXTENSION);
 			$target_file_path = $image_dir . ($biggestFile + 1) .".". $imgeFileExtension;
 			$continueUpload = TRUE;
 			#check if is image
-			if(getimagesize($_FILES["image"]["tmp_name"][i]) == FALSE) {
+			if(getimagesize($_FILES["image"]["tmp_name"][$i]) == FALSE) {
 				writeToLog("INVALID FILE","images");
 				$continueUpload = FALSE;
 			}
@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				$continueUpload = FALSE;
 			}
 			if($continueUpload) {
-				if (!move_uploaded_file($_FILES["image"]["tmp_name"][i], $target_file_path)) {
+				if (!move_uploaded_file($_FILES["image"]["tmp_name"][$i], $target_file_path)) {
 					writeToLog("ERROR MOVING UPLOADED FILE","images");
 				}
 			}
