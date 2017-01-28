@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		writeToLog("WHERE ".$DB->real_escape_string($key)." LIKE ".$DB->real_escape_string($value),"filters");
 		$index++;
 	}
-	writeToLog($query . " gave the error ".$B->error,"filters");
+	writeToLog($query . " gave the error ".$DB->error,"filters");
 	/*echo($_POST["Team"]);
 	echo($query);
 	echo(count($_POST));*/
