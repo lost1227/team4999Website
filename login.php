@@ -16,7 +16,9 @@
 		if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$user = clean($_POST["user"]);
 			$pass = clean($_POST["pass"]);
-			$redirect = $_POST["redirect"];
+			if(isset($_POST["redirect"])) {
+				$redirect = $_POST["redirect"];
+			}
 			$DB = new mysqli("localhost",$user,$pass,"frcteam4999");
 			$_SESSION["user"] = $user;
 			$_SESSION["pass"] = $pass;
@@ -30,6 +32,7 @@
 				exit();
 			}
 			header( 'Location: https://frcteam4999.jordanpowers.net/index.php');
+			exit();
 		}
 		?>
 	
@@ -57,6 +60,9 @@
 			<p id="passlabel">Password:</p><br>
 			<input id="passwordfield" type="password" name="pass"><br>
 			<?php
+			if ($DB->connect_error) {
+				echo('<p sytle = "font-size: 12px; font-color: red;">'.$DB->connect_error.'</p>');
+			}
 			if(isset($redirect)){
 				echo('<input type="hidden" name="redirect" value="'.$redirect.'">');
 			}
