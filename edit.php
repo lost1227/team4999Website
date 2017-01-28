@@ -77,12 +77,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$continueUpload = TRUE;
 			#check if is image
 			if(getimagesize($_FILES["uploadImages"]["tmp_name"][$i]) == FALSE) {
-				writeToLog("INVALID FILE","images");
+				writeToLog("INVALID FILE: getimagesize","images");
 				$continueUpload = FALSE;
 			}
 			#check if acceptable image (trusts extension)
 			if(!in_array($imgeFileExtension,$acceptableFileTypes)) {
-				writeToLog("INVALID FILE","images");
+				writeToLog("INVALID FILE: extension","images");
 				$continueUpload = FALSE;
 			}
 			if($continueUpload) {
