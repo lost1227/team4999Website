@@ -192,13 +192,15 @@ if(file_exists($image_dir)){
 	foreach( $files as $file ) {
 		#writeToLog("File in image dir: " . $file, "images");
 		if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
-			echo('<label><input id="deletePix" type="checkbox" name="images[]" value="'.$file.'"><img src="'.$image_dir.$file.'" class="gallery"></label>');
+			echo('<label><input class="deletePix" type="checkbox" name="images[]" value="'.$file.'"><img id="'.$file.'" src="'.$image_dir.$file.'" class="gallery"></label>');
 		}
 	}
 }
 echo('<input type="submit" value="Submit"></form>');
 ?>
-	<p>All values are in lbs and inches</p>
+<p>All values are in lbs and inches</p>
+<script src="scripts/jquery-3.1.1.min.js"></script>
 <script src="scripts/universal.js"></script>
+<script src="scripts/deleteImages.js"></script>
 </body>
 </html>
