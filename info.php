@@ -28,7 +28,7 @@
 	<body>
 	<?php
 	require 'functions.php';
-	if ($_SESSION["loggedIn"]){
+	if (isset($_SESSION["loggedIn"])){
 		$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
 	} else {
 		$DB = new mysqli("localhost","ro","","frcteam4999");

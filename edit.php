@@ -22,7 +22,7 @@ require 'functions.php';
 $image_root = "photos/";
 $acceptableFileTypes = array("jpg","png","jpeg","gif","bmp","svg");
 #check if logged in and redirect if not
-if ($_SESSION["loggedIn"]){
+if (isset($_SESSION["loggedIn"])){
 	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
 } else {
 	if(isset($_GET["team"])){
@@ -93,7 +93,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		}
 	}
 	#handle deletions
-	$images = $_POST["images"];
+	if(isset($_POST["images"])) {
+		$images = $_POST["images"];
+	}
 	if(!empty($images)) {
 		foreach($images as $image ) {
 			$target_file_path = $image_root . $_POST["Team"] . "/" . $image;
@@ -178,7 +180,12 @@ foreach($columns as $column) {
 	}
 }
 echo('<input type="file" name="uploadImages[]" accept="image/jpeg,image/png,image/gif,image/bmp,image/svg+xml" multiple>');
-$image_dir = $image_root . $_GET["team"] . "/";
+if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
+	$team = $_POST["Team"];
+} else {
+	$team = $_GET["team"];
+}
+$image_dir = $image_root . $team . "/";
 #writeToLog("Imagedir: " . $image_dir, "images");
 if(file_exists($image_dir)){
 	$files = scandir($image_dir);

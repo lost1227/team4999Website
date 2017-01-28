@@ -4,7 +4,9 @@
 		<title>Log in</title>
 		<link rel="stylesheet" href="style.css">
 		<?php
-		$redirect = $_GET['redirect'];
+		if ($_SERVER["REQUEST_METHOD"] == "GET") {
+			$redirect = $_GET['redirect'];
+		}
 		function clean($data) {
 		  $data = trim($data);
 		  $data = stripslashes($data);
@@ -49,11 +51,6 @@
 		<meta name="theme-color" content="#ffffff">
 	</head>
 	<body>
-		<?php
-			if ($DB->connect_error) {
-				echo('<p>' . $DB->connect_error . '</p>');
-			}
-		?>
 		<form id="loginform" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
 			<p id="userlabel">Username:</p><br>
 			<input id="usernamefield" type="text" name="user" <?php if($_SERVER["REQUEST_METHOD"] == "POST"){echo('value="'.$user.'"');}?>><br>

@@ -58,7 +58,7 @@
 	<div id="container">
 	</div>
 	<?php
-	if($_SESSION["loggedIn"]) {
+	if(isset($_SESSION["loggedIn"])) {
 		echo('<div id="loginbox"><p style="margin:2px;"><a href="logout.php">Log Out: '.$_SESSION["user"].'</a></p></div>');
 	}
 	?>
