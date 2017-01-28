@@ -217,13 +217,12 @@ div.infoRow:hover{
 	top: 79px;
 	z-index: 3;
 	width: 100%;
+	padding: 5px 15px;
+	background-color: rgba(250, 250, 250, 0.67);
 }
 /* The filter checkboxes */
 label {
 	display: block;
-}
-#filters {
-	padding: 0px, 10px;
 }
 
 

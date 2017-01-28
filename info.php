@@ -26,6 +26,7 @@
 		<meta name="theme-color" content="#ffffff">
 	</head>
 	<body>
+	<div id="info">
 	<?php
 	require 'functions.php';
 	if (isset($_SESSION["loggedIn"])){
@@ -86,5 +87,6 @@
 	echo('<p id="edit"><a href=/edit.php?team='.$_GET["team"].'>Edit</a></p>');
 	?>
 <script src="scripts/universal.js"></script>
+</div>
 </body>
 </html>
