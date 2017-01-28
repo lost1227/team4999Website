@@ -1,6 +1,6 @@
 <?php
 $image_root = "photos/";
-$acceptableFileTypes = array("jpg","png","jpeg","gif","bmp","svg");
+$acceptableFileTypes = array("jpg","png","jpeg","gif","bmp");
 
 function writeToLog($string, $log) {
 	file_put_contents("/var/www/frcteam4999.jordanpowers.net/logs/".$log.".log", date("d-m-Y_h:i:s")."-- ".$string."\r\n", FILE_APPEND);

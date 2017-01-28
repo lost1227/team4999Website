@@ -20,7 +20,7 @@
 <?php
 require 'functions.php';
 $image_root = "photos/";
-$acceptableFileTypes = array("jpg","png","jpeg","gif","bmp","svg");
+$acceptableFileTypes = array("jpg","png","jpeg","gif","bmp",);
 #check if logged in and redirect if not
 if (isset($_SESSION["loggedIn"])){
 	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
@@ -179,7 +179,7 @@ foreach($columns as $column) {
 		echo('<input type="hidden" name="Team" value="'.$row[$column["Field"]].'">');
 	}
 }
-echo('<input type="file" name="uploadImages[]" accept="image/jpeg,image/png,image/gif,image/bmp,image/svg+xml" multiple>');
+echo('<input type="file" name="uploadImages[]" accept="image/jpeg,image/png,image/gif,image/bmp" multiple>');
 if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
 	$team = $_POST["Team"];
 } else {
