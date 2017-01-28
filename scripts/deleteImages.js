@@ -1,8 +1,8 @@
 $(".deletePix").on("change",function() {
 	var imageId = this.value;
 	if(this.checked) {
-		$(imageId).css("filter","greyscale(100%)");
+		document.getElementById(imageId).style.filter = "grayscale(100%)";
 	} else {
-		$(imageId).css("filter","");
+		document.getElementById(imageId).style.filter = "";
 	}
 });
