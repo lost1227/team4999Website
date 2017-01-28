@@ -24,15 +24,11 @@ $("#Filters input").on("change",function() {
 	var filterIDs = $("#filters input").map(function() { return this.id; }).get(); // get ids of each filter element
 	for (var i = 0; i < filterIDs.length; i++) {
 		if(document.getElementById(filterIDs[i]).checked) {
-			window.clearInterval(loop);
 			filter.enabled = true;
 			break;
 		} else {
 			filter.enabled = false;
 		}
-	}
-	if(!filter.enabled) {
-		loop = window.setInterval(get(),5000);
 	}
 	if(this.checked) {
 		//alert(this.id);

@@ -3,7 +3,6 @@ $("#searchli").click(function() {
 	$("#hamburgermenu").slideUp(100);
 	$("#TeamSearch").show(0, function() {
 		if($("#TeamSearch").is(':visible')) {
-			window.clearInterval(loop);
 			$("#Filters").css('top','130px');
 			if($("#Filters").is(':visible')) {
 				$("#container").css('top','130px');
@@ -12,7 +11,6 @@ $("#searchli").click(function() {
 			}
 		} else {
 			filter.enabled = false;
-			loop = window.setInterval(get(),5000);
 			$("#Filters").css('top','80px');
 			if($("#Filters").is(':visible')) {
 				$("#container").css('top','80px');

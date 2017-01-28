@@ -30,8 +30,8 @@ function get() {
 					request.send();
 				}
 }
-var request = new XMLHttpRequest();
 
+var request = new XMLHttpRequest();
 request.onreadystatechange = function() {
 	if (this.readyState == this.DONE && this.status == 200){
 		document.getElementById("container").innerHTML = this.responseText;
