@@ -39,4 +39,4 @@ request.onreadystatechange = function() {
 };
 request.open("GET","/query.php",true);
 request.send();
-var loop = window.setInterval(get(), 5000);
+var loop = window.setInterval(function() {get();}, 5000);
