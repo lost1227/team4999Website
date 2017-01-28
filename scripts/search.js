@@ -32,11 +32,12 @@ $("#TeamSearch > input").keypress( function(e) {
 
 //update the results on input into the search box
 $("#TeamSearch > input").on('input', function() {
-	if(!$("#TeamSearch > input").val())
-		delete fitler.Team;
-	else
+	if(!$("#TeamSearch > input").val()) {
+		delete filter.Team;
+	} else {
 		filter.enabled = true;
 		filter.Team = "%25" + $("#TeamSearch > input").val() + "%25";
+	}
 	get();
 });
 
