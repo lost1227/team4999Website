@@ -5,13 +5,6 @@ img.gallery {
 p {
 	margin: 0px;
 }
-#image {
-	max-width: 25%;
-	display: block;
-}
-#image:hover {
-	max-width: 100%;
-}
 input{
 	display: block;
 }
