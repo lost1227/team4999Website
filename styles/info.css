@@ -1,4 +1,7 @@
-
+@font-face{
+	font-family: "StormFaze";
+	src: url("/fonts/stormfaze.ttf");
+}
 * {
     font-family: arial;
 }
@@ -27,4 +30,8 @@ img.gallery {
 	background-color: rgba(255, 255, 255, 0.67);
 	padding: 10px 25px;
 	height: 100%;
+}
+h1{
+	font-family: "StormFaze";
+	font-size: 25px;
 }

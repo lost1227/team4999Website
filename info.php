@@ -42,6 +42,9 @@
 			foreach($row as $key => $value) {
 				$key = str_replace('_',' ',$key);
 				switch($key) {
+					case("Team"):
+						echo('<h1>'.$key.': '.$value.'</h1>');
+						break;
 					case("Width"):
 					case("Depth"):
 					case("Height"):

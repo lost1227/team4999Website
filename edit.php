@@ -17,6 +17,7 @@
 	<meta name="theme-color" content="#ffffff">
 </head>
 <body>
+<div id="main">
 <?php
 require 'functions.php';
 $image_root = "photos/";
@@ -202,5 +203,6 @@ echo('<input type="submit" value="Submit"></form>');
 <script src="scripts/jquery-3.1.1.min.js"></script>
 <script src="scripts/universal.js"></script>
 <script src="scripts/deleteImages.js"></script>
+</div>
 </body>
 </html>

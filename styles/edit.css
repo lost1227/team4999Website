@@ -1,3 +1,16 @@
+@font-face{
+	font-family: "StormFaze";
+	src: url("/fonts/stormfaze.ttf");
+}
+body {
+    margin: 0;
+    background-image: url("/images/grey.png");
+    background-attachment: fixed;
+}
+* {
+    font-family: arial;
+}
+
 /* Image Gallery style */
 img.gallery {
 	max-width: 25%;
@@ -10,4 +23,16 @@ input{
 }
 #deletePix{
 	display: inline-block;
+}
+#main {
+	width: 60%;
+	margin: auto;
+	min-width: 400px;
+	background-color: rgba(255, 255, 255, 0.67);
+	padding: 10px 25px;
+	height: 100%;
+}
+h1{
+	font-family: "StormFaze";
+	font-size: 25px;
 }
