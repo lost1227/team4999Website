@@ -15,7 +15,9 @@ function formatAndQuery() { #first argument should be the query. %sv for strings
         $args[$key] = $DB->real_escape_string($val);
     }
 	$query  = vsprintf($query, $args);
-	str_replace("''","null",$query);
+	writeToLog("Old Query: ".$query,"query");
+	$query = str_replace('\'\'',"null",$query);
+	writeToLog("New Query: ".$query,"query");
     $result = $DB->query($query);
     if (!$result)
     {
