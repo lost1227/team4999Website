@@ -132,10 +132,10 @@ foreach($columns as $column) {
 			case("Width"):
 			case("Depth"):
 			case("Height"):
-				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9.]*"><span>inches</span>');
+				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9.]*"><span> inches</span>');
 				break;
 			case("Weight"):
-				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9.]*"><span>lbs</span>');
+				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9.]*"><span> lbs</span>');
 				break;
 			case("Drive_System"): #Create select menu with options for each type of drive system. The array $options can have new drive systems added to it to create more options
 				echo('<select name="'.$column["Field"].'">');
@@ -180,7 +180,7 @@ foreach($columns as $column) {
 		echo('<input type="hidden" name="Team" value="'.$row[$column["Field"]].'">');
 	}
 }
-echo('<input type="file" name="uploadImages[]" accept="image/jpeg,image/png,image/gif,image/bmp" multiple>');
+echo('<br><input type="file" name="uploadImages[]" accept="image/jpeg,image/png,image/gif,image/bmp" multiple><br>');
 if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
 	$team = $_POST["Team"];
 } else {
@@ -197,7 +197,7 @@ if(file_exists($image_dir)){
 		}
 	}
 }
-echo('<input type="submit" value="Submit"></form>');
+echo('<br><input type="submit" value="Submit"></form>');
 ?>
 <p>All values are in lbs and inches</p>
 <script src="scripts/jquery-3.1.1.min.js"></script>
