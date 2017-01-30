@@ -27,6 +27,7 @@
 	</head>
 	<body>
 	<div id="info">
+	<a href="/"><img src="/images/back.png" id="back"></a>
 	<?php
 	require 'functions.php';
 	if (isset($_SESSION["loggedIn"])){
