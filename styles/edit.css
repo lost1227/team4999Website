@@ -22,7 +22,7 @@ p {
 }
 
 .deletePix{
-	display: inline-block;
+	display: none;
 }
 #main {
 	width: 60%;
@@ -31,6 +31,7 @@ p {
 	background-color: rgba(255, 255, 255, 0.67);
 	padding: 10px 25px;
 	min-height: 100%;
+	box-shadow: 0px 0px 10px 1px black;
 }
 h1{
 	font-family: "StormFaze";
