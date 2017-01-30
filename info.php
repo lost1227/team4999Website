@@ -54,10 +54,14 @@
 					case("Width"):
 					case("Depth"):
 					case("Height"):
-						echo('<p>'.$key.': '.$value.' inches</p>');
+						if(!empty($value)){
+							echo('<p>'.$key.': '.$value.' inches</p>');
+						}
 						break;
 					case("Weight"):
-						echo('<p>'.$key.': '.$value.' lbs</p>');
+						if(!empty($value)){
+							echo('<p>'.$key.': '.$value.' lbs</p>');
+						}
 						break;
 					case("Can pickup gear from floor"):
 					case("Can place gear on lift"):
@@ -74,7 +78,9 @@
 						}
 						break;
 					default:
-						echo('<p>'.$key.': '.$value.'</p>');
+						if(!empty($value)){
+							echo('<p>'.$key.': '.$value.'</p>');
+						}
 						break;
 				}
 			}
