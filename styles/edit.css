@@ -21,7 +21,7 @@ p {
 input{
 	display: block;
 }
-#deletePix{
+.deletePix{
 	display: inline-block;
 }
 #main {
