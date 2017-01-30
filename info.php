@@ -93,7 +93,7 @@
 			}
 		}
 	}
-	echo('<p id="edit"><a href=/edit.php?team='.$_GET["team"].'>Edit</a></p>');
+	echo('<br><a id="edit" href=/edit.php?team='.$_GET["team"].'>Edit</a>');
 	?>
 <script src="scripts/universal.js"></script>
 </div>
