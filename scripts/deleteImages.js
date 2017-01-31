@@ -8,3 +8,7 @@ $(".deletePix").on("change",function() {
 		document.getElementById(imageId).style.border = "inherit";
 	}
 });
+
+window.onunload = function() {
+	history.replaceState({},"Scouting Website","/");
+};
