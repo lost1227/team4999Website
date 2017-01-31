@@ -41,20 +41,12 @@ while($row = $columnData->fetch_assoc()) {
 }
 #handle submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	#check if team exists
-	$data = formatAndQuery('SELECT Team FROM robots WHERE Team = %d;',$_POST["Team"]);
-	if($data->num_rows == 0){ # add team if it doesn't exist yet
-		formatAndQuery('INSERT INTO robots (Team) VALUES (%d);',$_POST["Team"]);
-	}
-	$update = 'UPDATE robots SET %s = %sv WHERE Team = %d;';
-	foreach($columns as $column) {
-		if($column["Field"] != "Team" and $column["Field"] != "Stored_Images"){
-			formatAndQuery($update,$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
-		}
-	}
+	if (isset($_SERVER["CONTENT_LENGTH"]))
+	if($_SERVER["CONTENT_LENGTH"]>((int)ini_get('post_max_size')*1024*1024))
+	die("FILE EXCEEDS SIZE LIMIT");
 	#handle file submission
 	for( $i = 0; $i < count($_FILES["uploadImages"]["tmp_name"]); $i++) {
-		if ($_FILES["uploadImages"]["error"] == UPLOAD_ERR_OK) {
+		if ($_FILES["uploadImages"]["error"][i] == UPLOAD_ERR_OK) {
 			if (is_uploaded_file($_FILES["uploadImages"]["tmp_name"][$i])) {
 				if (!file_exists($image_root)) {
 					mkdir($image_root,0777,true);
@@ -93,6 +85,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 					}
 				}
 			}
+		} else {
+			exit($_FILES["uploadImages"]["error"][i]);
+		}
+	}
+	#Update actual data
+	$data = formatAndQuery('SELECT Team FROM robots WHERE Team = %d;',$_POST["Team"]); #check if team exists
+	if($data->num_rows == 0){ # add team if it doesn't exist yet
+		formatAndQuery('INSERT INTO robots (Team) VALUES (%d);',$_POST["Team"]);
+	}
+	$update = 'UPDATE robots SET %s = %sv WHERE Team = %d;';
+	foreach($columns as $column) {
+		if($column["Field"] != "Team" and $column["Field"] != "Stored_Images"){
+			formatAndQuery($update,$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
 		}
 	}
 	#handle deletions
