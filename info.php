@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="styles/info.css">
 		<title>Team: <?php echo(str_replace('_',' ',$_GET["team"])); ?></title>
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0" />
-		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-capable" content="no" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 		<script>
 			function setUrl(url) {
@@ -101,7 +101,6 @@
 	}
 	echo('<br><a id="edit" href=/edit.php?team='.$_GET["team"].'>Edit</a>');
 	?>
-<script src="scripts/universal.js"></script>
 </div>
 </body>
 </html>

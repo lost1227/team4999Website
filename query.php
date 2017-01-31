@@ -45,4 +45,3 @@ if($data->num_rows > 0){
 	echo('<p style="text-align: center; font-family: StormFaze; width: inherit; font-size: 25px; padding: 10px;">No results!</p>');
 }
 ?>
-<script src="scripts/universal.js"></script>

@@ -201,7 +201,6 @@ echo('<br><input type="submit" value="Submit"></form>');
 ?>
 <p>All values are in lbs and inches</p>
 <script src="scripts/jquery-3.1.1.min.js"></script>
-<script src="scripts/universal.js"></script>
 <script src="scripts/deleteImages.js"></script>
 </div>
 </body>
