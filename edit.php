@@ -127,7 +127,8 @@ foreach($columns as $column) {
 		switch($column["Field"]) {
 			#check all numbers
 			case("Team"):
-				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9]*" required>');
+				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9]*" required>
+					<a href="/" id="teamExists">TEAM EXISTS</a>');
 				break;
 			case("Width"):
 			case("Depth"):
@@ -197,11 +198,12 @@ if(file_exists($image_dir)){
 		}
 	}
 }
-echo('<br><input type="submit" value="Submit"></form>');
+echo('<br><input id="submit" type="submit" value="Submit"></form>');
 ?>
 <p>All values are in lbs and inches</p>
 <script src="scripts/jquery-3.1.1.min.js"></script>
 <script src="scripts/deleteImages.js"></script>
+<script src="scripts/checkteam.js"></script>
 </div>
 </body>
 </html>

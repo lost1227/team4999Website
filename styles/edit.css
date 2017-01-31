@@ -36,3 +36,8 @@ h1{
 	font-family: "StormFaze";
 	font-size: 2em;
 }
+#teamExists {
+	display: none;
+	margin: 0px 5px;
+	color: red;
+}
