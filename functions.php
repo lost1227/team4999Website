@@ -18,6 +18,7 @@ function formatAndQuery() { #first argument should be the query. %sv for strings
 	#writeToLog("Old Query: ".$query,"query");
 	$query = str_replace('\'\'',"null",$query);
 	#writeToLog("New Query: ".$query,"query");
+	writeToLog("Query: ".$query,"query");
     $result = $DB->query($query);
     if (!$result)
     {
