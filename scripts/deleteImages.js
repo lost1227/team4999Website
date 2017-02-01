@@ -44,12 +44,11 @@ document.getElementById('uploadImage').onchange = function() {
 	var upload = document.getElementById('uploadImage');
 	var count = upload.files.length;
 	var enable = true;
+	var totalsize = 0;
 	for(var i = 0; i < count; i++) {
-		if(upload.files[i].size > 249000000) {
-			enable = false;
-		} 
+		 totalsize += upload.files[i].size;
 	}
-	if(enable) {
+	if(totalsize < 249000000) {
 		document.getElementById("invalidFile").style.display = "none";
 		disableSubmit.removeValue("file");
 	} else {

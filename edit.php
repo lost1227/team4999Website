@@ -188,7 +188,7 @@ foreach($columns as $column) {
 		echo('<input type="hidden" name="Team" value="'.$row[$column["Field"]].'">');
 	}
 }
-echo('<br><input id="uploadImage" type="file" name="uploadImages[]" accept="image/jpeg,image/png,image/gif,image/bmp" multiple><span id="invalidFile">MAX FILE SIZE IS 250 MB</span><br>');
+echo('<br><input id="uploadImage" type="file" name="uploadImages[]" accept="image/jpeg,image/png,image/gif,image/bmp" multiple><span id="invalidFile">MAX UPLOAD IS 250MB</span><br>');
 if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
 	$team = $_POST["Team"];
 } else {
