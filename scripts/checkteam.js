@@ -6,14 +6,14 @@ teamRequest.onreadystatechange = function() {
 				document.getElementsByName("Team")[0].style.border = "";
 				document.getElementsByName("Team")[0].style.backgroundColor = "";
 				document.getElementById("teamExists").style.display = "none";
-				document.getElementById("submit").disabled = false;
+				disableSubmit.removeValue("team");
 				break;
 			case "FALSE":
 				document.getElementsByName("Team")[0].style.border = "2px solid red";
 				document.getElementsByName("Team")[0].style.backgroundColor = "rgba(255,0,0,.15)";
 				document.getElementById("teamExists").style.display = "inline-block";
 				document.getElementById("teamExists").setAttribute("href","/edit.php?team=" + this.teamNumber);
-				document.getElementById("submit").disabled = true;
+				disableSubmit.addValue("team",false);
 				break;
 			case "LOGIN_ERROR":
 				document.location.href = "/login.php?redirect=edit.php";
