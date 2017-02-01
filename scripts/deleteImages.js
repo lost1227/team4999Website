@@ -45,7 +45,7 @@ document.getElementById('uploadImage').onchange = function() {
 	var count = upload.files.length;
 	var enable = true;
 	for(var i = 0; i < count; i++) {
-		if(upload.files[i].size > 250000000) {
+		if(upload.files[i].size > 249000000) {
 			enable = false;
 		} 
 	}

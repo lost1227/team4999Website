@@ -17,6 +17,7 @@
 		'git submodule sync',
 		'git submodule update',
 		'git submodule status',
+		'git ls-files | xargs wc -l'
 	);
 
 	// Run the commands for output
