@@ -26,4 +26,10 @@ function formatAndQuery() { #first argument should be the query. %sv for strings
     }
     return $result;
 }
+function getCurrentDB() {
+	global $DB;
+	$result = $DB->query("SELECT CurrentDB FROM Control;");
+	$result = $result->fetch_assoc();
+	return $result["CurrentDB"];
+}
 ?>
