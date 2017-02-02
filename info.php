@@ -94,7 +94,7 @@
 		foreach( $files as $file ) {
 			#writeToLog("File in image dir: " . $file, "images");
 			if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
-				echo('<img src="'.$image_dir.$file.'" class="gallery">');
+				echo('<a href="'.$image_dir.$file.'"><img src="'.$image_dir.$file.'" class="gallery"></a>');
 			}
 		}
 	}
