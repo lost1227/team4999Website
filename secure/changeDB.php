@@ -3,13 +3,13 @@
 <head>
 <title>Change DB</title>
 <?php
+require '../functions.php';
 if (isset($_SESSION["loggedIn"])){
 	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
 } else {
 	header( 'Location: https://frcteam4999.jordanpowers.net/login.php?redirect=changeDB.php');
 	exit();
 }
-require 'functions.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	if(!empty($_POST["NEW_DB"])){
 		formatAndQuery("CREATE TABLE frcteam4999.%s LIKE frcteam4999.Template;",$_POST["NEW_DB"]);
