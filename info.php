@@ -41,8 +41,7 @@
 		$DB = new mysqli("localhost","ro","","frcteam4999");
 	}
 	$team = str_replace('_',' ',$_GET["team"]);
-	$data = formatAndQuery('SELECT * FROM robots WHERE Team = %d;',$team);
-	#$data = $DB->query('SELECT * FROM robots WHERE Team = "'.$team.'";');
+	$data = formatAndQuery('SELECT * FROM '.getCurrentDB().' WHERE Team = %d;',$team);
 	if($data->num_rows > 0){
 		while($row = $data->fetch_assoc()) {
 			foreach($row as $key => $value) {

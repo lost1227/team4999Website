@@ -34,7 +34,7 @@ if (isset($_SESSION["loggedIn"])){
 	exit();
 }
 #get columns into an associative array
-$columnData = $DB->query('DESCRIBE robots;');
+$columnData = $DB->query('DESCRIBE '.getCurrentDB().';');
 $columns = array();
 while($row = $columnData->fetch_assoc()) {
 	$columns[] = $row;
@@ -90,11 +90,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		}
 	}
 	#Update actual data
-	$data = formatAndQuery('SELECT Team FROM robots WHERE Team = %d;',$_POST["Team"]); #check if team exists
+	$data = formatAndQuery('SELECT Team FROM '.getCurrentDB().' WHERE Team = %d;',$_POST["Team"]); #check if team exists
 	if($data->num_rows == 0){ # add team if it doesn't exist yet
-		formatAndQuery('INSERT INTO robots (Team) VALUES (%d);',$_POST["Team"]);
+		formatAndQuery('INSERT INTO '.getCurrentDB().' (Team) VALUES (%d);',$_POST["Team"]);
 	}
-	$update = 'UPDATE robots SET %s = %sv WHERE Team = %d;';
+	$update = 'UPDATE '.getCurrentDB().' SET %s = %sv WHERE Team = %d;';
 	foreach($columns as $column) {
 		if($column["Field"] != "Team" and $column["Field"] != "Stored_Images"){
 			formatAndQuery($update,$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
@@ -118,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 #check if creating a new entry, or editing an existing entry
 #creates an associative array of the existing entry
 if(isset($_GET["team"])){
-	$data = formatAndQuery('SELECT * FROM robots WHERE Team = %d;',$_GET["team"]);
+	$data = formatAndQuery('SELECT * FROM '.getCurrentDB().' WHERE Team = %d;',$_GET["team"]);
 	if($data->num_rows > 0){
 		$row = $data->fetch_assoc();
 		echo('<h1>Team: '.$_GET["team"].'</h1>');

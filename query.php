@@ -9,7 +9,7 @@ if (isset($_SESSION["loggedIn"])){
 }
 #Check if accessed by post and apply the filters if so
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$query = 'SELECT Team FROM robots WHERE ';
+	$query = 'SELECT Team FROM '.getCurrentDB().' WHERE ';
 	$index = 1;
 	#loop through all the filters and apply each one, adding an 'AND' between each
 	foreach($_POST as $key => $value) {
@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	echo(count($_POST));*/
 } else {
 	#If not accessed by POST, show all rows
-	$query = "SELECT Team FROM robots ORDER BY Team ASC;";
+	$query = 'SELECT Team FROM '.getCurrentDB().' ORDER BY Team ASC;';
 }
 #execute the query
 $data = $DB->query($query);
