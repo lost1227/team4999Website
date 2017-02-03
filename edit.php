@@ -49,47 +49,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	#handle file submission
 	writeToLog("Recieved " . count($_FILES["uploadImages"]["tmp_name"]) . " images","images");
 	for( $i = 0; $i < count($_FILES["uploadImages"]["tmp_name"]); $i++) {
-		if ($_FILES["uploadImages"]["error"][$i] == UPLOAD_ERR_OK) {
-			if (is_uploaded_file($_FILES["uploadImages"]["tmp_name"][$i])) {
-				if (!file_exists($image_root)) {
-					mkdir($image_root,0777,true);
-				}
-				$image_dir = $image_root . getCurrentDB() . '/' . $_POST["Team"] ."/";
-				if (!file_exists($image_dir)) {
-					mkdir($image_dir,0777,true);
-				}
-				$files = scandir($image_dir);
-				$biggestFile = 0;
-				foreach( $files as $file ) {
-					if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
-						$base = basename($file, "." . pathinfo(basename($file),PATHINFO_EXTENSION));
-						if ( $base > $biggestFile) {
-							$biggestFile = $base;
+		if(file_exists($_FILES["uploadImages"]["tmp_name"][$i])) {
+			if ($_FILES["uploadImages"]["error"][$i] == UPLOAD_ERR_OK) {
+				if (is_uploaded_file($_FILES["uploadImages"]["tmp_name"][$i])) {
+					if (!file_exists($image_root)) {
+						mkdir($image_root,0777,true);
+					}
+					$image_dir = $image_root . getCurrentDB() . '/' . $_POST["Team"] ."/";
+					if (!file_exists($image_dir)) {
+						mkdir($image_dir,0777,true);
+					}
+					$files = scandir($image_dir);
+					$biggestFile = 0;
+					foreach( $files as $file ) {
+						if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
+							$base = basename($file, "." . pathinfo(basename($file),PATHINFO_EXTENSION));
+							if ( $base > $biggestFile) {
+								$biggestFile = $base;
+							}
+						}
+					}
+					$imgeFileExtension = pathinfo(basename($_FILES["uploadImages"]["name"][$i]),PATHINFO_EXTENSION);
+					$imgeFileExtension = pathinfo(basename($_FILES["uploadImages"]["name"][$i]),PATHINFO_EXTENSION);
+					$target_file_path = $image_dir . ($biggestFile + 1) .".". $imgeFileExtension;
+					$continueUpload = TRUE;
+					#check if is image
+					if(getimagesize($_FILES["uploadImages"]["tmp_name"][$i]) == FALSE) {
+						writeToLog("INVALID FILE: getimagesize","images");
+						$continueUpload = FALSE;
+					}
+					#check if acceptable image (trusts extension)
+					if(!in_array($imgeFileExtension,$acceptableFileTypes)) {
+						writeToLog("INVALID FILE: extension","images");
+						$continueUpload = FALSE;
+					}
+					if($continueUpload) {
+						if (!move_uploaded_file($_FILES["uploadImages"]["tmp_name"][$i], $target_file_path)) {
+							writeToLog("ERROR MOVING UPLOADED FILE","images");
 						}
 					}
 				}
-				$imgeFileExtension = pathinfo(basename($_FILES["uploadImages"]["name"][$i]),PATHINFO_EXTENSION);
-				$imgeFileExtension = pathinfo(basename($_FILES["uploadImages"]["name"][$i]),PATHINFO_EXTENSION);
-				$target_file_path = $image_dir . ($biggestFile + 1) .".". $imgeFileExtension;
-				$continueUpload = TRUE;
-				#check if is image
-				if(getimagesize($_FILES["uploadImages"]["tmp_name"][$i]) == FALSE) {
-					writeToLog("INVALID FILE: getimagesize","images");
-					$continueUpload = FALSE;
-				}
-				#check if acceptable image (trusts extension)
-				if(!in_array($imgeFileExtension,$acceptableFileTypes)) {
-					writeToLog("INVALID FILE: extension","images");
-					$continueUpload = FALSE;
-				}
-				if($continueUpload) {
-					if (!move_uploaded_file($_FILES["uploadImages"]["tmp_name"][$i], $target_file_path)) {
-						writeToLog("ERROR MOVING UPLOADED FILE","images");
-					}
-				}
+			} else {
+				exit($_FILES["uploadImages"]["error"][$i]);
 			}
-		} else {
-			exit($_FILES["uploadImages"]["error"][$i]);
 		}
 	}
 	#Update actual data
