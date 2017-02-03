@@ -87,7 +87,7 @@
 	} else {
 		echo('<p>No results!</p>');
 	}
-	$image_dir = $image_root . $team . "/";
+	$image_dir = $image_root . getCurrentDB() . '/' . $team . "/";
 	#writeToLog("Imagedir: " . $image_dir, "images");
 	if(file_exists($image_dir)){
 		$files = scandir($image_dir);

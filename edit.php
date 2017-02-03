@@ -41,17 +41,20 @@ while($row = $columnData->fetch_assoc()) {
 }
 #handle submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	if (isset($_SERVER["CONTENT_LENGTH"]))
-	if($_SERVER["CONTENT_LENGTH"]>((int)ini_get('post_max_size')*1024*1024))
-	die("FILE EXCEEDS SIZE LIMIT");
+	if (isset($_SERVER["CONTENT_LENGTH"])) {
+		if($_SERVER["CONTENT_LENGTH"]>((int)ini_get('post_max_size')*1024*1024)) {
+			die("FILE EXCEEDS SIZE LIMIT");
+		}
+	}
 	#handle file submission
+	writeToLog("Recieved " . count($_FILES["uploadImages"]["tmp_name"]) . " images","images");
 	for( $i = 0; $i < count($_FILES["uploadImages"]["tmp_name"]); $i++) {
-		if ($_FILES["uploadImages"]["error"][i] == UPLOAD_ERR_OK) {
+		if ($_FILES["uploadImages"]["error"][$i] == UPLOAD_ERR_OK) {
 			if (is_uploaded_file($_FILES["uploadImages"]["tmp_name"][$i])) {
 				if (!file_exists($image_root)) {
 					mkdir($image_root,0777,true);
 				}
-				$image_dir = $image_root . $_POST["Team"] ."/";
+				$image_dir = $image_root . getCurrentDB() . '/' . $_POST["Team"] ."/";
 				if (!file_exists($image_dir)) {
 					mkdir($image_dir,0777,true);
 				}
@@ -86,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				}
 			}
 		} else {
-			exit($_FILES["uploadImages"]["error"][i]);
+			exit($_FILES["uploadImages"]["error"][$i]);
 		}
 	}
 	#Update actual data
@@ -106,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 	if(!empty($images)) {
 		foreach($images as $image ) {
-			$target_file_path = $image_root . $_POST["Team"] . "/" . $image;
+			$target_file_path = $image_root . getCurrentDB() . '/' . $_POST["Team"] ."/" . $image;
 			writeToLog("Will unset: ". $target_file_path,"images");
 			unlink($target_file_path);
 		}
@@ -194,7 +197,7 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
 } else {
 	$team = $_GET["team"];
 }
-$image_dir = $image_root . $team . "/";
+$image_dir = $image_root . getCurrentDB() . '/' . $team ."/";
 #writeToLog("Imagedir: " . $image_dir, "images");
 if(file_exists($image_dir)){
 	$files = scandir($image_dir);
