@@ -111,8 +111,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 	if(!empty($images)) {
 		foreach($images as $image ) {
-			$target_file_path = $image_root . getCurrentDB() . '/' . $_POST["Team"] ."/" . $image;
-			writeToLog("Will unset: ". $target_file_path,"images");
+			$target_file_path = $image_root . getCurrentDB() . '/' . $_POST["Team"] . "/" . $image;
+			writeToLog("Will unlink: ". $target_file_path,"images");
 			unlink($target_file_path);
 		}
 	} else {
