@@ -7,7 +7,7 @@ require '../functions.php';
 if (isset($_SESSION["loggedIn"])){
 	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
 } else {
-	header( 'Location: https://frcteam4999.jordanpowers.net/login.php?redirect=changeDB.php');
+	header( 'Location: https://frcteam4999.jordanpowers.net/login.php?redirect=secure%2FchangeDB.php');
 	exit();
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
