@@ -16,12 +16,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	try {
 		formatAndQuery("CREATE USER %sv@'localhost' IDENTIFIED BY %sv;",$_POST["usr"],$_POST["pass"]);
 		if(isset($_POST["admin"])) {
-			$privs = "GRANT SELECT,INSERT,UPDATE,GRANT OPTION,CREATE USER,DELETE,CREATE ON frcteam4999.* TO %sv@'localhost';";
+			$privs = "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE ON frcteam4999.* TO %sv@'localhost'; GRANT CREATE USER ON *.* TO %sv@'localhost' WITH GRANT OPTION;";
 		} else {
 			$privs = "GRANT SELECT,INSERT,UPDATE ON frcteam4999.* TO %sv@'localhost';";
 		}
 		try {
-			formatAndQuery($privs,$_POST["usr"]);
+			formatAndQuery($privs,$_POST["usr"],$_POST["usr"]);
 		} catch (Exception $e) {
 			echo("Exception: ".$e->getMessage());
 			formatAndQuery("DROP USER %sv@'localhost';");
