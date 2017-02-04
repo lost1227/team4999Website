@@ -13,18 +13,21 @@ if (isset($_SESSION["loggedIn"])){
 	exit();
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	if(formatAndQuery("CREATE USER %sv@'localhost' IDENTIFIED BY %sv;",$_POST["usr"],$_POST["pass"])) {
+	try {
+		formatAndQuery("CREATE USER %sv@'localhost' IDENTIFIED BY %sv;",$_POST["usr"],$_POST["pass"]);
 		if(isset($_POST["admin"])) {
 			$privs = "GRANT SELECT,INSERT,UPDATE,GRANT OPTION,CREATE USER,DELETE,CREATE ON frcteam4999.* TO %sv@'localhost';";
 		} else {
 			$privs = "GRANT SELECT,INSERT,UPDATE ON frcteam4999.* TO %sv@'localhost';";
 		}
-		if(!formatAndQuery($privs,$_POST["usr"])) {
-			echo($DB->error);
+		try {
+			formatAndQuery($privs,$_POST["usr"]);
+		} catch (Exception $e) {
+			echo("Exception: ".$e->getMessage());
 			formatAndQuery("DROP USER %sv@'localhost';");
 		}
-	} else {
-		echo($DB->error);
+	} catch (Exception $e) {
+		echo("Exception: ".$e->getMessage());
 	}
 }
 ?>
