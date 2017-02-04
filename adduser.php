@@ -2,6 +2,17 @@
 <html>
 <head>
 <title>Add User</title>
+<script>
+function checkBoxes() {
+	if (document.getElementById('pass1').value != document.getElementById('pass2').value) {
+		document.getElementById('Submit').disabled = true;
+		document.getElementById('errorWarning').style.display = "block";
+	} else {
+		document.getElementById('Submit').disabled = false;
+		document.getElementById('errorWarning').style.display = "none";
+	}
+}
+</script>
 </head>
 <body>
 <?php
@@ -40,10 +51,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <p>User:</p>
 <input name="usr" type="text"><br>
 <p>Password:</p>
-<input id='pass1' type="password"><br>
-<input id='pass2' name="pass" type="password"><br>
+<input id='pass1' onblur="checkBoxes()" type="password"><br>
+<input id='pass2' onblur="checkBoxes()" name="pass" type="password"><br>
+<p id="errorWarning" hidden>PASSWORDS DON'T MATCH</p>
 <label><input name="admin" type="checkbox">Admin</label><br>
-<input type="submit">
+<input id='Submit' type="submit">
 </form>
 </body>
 </html>
