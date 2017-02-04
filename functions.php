@@ -13,6 +13,7 @@ function formatAndQuery() { #first argument should be the query. %sv for strings
 	foreach ($args as $key => $val)
     {
         $args[$key] = $DB->real_escape_string($val);
+		$args[$key] = htmlspecialchars($val);
     }
 	$query  = vsprintf($query, $args);
 	#writeToLog("Old Query: ".$query,"query");
