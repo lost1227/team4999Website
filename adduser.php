@@ -16,15 +16,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	try {
 		formatAndQuery("CREATE USER %sv@'localhost' IDENTIFIED BY %sv;",$_POST["usr"],$_POST["pass"]);
 		if(isset($_POST["admin"])) {
-			$privs = "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE ON frcteam4999.* TO %sv@'localhost'; GRANT CREATE USER ON *.* TO %sv@'localhost' WITH GRANT OPTION;";
+			try {
+				formatAndQuery("GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON frcteam4999.* TO %sv@'localhost';",$_POST["usr"]);
+				formatAndQuery("GRANT CREATE USER ON *.* TO 'TEST'@'localhost' WITH GRANT OPTION;",$_POST["usr"]);
+			} catch (Exception $e) {
+				echo("Exception: ".$e->getMessage());
+				formatAndQuery("DROP USER %sv@'localhost';");
+			}
 		} else {
-			$privs = "GRANT SELECT,INSERT,UPDATE ON frcteam4999.* TO %sv@'localhost';";
-		}
-		try {
-			formatAndQuery($privs,$_POST["usr"],$_POST["usr"]);
-		} catch (Exception $e) {
-			echo("Exception: ".$e->getMessage());
-			formatAndQuery("DROP USER %sv@'localhost';");
+			try {
+				formatAndQuery("GRANT SELECT,INSERT,UPDATE ON frcteam4999.* TO %sv@'localhost';",$_POST["usr"]);
+			} catch (Exception $e) {
+				echo("Exception: ".$e->getMessage());
+				formatAndQuery("DROP USER %sv@'localhost';");
+			}
 		}
 	} catch (Exception $e) {
 		echo("Exception: ".$e->getMessage());
@@ -35,7 +40,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <p>User:</p>
 <input name="usr" type="text"><br>
 <p>Password:</p>
-<input name="pass" type="password"><br>
+<input id='pass1' type="password"><br>
+<input id='pass2' name="pass" type="password"><br>
 <label><input name="admin" type="checkbox">Admin</label><br>
 <input type="submit">
 </form>
