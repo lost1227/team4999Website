@@ -154,16 +154,23 @@ div.infoRow p{
 div.infoRow:hover{
 	cursor: pointer;
 }
-
+#logoutLink {
+	color: black;
+	font-family: StormFaze;
+}
+#logoutLink :hover {
+	color: grey;
+}
 /*The logout box that appears in the corner of index.php when you are logged in*/
 #loginbox {
 	position:fixed;
 	bottom:5px;
 	left:5px;
-	background-color:#E0E0E0;
+	background-color: rgb(255, 255, 255);
 	border-radius: 5px;
 	display: inline-block;
 	padding:1px 10px;
+	box-shadow: 0px 0px 10px 0px black;
 }
 
 /*The login form at login.php*/

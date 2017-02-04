@@ -59,7 +59,7 @@
 	</div>
 	<?php
 	if(isset($_SESSION["loggedIn"])) {
-		echo('<div id="loginbox"><p style="margin:2px;"><a href="logout.php">Log Out: '.$_SESSION["user"].'</a></p></div>');
+		echo('<div id="loginbox"><p style="margin:2px;"><a id="logoutLink" href="logout.php">Log Out: '.$_SESSION["user"].'</a></p></div>');
 	}
 	?>
 	
