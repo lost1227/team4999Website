@@ -101,7 +101,7 @@
 	}
 	echo('<br><a id="edit" href=/edit.php?team='.$_GET["team"].'>Edit</a>');
 	?>
-	<hr><h1>The Blue Alliance info</h1>
+	<hr><div id="TBAheading"><span>The Blue Alliance info</span></div>
 	<div id="TBA">
 	</div>
 </div>
