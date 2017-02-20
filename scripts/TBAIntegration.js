@@ -6,15 +6,17 @@ function processResponse(rawdata) {
 	var data = JSON.parse(rawdata);
 	document.getElementById('TBA').innerHTML = "";
 	for (index in data) {
-		switch(index) {
-			case "key":
-				break;
-			case "website":
-				document.getElementById('TBA').innerHTML += '<p>' + index.replace(/_/gi," ").toProperCase() + ': <a href="' + data[index] + '">' + data[index] + "</a></p>";
-				break;
-			default:
-				document.getElementById('TBA').innerHTML += "<p>" + index.replace(/_/gi," ").toProperCase() + ": " + data[index] + "</p>";
-				break;
+		if(data[index]){
+			switch(index) {
+				case "key":
+					break;
+				case "website":
+					document.getElementById('TBA').innerHTML += '<p>' + index.replace(/_/gi," ").toProperCase() + ': <a href="' + data[index] + '">' + data[index] + "</a></p>";
+					break;
+				default:
+					document.getElementById('TBA').innerHTML += "<p>" + index.replace(/_/gi," ").toProperCase() + ": " + data[index] + "</p>";
+					break;
+			}
 		}
 	}
 }
@@ -35,7 +37,7 @@ function sendRequest(data) {
 	TBARequest.send(data);
 }
 sendRequest("frc4999:scouting-app:v01");
-var loop = window.setInterval(function() {sendRequest("frc4999:scouting-app:v01");}, 5000);
+var loop = window.setInterval(function() {sendRequest("frc4999:scouting-app:v01");}, 20000);
 document.getElementById('TBAheading').onclick = function() {
 	document.location.href = teamURL;
 };
