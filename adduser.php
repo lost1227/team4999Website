@@ -29,10 +29,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if(isset($_POST["admin"])) {
 			try {
 				formatAndQuery("GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON frcteam4999.* TO %sv@'localhost';",$_POST["usr"]);
-				formatAndQuery("GRANT CREATE USER ON *.* TO 'TEST'@'localhost' WITH GRANT OPTION;",$_POST["usr"]);
+				formatAndQuery("GRANT CREATE USER ON *.* TO %sv@'localhost' WITH GRANT OPTION;",$_POST["usr"]);
 			} catch (Exception $e) {
 				echo("Exception: ".$e->getMessage());
-				formatAndQuery("DROP USER %sv@'localhost';");
+				formatAndQuery("DROP USER %sv@'localhost';",$_POST["usr"]);
 			}
 		} else {
 			try {
