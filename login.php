@@ -61,7 +61,12 @@
 			<input id="passwordfield" type="password" name="pass"><br>
 			<?php
 			if ($DB->connect_error) {
-				echo('<p sytle = "font-size: 12px; font-color: red;">'.$DB->connect_error.'</p>');
+				$error = $DB->connect_error;
+				if(is_int(strpos($error, "Access denied"))) {
+					echo('<p style="font-size: 25px; color: red;">Access Denied: Check Username and Password</p>');
+				} else {
+					echo('<p sytle = "font-size: 15px; font-color: red;">'.$error.'</p>');
+				}
 			}
 			if(isset($redirect)){
 				echo('<input type="hidden" name="redirect" value="'.$redirect.'">');
