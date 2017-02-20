@@ -2,6 +2,30 @@
 <html>
 <head>
 <title>Add User</title>
+<style>
+@font-face{
+	font-family: "StormFaze";
+	src: url("/fonts/stormfaze.ttf");
+}
+body {
+	background-image: url(/images/grey.png);
+	margin: 0px;
+	background-attachment: fixed;
+}
+form {
+	width: 80%;
+	margin: auto;
+	background-color: rgba(255, 255, 255, 0.67);
+	padding: 15px 20px;
+	min-height: 100%;
+	box-shadow: 0px 0px 10px 1px #06ceff;
+	font-family: StormFaze;
+}
+#errorWarning {
+	color: red;
+	margin: 5px 0px;
+}
+</style>
 <script>
 function checkBoxes() {
 	if (document.getElementById('pass1').value != document.getElementById('pass2').value) {
@@ -51,10 +75,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <p>User:</p>
 <input name="usr" type="text"><br>
 <p>Password:</p>
-<input id='pass1' onblur="checkBoxes()" type="password"><br>
-<input id='pass2' onblur="checkBoxes()" name="pass" type="password"><br>
+<input id='pass1' oninput="checkBoxes()" type="password"><br>
+<input id='pass2' oninput="checkBoxes()" name="pass" type="password"><br>
 <p id="errorWarning" hidden>PASSWORDS DON'T MATCH</p>
-<label><input name="admin" type="checkbox">Admin</label><br>
+<label style="font-family: arial;"><input name="admin" type="checkbox">Admin</label><br>
 <input id='Submit' type="submit">
 </form>
 </body>
