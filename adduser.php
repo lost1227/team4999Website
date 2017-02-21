@@ -41,6 +41,7 @@ function checkBoxes() {
 <body>
 <?php
 require 'functions.php';
+$noPermissions = false;
 if (isset($_SESSION["loggedIn"])){
 	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
 } else {
@@ -67,7 +68,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			}
 		}
 	} catch (Exception $e) {
-		echo("Exception: ".$e->getMessage());
+		if(is_int(strpos($e->getMessage(), "Access denied; you need (at least one of) the CREATE USER privilege(s) for this operation"))) {
+			$noPermissions = true;
+		} else {
+			echo("Exception: ".$e->getMessage());
+		}
 	}
 }
 ?>
@@ -80,6 +85,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <p id="errorWarning" hidden>PASSWORDS DON'T MATCH</p>
 <label style="font-family: arial;"><input name="admin" type="checkbox">Admin</label><br>
 <input id='Submit' type="submit">
+<?php
+if($noPermissions) {
+	echo('<p style="color: red; margin: 0px 5px;">Only admins can create user accounts.</p>');
+}
+?>
 </form>
 </body>
 </html>
