@@ -134,70 +134,73 @@ echo('<form id="edit" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method
 foreach($columns as $column) {
 	#remove underscores from column names
 	$PrettyColumn = str_replace('_',' ',$column["Field"]);
-	if(!($column["Field"] == "Team" and isset($_GET["team"]))){ #Check if creating a new team
-		echo('<p>'.$PrettyColumn.':</p>');
-		switch($column["Field"]) {
-			#check all numbers
-			case("Team"):
+	switch($column["Field"]) {
+		case("Team"):
+			if(isset($_GET["team"])) {
+				echo('<input type="hidden" name="Team" value="'.$row[$column["Field"]].'">');
+			} else {
+				echo('<p>'.$PrettyColumn.':</p>');
 				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9]*" required>
 					<a href="/" id="teamExists">TEAM EXISTS</a>');
-				break;
-			case("Width"):
-			case("Depth"):
-			case("Height"):
-				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9.]*"><span> inches</span>');
-				break;
-			case("Weight"):
-				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9.]*"><span> lbs</span>');
-				break;
-			case("Drive_System"): #Create select menu with options for each type of drive system. The array $options can have new drive systems added to it to create more options
-				echo('<select name="'.$column["Field"].'">');
-				$options=array("West Coast","Mechanum","Tank","Swerve");
-				foreach($options as $option) {
-					if ($option == $row[$column["Field"]]) { #if the value is already set, set the option to that value
-						echo('<option value="'.$option.'" selected>'.$option.'</option>');
-					} else {
-						echo('<option value="'.$option.'">'.$option.'</option>');
-					}
-				}
-				echo('</select>');
-				break;
-			case("Can_pickup_gear_from_floor"):
-			case("Can_place_gear_on_lift"):
-			case("Can_catch_fuel_from_hoppers"):
-			case("Can_pickup_fuel_from_floor"):
-			case("Can_shoot_in_low_goal"):
-			case("Can_shoot_in_high_goal"):
-			case("Can_climb_rope"):
-			case("Brought_own_rope"):
-				echo('<select name="'.$column["Field"].'">');
-				if ($row[$column["Field"]] == 0) {
-					echo('<option value="0" selected>No</option>
-					<option value="1">Yes</option>');
+			}
+			break;
+		case("Width"):
+		case("Depth"):
+		case("Height"):
+			echo('<p>'.$PrettyColumn.':</p>');
+			echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9.]*"><span> inches</span>');
+			break;
+		case("Weight"):
+			echo('<p>'.$PrettyColumn.':</p>');
+			echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9.]*"><span> lbs</span>');
+			break;
+		case("Drive_System"): #Create select menu with options for each type of drive system. The array $options can have new drive systems added to it to create more options
+			echo('<p>'.$PrettyColumn.':</p>');
+			echo('<select name="'.$column["Field"].'">');
+			$options=array("West Coast","Mechanum","Tank","Swerve");
+			foreach($options as $option) {
+				if ($option == $row[$column["Field"]]) { #if the value is already set, set the option to that value
+					echo('<option value="'.$option.'" selected>'.$option.'</option>');
 				} else {
-					echo('<option value="0">No</option>
-					<option value="1" selected>Yes</option>');
+					echo('<option value="'.$option.'">'.$option.'</option>');
 				}
-				echo('</select>');
-				break;
-			case("Autonomous_capabilities"):
-			case("Other_info"):
-				echo('<textarea rows="4" cols="50" name="'.$column["Field"].'">'.$row[$column["Field"]].'</textarea>');
-				break;
-			case("Contributors"):
-				if(strpos($row[$column["Field"]],$_SESSION["user"]) === false) {
-					echo('<input type="hidden" name="'.$column["Field"].'" value="'.$row[$column["Field"]].', '. $_SESSION["user"].'">');	
-				} else {
-					echo('<input type="hidden" name="'.$column["Field"].'" value="'.$row[$column["Field"]] .'">');
-				}
-				break;
-			default:
-				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'">');
-		}
-		/*echo('<p>'.$PrettyColumn.':</p><br>
-			<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'"><br>');*/
-	} elseif ($column["Field"] == "Team" and isset($_GET["team"])) {#Set the team to a hidden value
-		echo('<input type="hidden" name="Team" value="'.$row[$column["Field"]].'">');
+			}
+			echo('</select>');
+			break;
+		case("Can_pickup_gear_from_floor"):
+		case("Can_place_gear_on_lift"):
+		case("Can_catch_fuel_from_hoppers"):
+		case("Can_pickup_fuel_from_floor"):
+		case("Can_shoot_in_low_goal"):
+		case("Can_shoot_in_high_goal"):
+		case("Can_climb_rope"):
+		case("Brought_own_rope"):
+			echo('<p>'.$PrettyColumn.':</p>');
+			echo('<select name="'.$column["Field"].'">');
+			if ($row[$column["Field"]] == 0) {
+				echo('<option value="0" selected>No</option>
+				<option value="1">Yes</option>');
+			} else {
+				echo('<option value="0">No</option>
+				<option value="1" selected>Yes</option>');
+			}
+			echo('</select>');
+			break;
+		case("Autonomous_capabilities"):
+		case("Other_info"):
+			echo('<p>'.$PrettyColumn.':</p>');
+			echo('<textarea rows="4" cols="50" name="'.$column["Field"].'">'.$row[$column["Field"]].'</textarea>');
+			break;
+		case("Contributors"):
+			if(strpos($row[$column["Field"]],$_SESSION["user"]) === false) {
+				echo('<input type="hidden" name="'.$column["Field"].'" value="'.$row[$column["Field"]].', '. $_SESSION["user"].'">');	
+			} else {
+				echo('<input type="hidden" name="'.$column["Field"].'" value="'.$row[$column["Field"]] .'">');
+			}
+			break;
+		default:
+			echo('<p>'.$PrettyColumn.':</p>');
+			echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'">');
 	}
 }
 echo('<br><input id="uploadImage" type="file" name="uploadImages[]" accept="image/jpeg,image/png,image/gif,image/bmp" multiple><span id="invalidFile">MAX UPLOAD IS 250MB</span><br>');
