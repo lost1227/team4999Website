@@ -193,7 +193,11 @@ foreach($columns as $column) {
 			break;
 		case("Contributors"):
 			if(strpos($row[$column["Field"]],$_SESSION["user"]) === false) {
-				echo('<input type="hidden" name="'.$column["Field"].'" value="'.$row[$column["Field"]].', '. $_SESSION["user"].'">');	
+				if(empty($row[$column["Field"]])) {
+					echo('<input type="hidden" name="'.$column["Field"].'" value="'.$_SESSION["user"].'">');
+				} else {
+					echo('<input type="hidden" name="'.$column["Field"].'" value="'.$row[$column["Field"]].', '. $_SESSION["user"].'">');
+				}
 			} else {
 				echo('<input type="hidden" name="'.$column["Field"].'" value="'.$row[$column["Field"]] .'">');
 			}
