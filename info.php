@@ -77,6 +77,11 @@
 							echo('<p>'.$key.': No</p>');
 						}
 						break;
+					case("Contributors"):
+						if(!empty($value)) {
+							echo('<p>Contributors to this information: ' . $value . '</p>');
+						}
+						break;
 					default:
 						if(!empty($value)){
 							echo('<p>'.$key.': '.$value.'</p>');
