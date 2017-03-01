@@ -184,6 +184,13 @@ foreach($columns as $column) {
 			case("Other_info"):
 				echo('<textarea rows="4" cols="50" name="'.$column["Field"].'">'.$row[$column["Field"]].'</textarea>');
 				break;
+			case("Contributors"):
+				if(strpos($row[$column["Field"]],$_SESSION["user"]) === false) {
+					echo('<input type="hidden" name="'.$column["Field"].'" value="'.$row[$column["Field"]].', '. $_SESSION["user"].'">');	
+				} else {
+					echo('<input type="hidden" name="'.$column["Field"].'" value="'.$row[$column["Field"]] .'">');
+				}
+				break;
 			default:
 				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'">');
 		}
