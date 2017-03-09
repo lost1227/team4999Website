@@ -33,7 +33,7 @@
 	</head>
 	<body>
 	<div id="info">
-	<img src="images/back.png" id="back" onclick="setUrl('/')">
+	<img src="images/back.png" id="back" onclick="setUrl('/scouting/')">
 	<?php
 	require 'functions.php';
 	if (isset($_SESSION["loggedIn"])){

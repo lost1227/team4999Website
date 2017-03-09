@@ -42,10 +42,10 @@ function checkBoxes() {
 <?php
 require 'functions.php';
 $noPermissions = false;
-if (isset($_SESSION["loggedIn"])){
-	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
+if (isset($_SESSION["loggedInCP"])){
+	//$DB = new mysqli("localhost",$_SESSION["userC"],$_SESSION["passC"],"frcteam4999");
 } else {
-	header( 'Location: https://frcteam4999.jordanpowers.net/login.php?redirect=adduser.php');
+	header( 'Location: https://frcteam4999.jordanpowers.net/login.php?redirect=adduser.php&cp=true');
 	exit();
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

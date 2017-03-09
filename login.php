@@ -14,6 +14,7 @@
 		  return $data;
 		}
 		if ($_SERVER["REQUEST_METHOD"] == "POST") {
+			//put code to check if cp and do different stuff if cp is true
 			$user = "momentu2_" . clean($_POST["user"]);
 			$pass = clean($_POST["pass"]);
 			if(isset($_POST["redirect"])) {
@@ -67,6 +68,12 @@
 				} else {
 					echo('<p sytle = "font-size: 15px; font-color: red;">'.$error.'</p>');
 				}
+			}
+			//put code here to tell user to log into cp
+			if(isset($_POST["cp"]) and $_POST["cp"] == "true") {
+				echo('<input type="hidden" name="cp" value="True">');
+			} else {
+				echo('<input type="hidden" name="cp" value="False">');
 			}
 			if(isset($redirect)){
 				echo('<input type="hidden" name="redirect" value="'.$redirect.'">');
