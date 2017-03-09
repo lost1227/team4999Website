@@ -41,39 +41,19 @@ function checkBoxes() {
 <body>
 <?php
 require 'functions.php';
+require 'xmlapi.php';
 $noPermissions = false;
 if (isset($_SESSION["loggedInCP"])){
-	//$DB = new mysqli("localhost",$_SESSION["userC"],$_SESSION["passC"],"frcteam4999");
+	$xmlapi = new xmlapi("momentum4999.com", $_SESSION["userC"], $_SESSION["passC"]);
 } else {
 	header( 'Location: https://frcteam4999.jordanpowers.net/login.php?redirect=adduser.php&cp=true');
 	exit();
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	try {
-		formatAndQuery("CREATE USER %sv@'localhost' IDENTIFIED BY %sv;",$_POST["usr"],$_POST["pass"]);
-		if(isset($_POST["admin"])) {
-			try {
-				formatAndQuery("GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON frcteam4999.* TO %sv@'localhost';",$_POST["usr"]);
-				formatAndQuery("GRANT CREATE USER ON *.* TO %sv@'localhost' WITH GRANT OPTION;",$_POST["usr"]);
-			} catch (Exception $e) {
-				echo("Exception: ".$e->getMessage());
-				formatAndQuery("DROP USER %sv@'localhost';",$_POST["usr"]);
-			}
-		} else {
-			try {
-				formatAndQuery("GRANT SELECT,INSERT,UPDATE ON frcteam4999.* TO %sv@'localhost';",$_POST["usr"]);
-			} catch (Exception $e) {
-				echo("Exception: ".$e->getMessage());
-				formatAndQuery("DROP USER %sv@'localhost';");
-			}
-		}
-	} catch (Exception $e) {
-		if(is_int(strpos($e->getMessage(), "Access denied; you need (at least one of) the CREATE USER privilege(s) for this operation"))) {
-			$noPermissions = true;
-		} else {
-			echo("Exception: ".$e->getMessage());
-		}
-	}
+	$create = $xmlapi->api2_query($_SESSION["userC"],"MysqlFE","createdbuser",array("dbuser"=>$_POST["usr"],"password"=>$_POST["pass"]));
+	writeToLog($create->asXML(),"APIquery");
+	$addprivs = $xmlapi->api2_query($_SESSION["userC"],"MysqlFE","setdbuserprivileges",array("privleges"=>"SELECT,INSERT,UPDATE","db"=>"momentu2_frcteam4999","dbuser"=>$_POST["usr"]));
+	writeToLog($addprivs->asXML(),"APIquery");
 }
 ?>
 <form id="addUser" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="off">
@@ -83,7 +63,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <input id='pass1' oninput="checkBoxes()" type="password"><br>
 <input id='pass2' oninput="checkBoxes()" name="pass" type="password"><br>
 <p id="errorWarning" hidden>PASSWORDS DON'T MATCH</p>
-<label style="font-family: arial;"><input name="admin" type="checkbox">Admin</label><br>
 <input id='Submit' type="submit">
 <?php
 if($noPermissions) {

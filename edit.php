@@ -118,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	} else {
 		writeToLog("Images was empty!","images");
 	}
-	header( 'Location: https://frcteam4999.jordanpowers.net/info.php?team='.$_POST["Team"]);
+	header( 'Location: https://momentum4999.com/scouting/info.php?team='.$_POST["Team"]);
 }
 #check if creating a new entry, or editing an existing entry
 #creates an associative array of the existing entry

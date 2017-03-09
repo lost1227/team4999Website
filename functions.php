@@ -3,7 +3,10 @@ $image_root = "photos/";
 $acceptableFileTypes = array("jpg","png","jpeg","gif","bmp");
 
 function writeToLog($string, $log) {
-	file_put_contents("logs/".$log.".log", date("d-m-Y_h:i:s")."-- ".$string."\r\n", FILE_APPEND);
+	if (!file_exists("./logs/")) {
+		mkdir("./logs/",0777,true);
+	}
+	file_put_contents("./logs/".$log.".log", date("d-m-Y_h:i:s")."-- ".$string."\r\n", FILE_APPEND);
 }
 function formatAndQuery() { #first argument should be the query. %sv for strings to be escaped, %s for string and $d for int. the rest of the arguments should be the values in order
 	global $DB;
