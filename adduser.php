@@ -5,10 +5,10 @@
 <style>
 @font-face{
 	font-family: "StormFaze";
-	src: url("/fonts/stormfaze.ttf");
+	src: url("fonts/stormfaze.ttf");
 }
 body {
-	background-image: url(/images/grey.png);
+	background-image: url(images/grey.png);
 	margin: 0px;
 	background-attachment: fixed;
 }

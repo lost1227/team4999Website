@@ -22,11 +22,11 @@ var filter = {
 
 function get() {
 				if (filter.enabled) {
-					request.open("POST","/query.php",true);
+					request.open("POST","query.php",true);
 					request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 					request.send(filter.filterData());
 				} else {
-					request.open("GET","/query.php",true);
+					request.open("GET","query.php",true);
 					request.send();
 				}
 }

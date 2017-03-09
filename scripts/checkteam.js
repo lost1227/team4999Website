@@ -12,11 +12,11 @@ teamRequest.onreadystatechange = function() {
 				document.getElementsByName("Team")[0].style.border = "2px solid red";
 				document.getElementsByName("Team")[0].style.backgroundColor = "rgba(255,0,0,.15)";
 				document.getElementById("teamExists").style.display = "inline-block";
-				document.getElementById("teamExists").setAttribute("href","/edit.php?team=" + this.teamNumber);
+				document.getElementById("teamExists").setAttribute("href","edit.php?team=" + this.teamNumber);
 				disableSubmit.addValue("team",false);
 				break;
 			case "LOGIN_ERROR":
-				document.location.href = "/login.php?redirect=edit.php";
+				document.location.href = "login.php?redirect=edit.php";
 				break;
 			case "NO_TEAM":
 				console.log("INVALID TEAM REQUESTED");
@@ -35,6 +35,6 @@ document.getElementsByName("Team")[0].onkeypress = function(e) {
 }
 document.getElementsByName("Team")[0].onblur = function() {
 	teamRequest.teamNumber = document.getElementsByName("Team")[0].value;
-	teamRequest.open("GET","/checkteam.php?team=" + teamRequest.teamNumber, true);
+	teamRequest.open("GET","checkteam.php?team=" + teamRequest.teamNumber, true);
 	teamRequest.send();
 };

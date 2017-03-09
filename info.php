@@ -33,7 +33,7 @@
 	</head>
 	<body>
 	<div id="info">
-	<img src="/images/back.png" id="back" onclick="setUrl('/')">
+	<img src="images/back.png" id="back" onclick="setUrl('/')">
 	<?php
 	require 'functions.php';
 	if (isset($_SESSION["loggedIn"])){
@@ -104,12 +104,12 @@
 			}
 		}
 	}
-	echo('<br><a id="edit" href=/edit.php?team='.$_GET["team"].'>Edit</a>');
+	echo('<br><a id="edit" href="edit.php?team='.$_GET["team"].'">Edit</a>');
 	?>
 	<hr><div id="TBAheading"><span>The Blue Alliance info</span></div>
 	<div id="TBA">
 	</div>
 </div>
-<script src="/scripts/TBAIntegration.js"></script>
+<script src="scripts/TBAIntegration.js"></script>
 </body>
 </html>

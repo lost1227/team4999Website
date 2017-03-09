@@ -28,7 +28,7 @@
 		<ul id="menuitems">
 			<li id="searchli">Search</li>
 			<li id="filterli">Filters</li>
-			<a href="/edit.php"><li id="addli">Add Robot</li></a>
+			<a href="edit.php"><li id="addli">Add Robot</li></a>
 		</ul>
 	</div>
 	

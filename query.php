@@ -36,7 +36,7 @@ $data = $DB->query($query);
 #check if there were any results
 if($data->num_rows > 0){
 	while($row = $data->fetch_assoc()) { #loop through each row of the table
-		echo('<a class="teamlink" href = /info.php?team='.str_replace(' ','_',$row["Team"]).'>');
+		echo('<a class="teamlink" href = info.php?team='.str_replace(' ','_',$row["Team"]).'>');
 		echo('<div class="infoRow">
 			<p>Team: '.$row["Team"].'</p>
 			</div></a>');
