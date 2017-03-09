@@ -14,12 +14,12 @@
 		  return $data;
 		}
 		if ($_SERVER["REQUEST_METHOD"] == "POST") {
-			$user = clean($_POST["user"]);
+			$user = "momentu2_" . clean($_POST["user"]);
 			$pass = clean($_POST["pass"]);
 			if(isset($_POST["redirect"])) {
 				$redirect = $_POST["redirect"];
 			}
-			$DB = new mysqli("localhost",$user,$pass,"frcteam4999");
+			$DB = new mysqli("localhost",$user,$pass,"momentu2_frcteam4999");
 			$_SESSION["user"] = $user;
 			$_SESSION["pass"] = $pass;
 			if (!$DB->connect_error) {
@@ -28,10 +28,10 @@
 		}
 		if (isset($_SESSION["loggedIn"])) {
 			if (isset($_POST["redirect"])) {
-				header( 'Location: https://frcteam4999.jordanpowers.net/'.clean($_POST["redirect"]));
+				header( 'Location: https://momentum4999.com/scouting/'.clean($_POST["redirect"]));
 				exit();
 			}
-			header( 'Location: https://frcteam4999.jordanpowers.net/index.php');
+			header( 'Location: https://momentum4999.com/scouting/index.php');
 			exit();
 		}
 		?>

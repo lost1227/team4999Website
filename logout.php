@@ -2,7 +2,7 @@
 <?php
 session_unset();
 session_destroy();
-header( 'Location: https://frcteam4999.jordanpowers.net/index.php')
+header( 'Location: https://momentum4999.com/scouting/index.php')
 ?>
 <html>
 <head>

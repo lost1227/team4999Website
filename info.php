@@ -37,9 +37,9 @@
 	<?php
 	require 'functions.php';
 	if (isset($_SESSION["loggedIn"])){
-		$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
+		$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"momentu2_frcteam4999");
 	} else {
-		$DB = new mysqli("localhost","ro","","frcteam4999");
+		$DB = new mysqli("localhost","momentu2_ro","aRza#p=XckDC","momentu2_frcteam4999");
 	}
 	$team = str_replace('_',' ',$_GET["team"]);
 	$data = formatAndQuery('SELECT * FROM '.getCurrentDB().' WHERE Team = %d;',$team);

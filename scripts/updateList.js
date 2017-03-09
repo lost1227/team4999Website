@@ -37,6 +37,6 @@ request.onreadystatechange = function() {
 		document.getElementById("container").innerHTML = this.responseText;
 	}
 };
-request.open("GET","/query.php",true);
+request.open("GET","query.php",true);
 request.send();
 var loop = window.setInterval(function() {get();}, 5000);

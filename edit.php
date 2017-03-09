@@ -24,7 +24,7 @@ $image_root = "photos/";
 $acceptableFileTypes = array("jpg","png","jpeg","gif","bmp",);
 #check if logged in and redirect if not
 if (isset($_SESSION["loggedIn"])){
-	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"frcteam4999");
+	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"momentu2_frcteam4999");
 } else {
 	if(isset($_GET["team"])){
 		header( 'Location: https://frcteam4999.jordanpowers.net/login.php?redirect=edit.php?team='.$_GET["team"]);
