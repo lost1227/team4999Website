@@ -27,9 +27,9 @@ if (isset($_SESSION["loggedIn"])){
 	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"momentu2_frcteam4999");
 } else {
 	if(isset($_GET["team"])){
-		header( 'Location: https://frcteam4999.jordanpowers.net/login.php?redirect=edit.php?team='.$_GET["team"]);
+		header( 'Location: https://momentum4999.com/scouting/login.php?redirect=edit.php?team='.$_GET["team"]);
 	} else {
-		header( 'Location: https://frcteam4999.jordanpowers.net/login.php?redirect=edit.php');
+		header( 'Location: https://momentum4999.com/scouting/login.php?redirect=edit.php');
 	}
 	exit();
 }

@@ -46,7 +46,7 @@ $noPermissions = false;
 if (isset($_SESSION["loggedInCP"])){
 	$xmlapi = new xmlapi("momentum4999.com", $_SESSION["userC"], $_SESSION["passC"]);
 } else {
-	header( 'Location: https://frcteam4999.jordanpowers.net/login.php?redirect=adduser.php&cp=true');
+	header( 'Location: https://momentum4999.com/scouting/login.php?redirect=adduser.php&cp=true');
 	exit();
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
