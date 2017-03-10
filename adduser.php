@@ -45,15 +45,16 @@ require 'xmlapi.php';
 $noPermissions = false;
 if (isset($_SESSION["loggedInCP"])){
 	$xmlapi = new xmlapi("momentum4999.com", $_SESSION["userC"], $_SESSION["passC"]);
+	$xmlapi->set_port( 2083 );
 } else {
 	header( 'Location: https://momentum4999.com/scouting/login.php?redirect=adduser.php&cp=true');
 	exit();
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$create = $xmlapi->api2_query($_SESSION["userC"],"MysqlFE","createdbuser",array("dbuser"=>$_POST["usr"],"password"=>$_POST["pass"]));
-	writeToLog($create->asXML(),"APIquery");
-	$addprivs = $xmlapi->api2_query($_SESSION["userC"],"MysqlFE","setdbuserprivileges",array("privleges"=>"SELECT,INSERT,UPDATE","db"=>"momentu2_frcteam4999","dbuser"=>$_POST["usr"]));
-	writeToLog($addprivs->asXML(),"APIquery");
+	$create = $xmlapi->api2_query($_SESSION["userC"],"MysqlFE","createdbuser",array("dbuser"=>'momentu2_'.$_POST["usr"],"password"=>$_POST["pass"]));
+	echo($create->asXML());
+	$addprivs = $xmlapi->api2_query($_SESSION["userC"],"MysqlFE","setdbuserprivileges",array("privleges"=>"SELECT,INSERT,UPDATE","db"=>"momentu2_frcteam4999","dbuser"=>'momentu2_'.$_POST["usr"]));
+	echo($addprivs->asXML());
 }
 ?>
 <form id="addUser" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="off">

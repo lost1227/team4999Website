@@ -76,9 +76,9 @@
 					echo('<p sytle = "font-size: 15px; font-color: red;">'.$error.'</p>');
 				}
 			}
-			//put code here to tell user to log into cp
-			if(isset($_POST["cp"]) and $_POST["cp"] == "true") {
+			if(isset($_GET["cp"]) and $_GET["cp"] == "true") {
 				echo('<input type="hidden" name="cp" value="True">');
+				echo('<p style="font-size: 25px;">Please enter your cPanel login</p>');
 			} else {
 				echo('<input type="hidden" name="cp" value="False">');
 			}
