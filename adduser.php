@@ -44,19 +44,19 @@ require 'functions.php';
 require 'xmlapi.php';
 
 $noPermissions = false;
-$xmlapi = new xmlapi("momentum4999.com", $_SESSION["userC"], $_SESSION["passC"]);
-$xmlapi->set_port( 2083 );
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$create = $xmlapi->api2_query($_SESSION["userC"],"MysqlFE","createdbuser",array("dbuser"=>'momentu2_'.$_POST["usr"],"password"=>$_POST["pass"]));
+	$xmlapi = new xmlapi("momentum4999.com", "momentu2",$_POST["cPpass"]);
+	$xmlapi->set_port( 2083 );
+	$create = $xmlapi->api2_query("momentu2","MysqlFE","createdbuser",array("dbuser"=>'momentu2_'.$_POST["usr"],"password"=>$_POST["pass"]));
 	echo(htmlspecialchars($create->asXML()));
-	$addprivs = $xmlapi->api2_query($_SESSION["userC"],"MysqlFE","setdbuserprivileges",array("privleges"=>"SELECT,INSERT,UPDATE","db"=>"momentu2_frcteam4999","dbuser"=>'momentu2_'.$_POST["usr"]));
+	$addprivs = $xmlapi->api2_query("momentu2","MysqlFE","setdbuserprivileges",array("privleges"=>"SELECT,INSERT,UPDATE","db"=>"momentu2_frcteam4999","dbuser"=>'momentu2_'.$_POST["usr"]));
 	echo(htmlspecialchars($addprivs->asXML()));
 }
 ?>
 <form id="addUser" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="off">
 <p>Password for momentu2</p>
-<input
+<input name="cPpass" type="password" <?php if($_SERVER["REQUEST_METHOD"] == "POST") { echo('value="'.$_POST["cPpass"].'"'); } ?> ><br>
 <p>User:</p>
 <input name="usr" type="text"><br>
 <p>Password:</p>
