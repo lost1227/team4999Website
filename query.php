@@ -3,7 +3,7 @@
 require 'functions.php';
 #Check if logged in and use read-only account if not
 if (isset($_SESSION["loggedIn"])){
-	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"momentu2_frcteam4999");
+	$DB = new mysqli("localhost","momentu2_" . $_SESSION["user"],$_SESSION["pass"],"momentu2_frcteam4999");
 } else {
 	$DB = new mysqli("localhost","momentu2_ro","aRza#p=XckDC","momentu2_frcteam4999");
 }

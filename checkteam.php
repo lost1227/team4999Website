@@ -6,7 +6,7 @@ if(!isset($_SESSION["loggedIn"])) {
 } elseif (!isset($_GET["team"]))	{
 	echo("NO_TEAM");
 } else {
-	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"momentu2_frcteam4999");
+	$DB = new mysqli("localhost","momentu2_" . $_SESSION["user"],$_SESSION["pass"],"momentu2_frcteam4999");
 	$result = formatAndQuery('SELECT Team FROM '.getCurrentDB().' WHERE Team = %sv',$_GET["team"]);
 	if($result->num_rows == 0) {
 		echo("TRUE");

@@ -24,7 +24,7 @@ $image_root = "photos/";
 $acceptableFileTypes = array("jpg","png","jpeg","gif","bmp",);
 #check if logged in and redirect if not
 if (isset($_SESSION["loggedIn"])){
-	$DB = new mysqli("localhost",$_SESSION["user"],$_SESSION["pass"],"momentu2_frcteam4999");
+	$DB = new mysqli("localhost","momentu2_" . $_SESSION["user"],$_SESSION["pass"],"momentu2_frcteam4999");
 } else {
 	if(isset($_GET["team"])){
 		header( 'Location: https://momentum4999.com/scouting/login.php?redirect=edit.php?team='.$_GET["team"]);

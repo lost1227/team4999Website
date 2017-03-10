@@ -17,20 +17,20 @@
 			if(isset($_POST["redirect"])) {
 				$redirect = $_POST["redirect"];
 			}
-			if($_POST["cp"]) {
+			if($_POST["cp"] == "True") {
 				$_SESSION["userC"] = clean($_POST["user"]);
 				$_SESSION["passC"] = clean($_POST["pass"]);
 				$_SESSION["loggedInCP"] = True;
 				header( 'Location: https://momentum4999.com/scouting/'.clean($_POST["redirect"]));
 				exit();
 			} else {
-				$user = "momentu2_" . clean($_POST["user"]);
+				$user = clean($_POST["user"]);
 				$pass = clean($_POST["pass"]);
 				$DB = new mysqli("localhost",$user,$pass,"momentu2_frcteam4999");
 				$_SESSION["user"] = $user;
 				$_SESSION["pass"] = $pass;
 				if (!$DB->connect_error) {
-				$_SESSION["loggedIn"] = True;
+					$_SESSION["loggedIn"] = True;
 				}
 			}
 		}
