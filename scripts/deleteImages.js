@@ -10,7 +10,7 @@ $(".deletePix").on("change",function() {
 });
 
 window.onunload = function() {
-	history.replaceState({},"Scouting Website","/");
+	history.replaceState({},"Scouting Website","/scouting/");
 };
 
 var disableSubmit = {

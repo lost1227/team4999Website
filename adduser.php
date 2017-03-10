@@ -43,20 +43,25 @@ function checkBoxes() {
 require 'functions.php';
 require 'xmlapi.php';
 
-$noPermissions = false;
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$xmlapi = new xmlapi("momentum4999.com", "momentu2",$_POST["cPpass"]);
 	$xmlapi->set_port( 2083 );
 	$create = $xmlapi->api2_query("momentu2","MysqlFE","createdbuser",array("dbuser"=>'momentu2_'.$_POST["usr"],"password"=>$_POST["pass"]));
-	echo(htmlspecialchars($create->asXML()));
-	$addprivs = $xmlapi->api2_query("momentu2","MysqlFE","setdbuserprivileges",array("privleges"=>"SELECT,INSERT,UPDATE","db"=>"momentu2_frcteam4999","dbuser"=>'momentu2_'.$_POST["usr"]));
-	echo(htmlspecialchars($addprivs->asXML()));
+	#echo(htmlspecialchars($create->asXML()));
+	if($create->cpanelresult->data->result == 0) {
+		$error = $create->cpanelresult->data->reason;
+	} else {
+		$addprivs = $xmlapi->api2_query("momentu2","MysqlFE","setdbuserprivileges",array("privileges"=>"SELECT,INSERT,UPDATE","db"=>"momentu2_frcteam4999","dbuser"=>'momentu2_'.$_POST["usr"]));
+		#echo(htmlspecialchars($addprivs->asXML()));
+		if($addprivs->cpanelresult->data->result == 0) {
+			$error = $create->cpanelresult->data->reason;
+		}
+	}
 }
 ?>
 <form id="addUser" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="off">
 <p>Password for momentu2</p>
-<input name="cPpass" type="password" <?php if($_SERVER["REQUEST_METHOD"] == "POST") { echo('value="'.$_POST["cPpass"].'"'); } ?> ><br>
+<input name="cPpass" type="password" <?php if($_SERVER["REQUEST_METHOD"] == "POST" and !isset($error)) { echo('value="'.$_POST["cPpass"].'"'); } ?> ><br>
 <p>User:</p>
 <input name="usr" type="text"><br>
 <p>Password:</p>
@@ -65,8 +70,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <p id="errorWarning" hidden>PASSWORDS DON'T MATCH</p>
 <input id='Submit' type="submit">
 <?php
-if($noPermissions) {
-	echo('<p style="color: red; margin: 0px 5px;">Only admins can create user accounts.</p>');
+if(isset($error) and !empty($error)) {
+	echo('<p style="color: red; margin: 0px 5px;">'.$error.'</p>');
 }
 ?>
 </form>
