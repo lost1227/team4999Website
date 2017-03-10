@@ -46,17 +46,18 @@ require 'xmlapi.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$xmlapi = new xmlapi("momentum4999.com", "momentu2",$_POST["cPpass"]);
 	$xmlapi->set_port( 2083 );
+	$xmlapi->set_output( "array" );
 	$create = $xmlapi->api2_query("momentu2","MysqlFE","createdbuser",array("dbuser"=>'momentu2_'.$_POST["usr"],"password"=>$_POST["pass"]));
-	#echo(htmlspecialchars($create->asXML()));
-	if($create->cpanelresult->data->result == 0) {
-		$error = $create->cpanelresult->data->reason;
-	} else {
+	/*if($create["data"] !== "1") {
+		$error = $create["data"]["reason"];
+	} else { */
+	var_dump($create);
 		$addprivs = $xmlapi->api2_query("momentu2","MysqlFE","setdbuserprivileges",array("privileges"=>"SELECT,INSERT,UPDATE","db"=>"momentu2_frcteam4999","dbuser"=>'momentu2_'.$_POST["usr"]));
-		#echo(htmlspecialchars($addprivs->asXML()));
-		if($addprivs->cpanelresult->data->result == 0) {
+	/*	if($addprivs->cpanelresult->data->result == 0) {
 			$error = $create->cpanelresult->data->reason;
 		}
-	}
+	}*/
+	var_dump($addprivs);
 }
 ?>
 <form id="addUser" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="off">
