@@ -17,21 +17,13 @@
 			if(isset($_POST["redirect"])) {
 				$redirect = $_POST["redirect"];
 			}
-			if($_POST["cp"] == "True") {
-				$_SESSION["userC"] = clean($_POST["user"]);
-				$_SESSION["passC"] = clean($_POST["pass"]);
-				$_SESSION["loggedInCP"] = True;
-				header( 'Location: https://momentum4999.com/scouting/'.clean($_POST["redirect"]));
-				exit();
-			} else {
-				$user = clean($_POST["user"]);
-				$pass = clean($_POST["pass"]);
-				$DB = new mysqli("localhost",$user,$pass,"momentu2_frcteam4999");
-				$_SESSION["user"] = $user;
-				$_SESSION["pass"] = $pass;
-				if (!$DB->connect_error) {
-					$_SESSION["loggedIn"] = True;
-				}
+			$user = clean($_POST["user"]);
+			$pass = clean($_POST["pass"]);
+			$DB = new mysqli("localhost",'momentu2_' . $user,$pass,"momentu2_frcteam4999");
+			$_SESSION["user"] = $user;
+			$_SESSION["pass"] = $pass;
+			if (!$DB->connect_error) {
+				$_SESSION["loggedIn"] = True;
 			}
 		}
 		if (isset($_SESSION["loggedIn"])) {
@@ -75,12 +67,6 @@
 				} else {
 					echo('<p sytle = "font-size: 15px; font-color: red;">'.$error.'</p>');
 				}
-			}
-			if(isset($_GET["cp"]) and $_GET["cp"] == "true") {
-				echo('<input type="hidden" name="cp" value="True">');
-				echo('<p style="font-size: 25px;">Please enter your cPanel login</p>');
-			} else {
-				echo('<input type="hidden" name="cp" value="False">');
 			}
 			if(isset($redirect)){
 				echo('<input type="hidden" name="redirect" value="'.$redirect.'">');

@@ -42,22 +42,21 @@ function checkBoxes() {
 <?php
 require 'functions.php';
 require 'xmlapi.php';
+
 $noPermissions = false;
-if (isset($_SESSION["loggedInCP"])){
-	$xmlapi = new xmlapi("momentum4999.com", $_SESSION["userC"], $_SESSION["passC"]);
-	$xmlapi->set_port( 2083 );
-} else {
-	header( 'Location: https://momentum4999.com/scouting/login.php?redirect=adduser.php&cp=true');
-	exit();
-}
+$xmlapi = new xmlapi("momentum4999.com", $_SESSION["userC"], $_SESSION["passC"]);
+$xmlapi->set_port( 2083 );
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$create = $xmlapi->api2_query($_SESSION["userC"],"MysqlFE","createdbuser",array("dbuser"=>'momentu2_'.$_POST["usr"],"password"=>$_POST["pass"]));
-	echo($create->asXML());
+	echo(htmlspecialchars($create->asXML()));
 	$addprivs = $xmlapi->api2_query($_SESSION["userC"],"MysqlFE","setdbuserprivileges",array("privleges"=>"SELECT,INSERT,UPDATE","db"=>"momentu2_frcteam4999","dbuser"=>'momentu2_'.$_POST["usr"]));
-	echo($addprivs->asXML());
+	echo(htmlspecialchars($addprivs->asXML()));
 }
 ?>
 <form id="addUser" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="off">
+<p>Password for momentu2</p>
+<input
 <p>User:</p>
 <input name="usr" type="text"><br>
 <p>Password:</p>
