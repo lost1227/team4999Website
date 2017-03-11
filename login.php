@@ -60,7 +60,7 @@
 			<p id="passlabel">Password:</p><br>
 			<input id="passwordfield" type="password" name="pass"><br>
 			<?php
-			if ($DB->connect_error) {
+			if (isset($DB) and $DB->connect_error) {
 				$error = $DB->connect_error;
 				if(is_int(strpos($error, "Access denied"))) {
 					echo('<p style="font-size: 25px; color: red;">Access Denied: Check Username and Password</p>');

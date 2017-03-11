@@ -48,16 +48,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$xmlapi->set_port( 2083 );
 	$xmlapi->set_output( "array" );
 	$create = $xmlapi->api2_query("momentu2","MysqlFE","createdbuser",array("dbuser"=>'momentu2_'.$_POST["usr"],"password"=>$_POST["pass"]));
-	/*if($create["data"] !== "1") {
+	if($create["data"] !== "1") {
 		$error = $create["data"]["reason"];
-	} else { */
-	var_dump($create);
+	} else { 
 		$addprivs = $xmlapi->api2_query("momentu2","MysqlFE","setdbuserprivileges",array("privileges"=>"SELECT,INSERT,UPDATE","db"=>"momentu2_frcteam4999","dbuser"=>'momentu2_'.$_POST["usr"]));
-	/*	if($addprivs->cpanelresult->data->result == 0) {
+		if($create["data"] !== "1" and !isset($error)) {
 			$error = $create->cpanelresult->data->reason;
 		}
-	}*/
-	var_dump($addprivs);
+	}
 }
 ?>
 <form id="addUser" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="off">

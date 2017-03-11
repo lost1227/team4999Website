@@ -20,6 +20,25 @@
 <div id="main">
 <?php
 require 'functions.php';
+function image_fix_orientation(&$image, $filename) {
+    $exif = exif_read_data($filename);
+
+    if (!empty($exif['Orientation'])) {
+        switch ($exif['Orientation']) {
+            case 3:
+                $image = imagerotate($image, 180, 0);
+                break;
+
+            case 6:
+                $image = imagerotate($image, -90, 0);
+                break;
+
+            case 8:
+                $image = imagerotate($image, 90, 0);
+                break;
+        }
+    }
+}
 $image_root = "photos/";
 $acceptableFileTypes = array("jpg","png","jpeg","gif","bmp",);
 #check if logged in and redirect if not
@@ -69,12 +88,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 							}
 						}
 					}
+					unset($file);
 					$imgeFileExtension = pathinfo(basename($_FILES["uploadImages"]["name"][$i]),PATHINFO_EXTENSION);
-					$imgeFileExtension = pathinfo(basename($_FILES["uploadImages"]["name"][$i]),PATHINFO_EXTENSION);
-					$target_file_path = $image_dir . ($biggestFile + 1) .".". $imgeFileExtension;
+					$target_file_path = $image_dir . ($biggestFile + 1) .".png";
 					$continueUpload = TRUE;
 					#check if is image
-					if(getimagesize($_FILES["uploadImages"]["tmp_name"][$i]) == FALSE) {
+					$imgSize = getimagesize($_FILES["uploadImages"]["tmp_name"][$i]);
+					if($imgSize == FALSE) {
 						writeToLog("INVALID FILE: getimagesize","images");
 						$continueUpload = FALSE;
 					}
@@ -84,9 +104,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 						$continueUpload = FALSE;
 					}
 					if($continueUpload) {
-						if (!move_uploaded_file($_FILES["uploadImages"]["tmp_name"][$i], $target_file_path)) {
-							writeToLog("ERROR MOVING UPLOADED FILE","images");
+						#instead of moving the image to the new directory, load the image from the temp dir and rotate it as necessary. then save it in the correct place as a png
+						$file = $_FILES["uploadImages"]["tmp_name"][$i];
+						switch(strtolower($imgSize['mime'])) {
+							case 'image/bmp':
+								$img = imagecreatefrombmp($file);
+								break;
+							case 'image/png':
+								$img = imagecreatefrompng($file);
+								break;
+							case 'image/jpeg':
+								$img = imagecreatefromjpeg($file);
+								break;
+							case 'image/gif':
+								$img = imagecreatefromgif($file);
+								break;
+							default:
+								writeToLog("INVALID FILE: rotate","images");
+								break;
 						}
+						if(isset($img)) {
+							image_fix_orientation($img,$file);
+							if(!imagepng($img,$target_file_path)) {
+								writeToLog("FAILED TO SAVE UPLOADED FILE","images");
+							}
+						}
+						
+						
+						/*if (!move_uploaded_file($_FILES["uploadImages"]["tmp_name"][$i], $target_file_path)) {
+							writeToLog("ERROR MOVING UPLOADED FILE","images");
+						}}*/
 					}
 				}
 			} else {
@@ -210,8 +257,10 @@ foreach($columns as $column) {
 echo('<br><input id="uploadImage" type="file" name="uploadImages[]" accept="image/jpeg,image/png,image/gif,image/bmp" multiple><span id="invalidFile">MAX UPLOAD IS 250MB</span><br>');
 if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
 	$team = $_POST["Team"];
-} else {
+} elseif (isset($_GET["team"])) {
 	$team = $_GET["team"];
+} else {
+	$team = "";
 }
 $image_dir = $image_root . getCurrentDB() . '/' . $team ."/";
 #writeToLog("Imagedir: " . $image_dir, "images");
