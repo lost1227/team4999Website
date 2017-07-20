@@ -1,6 +1,7 @@
 <?php
 $image_root = "photos/";
 $acceptableFileTypes = array("jpg","png","jpeg","gif","bmp");
+date_default_timezone_set("America/Los_Angeles");
 
 function writeToLog($string, $log) {
 	if (!file_exists("./logs/")) {
