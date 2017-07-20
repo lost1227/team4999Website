@@ -12,6 +12,7 @@ function formatAndQuery() { #first argument should be the query. %sv for strings
 	global $DB;
 	$args  = func_get_args();
     $query = array_shift($args); #remove the first element of the array as its own variable
+		if(is_array($args[0])){$args = $args[0];}
     $query = str_replace("%sv","'%s'",$query);
 	foreach ($args as $key => $val)
     {

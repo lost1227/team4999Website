@@ -12,13 +12,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$query = 'SELECT Team FROM '.getCurrentDB().' WHERE ';
 	$index = 1;
 	#loop through all the filters and apply each one, adding an 'AND' between each
+	$params = array();
 	foreach($_POST as $key => $value) {
-		$query = $query . $DB->real_escape_string($key) . ' LIKE "' . $DB->real_escape_string($value) . '"';
+		$query .= '%s LIKE %sv';
 		if ($index != count($_POST) ){
-			$query = $query . ' AND ';
+			$query .= ' AND ';
 		} else {
-			$query = $query . ' ORDER BY Team ASC;';
+			$query .= ' ORDER BY Team ASC;';
 		}
+		$params[] = $key;
+		$params[] = $value;
 		$index++;
 	}
 } else {
@@ -26,7 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$query = 'SELECT Team FROM '.getCurrentDB().' ORDER BY Team ASC;';
 }
 #execute the query
-$data = $DB->query($query);
+writeToLog("Using query: ".$query, "filters");
+$data = formatAndQuery($query,$params);
 if($data == false) {
 	writeToLog($query . " gave the error ".$DB->error,"filters");
 }
