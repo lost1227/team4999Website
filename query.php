@@ -19,19 +19,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		} else {
 			$query = $query . ' ORDER BY Team ASC;';
 		}
-		writeToLog("WHERE ".$DB->real_escape_string($key)." LIKE ".$DB->real_escape_string($value),"filters");
 		$index++;
 	}
-	writeToLog($query . " gave the error ".$DB->error,"filters");
-	/*echo($_POST["Team"]);
-	echo($query);
-	echo(count($_POST));*/
 } else {
 	#If not accessed by POST, show all rows
 	$query = 'SELECT Team FROM '.getCurrentDB().' ORDER BY Team ASC;';
 }
 #execute the query
 $data = $DB->query($query);
+if($data == false) {
+	writeToLog($query . " gave the error ".$DB->error,"filters");
+}
 #echo($data->num_rows);
 #check if there were any results
 if($data->num_rows > 0){
