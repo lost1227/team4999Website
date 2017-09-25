@@ -1,4 +1,5 @@
 <?php
+require 'specificvars.php';
 $image_root = "photos/";
 $acceptableFileTypes = array("jpg","png","jpeg","gif","bmp");
 date_default_timezone_set("America/Los_Angeles");
@@ -34,5 +35,34 @@ function formatAndQuery() { #first argument should be the query. %sv for strings
 }
 function getCurrentDB() {
 	return "2017ROBOTS";
+}
+function clean($data) {
+	$data = trim($data);
+	$data = stripslashes($data);
+	$data = htmlspecialchars($data);
+	return $data;
+}
+function checkUserPassword($user, $password) {
+	$DB = new mysqli("localhost", $DBUser, $DBPass, $Database);
+	$result = formatAndQuery("SELECT passhash FROM %s WHERE user LIKE %sv;",$LoginTableName, $user);
+	if($data->num_rows > 0) {
+		$result = $result->fetch_assoc();
+	} else {
+		return False;
+	}
+	if(!isset($result["passhash"])) {
+		return False;
+	}
+	return password_verify($password, $result["passhash"]);
+
+}
+function createDBObject() {
+	session_start();
+	if (isset($_SESSION["loggedIn"]) and checkUserPassword($_SESSION["user"], $_SESSION["pass"])){
+		$DB = new mysqli("localhost",$DBUser,$DBPass,"momentu2_frcteam4999");
+	} else {
+		$DB = new mysqli("localhost","momentu2_ro","aRza#p=XckDC","momentu2_frcteam4999");
+	}
+	return $DB;
 }
 ?>
