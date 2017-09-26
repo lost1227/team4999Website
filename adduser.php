@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$create = $xmlapi->api2_query("momentu2","MysqlFE","createdbuser",array("dbuser"=>'momentu2_'.$_POST["usr"],"password"=>$_POST["pass"]));
 	if($create["data"] !== "1") {
 		$error = $create["data"]["reason"];
-	} else { 
+	} else {
 		$addprivs = $xmlapi->api2_query("momentu2","MysqlFE","setdbuserprivileges",array("privileges"=>"SELECT,INSERT,UPDATE","db"=>"momentu2_frcteam4999","dbuser"=>'momentu2_'.$_POST["usr"]));
 		if($create["data"] !== "1" and !isset($error)) {
 			$error = $create->cpanelresult->data->reason;

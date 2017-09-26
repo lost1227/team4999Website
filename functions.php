@@ -54,7 +54,23 @@ function checkUserPassword($user, $password) {
 		return False;
 	}
 	return password_verify($password, $result["passhash"]);
-
+}
+function checkIsAdmin($user, $password) {
+	$DB = new mysqli("localhost", $DBUser, $DBPass, $Database);
+	$result = formatAndQuery("SELECT passhash FROM %s WHERE user LIKE %sv;",$LoginTableName, $user);
+	if($data->num_rows > 0) {
+		$result = $result->fetch_assoc();
+	} else {
+		return False;
+	}
+	if(!isset($result["passhash"])) {
+		return False;
+	}
+	if(password_verify($password, $result["passhash"]) && isset($result["admin"])) {
+		return $result["admin"] != 0
+	} else {
+		return False;
+	}
 }
 function createDBObject() {
 	session_start();
