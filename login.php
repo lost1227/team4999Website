@@ -25,12 +25,12 @@
 				$passFailed = True;
 			}
 		}
-		if (isset($_SESSION["loggedIn"])) {
+		if (isset($_SESSION["loggedIn"]) and $_SESSION["loggedIn"]) {
 			if (isset($_POST["redirect"])) {
-				header( 'Location: https://momentum4999.com/scouting/'.clean($_POST["redirect"]));
+				header( 'Location: '.getRootDir().clean($_POST["redirect"]));
 				exit();
 			}
-			header( 'Location: https://momentum4999.com/scouting/index.php');
+			header( 'Location: '.getRootDir().'index.php');
 			exit();
 		}
 		?>

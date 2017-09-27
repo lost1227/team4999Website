@@ -33,8 +33,9 @@ function formatAndQuery() { #first argument should be the query. %sv for strings
     }
     return $result;
 }
-function getCurrentDB() {
-	return "2017ROBOTS";
+function getCurrentTable() {
+	global $CurrentTable;
+	return $CurrentTable;
 }
 function clean($data) {
 	$data = trim($data);
@@ -43,9 +44,11 @@ function clean($data) {
 	return $data;
 }
 function checkUserPassword($user, $password) {
+	global $DBUser, $DBPass, $Database, $LoginTableName, $DB;
+	$DBtmp = $DB;
 	$DB = new mysqli("localhost", $DBUser, $DBPass, $Database);
 	$result = formatAndQuery("SELECT passhash FROM %s WHERE user LIKE %sv;",$LoginTableName, $user);
-	if($data->num_rows > 0) {
+	if($result->num_rows > 0) {
 		$result = $result->fetch_assoc();
 	} else {
 		return False;
@@ -53,12 +56,16 @@ function checkUserPassword($user, $password) {
 	if(!isset($result["passhash"])) {
 		return False;
 	}
+	$DB->close();
+	$DB = $DBtmp;
 	return password_verify($password, $result["passhash"]);
 }
 function checkIsAdmin($user, $password) {
+	global $DBUser, $DBPass, $Database, $LoginTableName, $DB;
+	$DBTmp = $DB;
 	$DB = new mysqli("localhost", $DBUser, $DBPass, $Database);
-	$result = formatAndQuery("SELECT passhash FROM %s WHERE user LIKE %sv;",$LoginTableName, $user);
-	if($data->num_rows > 0) {
+	$result = formatAndQuery("SELECT passhash, admin FROM %s WHERE user LIKE %sv;", $LoginTableName, $user);
+	if($result->num_rows > 0) {
 		$result = $result->fetch_assoc();
 	} else {
 		return False;
@@ -67,18 +74,27 @@ function checkIsAdmin($user, $password) {
 		return False;
 	}
 	if(password_verify($password, $result["passhash"]) && isset($result["admin"])) {
-		return $result["admin"] != 0
+		return $result["admin"];
 	} else {
 		return False;
 	}
+	$DB->close();
+	$DB = $DBtmp;
 }
 function createDBObject() {
-	session_start();
+	global $roDBUser, $roDBPass, $DBUser, $DBPass, $Database;
+	if(session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
 	if (isset($_SESSION["loggedIn"]) and checkUserPassword($_SESSION["user"], $_SESSION["pass"])){
-		$DB = new mysqli("localhost",$DBUser,$DBPass,"momentu2_frcteam4999");
+		$DB = new mysqli("localhost",$DBUser,$DBPass,$Database);
 	} else {
-		$DB = new mysqli("localhost","momentu2_ro","aRza#p=XckDC","momentu2_frcteam4999");
+		$DB = new mysqli("localhost",$roDBUser,$roDBPass,$Database);
 	}
 	return $DB;
+}
+function getRootDir() {
+	global $appdir;
+	return $appdir;
 }
 ?>

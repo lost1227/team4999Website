@@ -5,7 +5,7 @@ require 'functions.php';
 $DB = createDBObject();
 #Check if accessed by post and apply the filters if so
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$query = 'SELECT Team FROM '.getCurrentDB().' WHERE ';
+	$query = 'SELECT Team FROM '.getCurrentTable().' WHERE ';
 	$index = 1;
 	#loop through all the filters and apply each one, adding an 'AND' between each
 	$params = array();
@@ -22,7 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 } else {
 	#If not accessed by POST, show all rows
-	$query = 'SELECT Team FROM '.getCurrentDB().' ORDER BY Team ASC;';
+	$query = 'SELECT Team FROM '.getCurrentTable().' ORDER BY Team ASC;';
+	$params = array();
 }
 #execute the query
 writeToLog("Using query: ".$query, "filters");

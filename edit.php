@@ -46,14 +46,14 @@ if (isset($_SESSION["loggedIn"])){
 	$DB = new mysqli("localhost","momentu2_" . $_SESSION["user"],$_SESSION["pass"],"momentu2_frcteam4999");
 } else {
 	if(isset($_GET["team"])){
-		header( 'Location: https://momentum4999.com/scouting/login.php?redirect=edit.php?team='.$_GET["team"]);
+		header( 'Location: '.getRootDir().'login.php?redirect=edit.php?team='.$_GET["team"]);
 	} else {
-		header( 'Location: https://momentum4999.com/scouting/login.php?redirect=edit.php');
+		header( 'Location: '.getRootDir().'login.php?redirect=edit.php');
 	}
 	exit();
 }
 #get columns into an associative array
-$columnData = $DB->query('DESCRIBE '.getCurrentDB().';');
+$columnData = $DB->query('DESCRIBE '.getCurrentTable().';');
 $columns = array();
 while($row = $columnData->fetch_assoc()) {
 	$columns[] = $row;
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 					if (!file_exists($image_root)) {
 						mkdir($image_root,0777,true);
 					}
-					$image_dir = $image_root . getCurrentDB() . '/' . $_POST["Team"] ."/";
+					$image_dir = $image_root . getCurrentTable() . '/' . $_POST["Team"] ."/";
 					if (!file_exists($image_dir)) {
 						mkdir($image_dir,0777,true);
 					}
@@ -129,8 +129,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 								writeToLog("FAILED TO SAVE UPLOADED FILE","images");
 							}
 						}
-						
-						
+
+
 						/*if (!move_uploaded_file($_FILES["uploadImages"]["tmp_name"][$i], $target_file_path)) {
 							writeToLog("ERROR MOVING UPLOADED FILE","images");
 						}}*/
@@ -142,11 +142,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		}
 	}
 	#Update actual data
-	$data = formatAndQuery('SELECT Team FROM '.getCurrentDB().' WHERE Team = %d;',$_POST["Team"]); #check if team exists
+	$data = formatAndQuery('SELECT Team FROM '.getCurrentTable().' WHERE Team = %d;',$_POST["Team"]); #check if team exists
 	if($data->num_rows == 0){ # add team if it doesn't exist yet
-		formatAndQuery('INSERT INTO '.getCurrentDB().' (Team) VALUES (%d);',$_POST["Team"]);
+		formatAndQuery('INSERT INTO '.getCurrentTable().' (Team) VALUES (%d);',$_POST["Team"]);
 	}
-	$update = 'UPDATE '.getCurrentDB().' SET %s = %sv WHERE Team = %d;';
+	$update = 'UPDATE '.getCurrentTable().' SET %s = %sv WHERE Team = %d;';
 	foreach($columns as $column) {
 		if($column["Field"] != "Team" and $column["Field"] != "Stored_Images"){
 			formatAndQuery($update,$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
@@ -158,19 +158,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 	if(!empty($images)) {
 		foreach($images as $image ) {
-			$target_file_path = $image_root . getCurrentDB() . '/' . $_POST["Team"] . "/" . $image;
+			$target_file_path = $image_root . getCurrentTable() . '/' . $_POST["Team"] . "/" . $image;
 			writeToLog("Will unlink: ". $target_file_path,"images");
 			unlink($target_file_path);
 		}
 	} else {
 		writeToLog("Images was empty!","images");
 	}
-	header( 'Location: https://momentum4999.com/scouting/info.php?team='.$_POST["Team"]);
+	header( 'Location: '.getRootDir().'info.php?team='.$_POST["Team"]);
 }
 #check if creating a new entry, or editing an existing entry
 #creates an associative array of the existing entry
 if(isset($_GET["team"])){
-	$data = formatAndQuery('SELECT * FROM '.getCurrentDB().' WHERE Team = %d;',$_GET["team"]);
+	$data = formatAndQuery('SELECT * FROM '.getCurrentTable().' WHERE Team = %d;',$_GET["team"]);
 	if($data->num_rows > 0){
 		$row = $data->fetch_assoc();
 		echo('<h1>Team: '.$_GET["team"].'</h1>');
@@ -262,7 +262,7 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
 } else {
 	$team = "";
 }
-$image_dir = $image_root . getCurrentDB() . '/' . $team ."/";
+$image_dir = $image_root . getCurrentTable() . '/' . $team ."/";
 #writeToLog("Imagedir: " . $image_dir, "images");
 if(file_exists($image_dir)){
 	$files = scandir($image_dir);
