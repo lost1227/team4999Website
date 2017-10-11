@@ -7,7 +7,7 @@ $roDBUser = "";
 $roDBPass = "";
 
 $Database = "";
-$CurrentTable = "";
+$TableTable = "";
 
 $LoginTableName = "";
 
@@ -18,6 +18,10 @@ The user's username and password are checked against the database to see if they
 This causes createDBObject to check the user's username and password in the $LoginTableName, and if it is correct, the user is allowed to use the $DBUser and $DBPass to view and change the scouting information.
 
 The login table will have the following schema: (user VARCHAR(255) NOT NULL, passhash TEXT, name TEXT, admin BOOLEAN, INDEX `user_index` (user))
+
+$TableTable is the name of a table with the following schema: (table_name VARCHAR(255) NOT NULL, json_columns TEXT, selected BOOLEAN, INDEX `table_index` (table_name))
+It defines a list of other tables in the database. table_name is the name of the table. json_columns is a json-formatted description of the table's columns (see example below). selected is a boolean, describing if the table is the table being currently shown
+
 */
 
 

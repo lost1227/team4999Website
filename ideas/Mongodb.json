@@ -1,0 +1,90 @@
+Use a MonoDB database. There is a collection of teams. Each team resembles this:
+{
+  "name":"momentum",
+  "number":4999,
+  "years":[
+    {
+      "year":2017,
+      "robotinfo":{
+        "name":"",
+        "drive system":"west coast",
+        "gear from floor":true,
+        "width":35,
+        "other info":"No other info. That's right, I have nothing else to say. Absolutely nothing. Nope. Nada."
+      },
+      "matches":[{
+        "event":"LA Regional",
+        "match number": 10,
+        "climbed":true
+        }]
+    }
+  ]
+}
+
+There is also a collection called 'year_schema'. Each document in the collection represents the data to be collected for a year. One year reesembles this:
+{
+  "year":2017,
+  "robotinfo":{
+    "name":{
+      "type":"string",
+      "name":"Robot Name"
+    },
+    "drive system":{
+      "type":"select",
+      "values":["West Coast", "Mechanum", "Tank", "Swerve"],
+      "name":"Drive System"
+    },
+    "gear from floor":{
+      "type":"boolean",
+      "name":"Can pickup gear from floor?"
+    },
+    "width":{
+      "type":"number",
+      "name":"Width"
+    },
+    "other info":{
+      "type":"textarea",
+      "name":"Other info"
+    }
+  },
+  "matches":{
+    "event":{
+      "type":"select",
+      "values":["LA Regional", "OC Regional", "Beach Blitz"],
+      "name":"Event"
+    },
+    "match number":{
+      "type":"number",
+      "name":"Match number"
+    },
+    "climbed":{
+      "type":"boolean",
+      "name":"Climbed rope"
+    }
+  }
+}
+
+In the 'year_schema', we will define keys and the data those keys expect to hold. The data to be held will be defined something like this:
+[
+  {
+    "type":"string",
+    "name":""
+  },
+  {
+    "type":"select",
+    "values":[],
+    "name":""
+  },
+  {
+    "type":"boolean",
+    "name":""
+  },
+  {
+    "type":"number",
+    "name":""
+  },
+  {
+    "type":"textarea",
+    "name":""
+  }
+]
