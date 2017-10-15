@@ -43,7 +43,7 @@ $image_root = "photos/";
 $acceptableFileTypes = array("jpg","png","jpeg","gif","bmp",);
 #check if logged in and redirect if not
 if (isset($_SESSION["loggedIn"])){
-	$DB = new mysqli("localhost","momentu2_" . $_SESSION["user"],$_SESSION["pass"],"momentu2_frcteam4999");
+	$DB = createDBObject();
 } else {
 	if(isset($_GET["team"])){
 		header( 'Location: '.getRootDir().'login.php?redirect=edit.php?team='.$_GET["team"]);
@@ -239,14 +239,15 @@ foreach($columns as $column) {
 			echo('<textarea rows="4" cols="50" name="'.$column["Field"].'">'.$row[$column["Field"]].'</textarea>');
 			break;
 		case("Contributors"):
-			if(strpos($row[$column["Field"]],$_SESSION["user"]) === false) {
+			$name = getUserName();
+			if(strpos($row[$column["Field"]],$name) === FALSE) {
 				if(empty($row[$column["Field"]])) {
-					echo('<input type="hidden" name="'.$column["Field"].'" value="'.$_SESSION["user"].'">');
+					echo('<input type="hidden" name="'.$column["Field"].'" value="'.$name.'">');
 				} else {
-					echo('<input type="hidden" name="'.$column["Field"].'" value="'.$row[$column["Field"]].', '. $_SESSION["user"].'">');
+					echo('<input type="hidden" name="'.$column["Field"].'" value="'.$row[$column["Field"]].', '. $name.'">');
 				}
 			} else {
-				echo('<input type="hidden" name="'.$column["Field"].'" value="'.$row[$column["Field"]] .'">');
+				echo('<input type="hidden" name="'.$column["Field"].'" value="'. $row[$column["Field"]] .'">');
 			}
 			break;
 		default:

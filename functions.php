@@ -81,6 +81,28 @@ function checkIsAdmin($user, $password) {
 	$DB->close();
 	$DB = $DBtmp;
 }
+function getUserName() {
+	if(session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
+	if(isset($_SESSION["loggedIn"]) and $_SESSION["loggedIn"] and checkUserPassword($_SESSION["user"], $_SESSION["pass"])) {
+		global $DB, $DBTmp, $DBUser, $DBPass, $Database, $LoginTableName;
+		$DBtmp = $DB;
+		$DB = new mysqli("localhost", $DBUser, $DBPass, $Database);
+		$result = formatAndQuery("SELECT name FROM %s WHERE user LIKE %sv;", $LoginTableName, $_SESSION["user"]);
+		$DB->close();
+		$DB = $DBtmp;
+		if($result->num_rows > 0) {
+			$result = $result->fetch_assoc();
+		} else {
+			return False;
+		}
+		if(isset($result["name"])) {
+			return $result["name"];
+		}
+	}
+	return False;
+}
 function createDBObject() {
 	global $roDBUser, $roDBPass, $DBUser, $DBPass, $Database;
 	if(session_status() == PHP_SESSION_NONE) {

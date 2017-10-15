@@ -8,7 +8,7 @@
 
 		$passFailed = False;
 
-		if ($_SERVER["REQUEST_METHOD"] == "GET") {
+		if ($_SERVER["REQUEST_METHOD"] == "GET" and isset($_GET["redirect"])) {
 			$redirect = $_GET['redirect'];
 		}
 		if ($_SERVER["REQUEST_METHOD"] == "POST") {

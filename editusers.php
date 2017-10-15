@@ -80,7 +80,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" and checkIfValidUser()) {
         }
       }
     } else {
-      echo('<tr><td>You are not logged in</td></tr>');
+      echo('<tr><td>You are not logged in and/or you are not an admin</td><td></td><td></td></tr>');
     }
 
     ?>
