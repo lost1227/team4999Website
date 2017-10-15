@@ -10,3 +10,6 @@ table, th, td {
 #addusr {
   background-color: #e8ebff;
 }
+img.trashbutton {
+  cursor: pointer;
+}
