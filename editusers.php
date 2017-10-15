@@ -34,7 +34,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" and checkIfValidUser()) {
 ?>
 <html>
 <head>
-  <script src="/scripts/jquery-3.1.1.min.js"></script>
+  <script src="scripts/jquery-3.1.1.min.js"></script>
   <link rel="stylesheet" href="<?php global $appdir; echo($appdir);?>styles/edituser.css">
   <script>
   $(document).ready(function() {
@@ -75,7 +75,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" and checkIfValidUser()) {
           echo('<tr>');
           echo('<td>'.clean($data["user"]).'</td>');
           echo('<td>'.clean($data["name"]).'</td>');
-          echo('<td><img src="/images/red-trash-512.jpg" width="15" class="trashbutton" data-user="'.clean($data["user"]).'"></td>');
+          echo('<td><img src="images/red-trash-512.jpg" width="15" class="trashbutton" data-user="'.clean($data["user"]).'"></td>');
           echo('<tr>');
         }
       }
@@ -91,7 +91,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" and checkIfValidUser()) {
           <p id="errorWarning" hidden>PASSWORDS DON'T MATCH</p>
         </td>
         <td><input id="name" name="name" type="text" placeholder = "Name"><label><input type="checkbox" name="admin" value="true">Admin</label></td>
-        <td><input id="submit" type="image" src="/images/plus-4-xxl.png" width="15"></td>
+        <td><input id="submit" type="image" src="images/plus-4-xxl.png" width="15"></td>
         <input type="hidden" name="formtype" value="adduser">
       </form>
     </tr>
