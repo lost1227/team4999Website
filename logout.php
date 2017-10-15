@@ -2,7 +2,8 @@
 <?php
 session_unset();
 session_destroy();
-header( 'Location: https://momentum4999.com/scouting/index.php')
+require 'functions.php';
+header( 'Location: '.getRootDir().'index.php')
 ?>
 <html>
 <head>

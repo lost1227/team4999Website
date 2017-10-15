@@ -2,14 +2,10 @@
 <?php
 require 'functions.php';
 #Check if logged in and use read-only account if not
-if (isset($_SESSION["loggedIn"])){
-	$DB = new mysqli("localhost","momentu2_" . $_SESSION["user"],$_SESSION["pass"],"momentu2_frcteam4999");
-} else {
-	$DB = new mysqli("localhost","momentu2_ro","aRza#p=XckDC","momentu2_frcteam4999");
-}
+$DB = createDBObject();
 #Check if accessed by post and apply the filters if so
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$query = 'SELECT Team FROM '.getCurrentDB().' WHERE ';
+	$query = 'SELECT Team FROM '.getCurrentTable().' WHERE ';
 	$index = 1;
 	#loop through all the filters and apply each one, adding an 'AND' between each
 	$params = array();
@@ -26,7 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 } else {
 	#If not accessed by POST, show all rows
-	$query = 'SELECT Team FROM '.getCurrentDB().' ORDER BY Team ASC;';
+	$query = 'SELECT Team FROM '.getCurrentTable().' ORDER BY Team ASC;';
+	$params = array();
 }
 #execute the query
 writeToLog("Using query: ".$query, "filters");

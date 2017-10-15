@@ -1,4 +1,5 @@
 <?php
+require 'specificvars.php';
 $image_root = "photos/";
 $acceptableFileTypes = array("jpg","png","jpeg","gif","bmp");
 date_default_timezone_set("America/Los_Angeles");
@@ -32,7 +33,90 @@ function formatAndQuery() { #first argument should be the query. %sv for strings
     }
     return $result;
 }
-function getCurrentDB() {
-	return "2017ROBOTS";
+function getCurrentTable() {
+	global $CurrentTable;
+	return $CurrentTable;
+}
+function clean($data) {
+	$data = trim($data);
+	$data = stripslashes($data);
+	$data = htmlspecialchars($data);
+	return $data;
+}
+function checkUserPassword($user, $password) {
+	global $DBUser, $DBPass, $Database, $LoginTableName, $DB;
+	$DBtmp = $DB;
+	$DB = new mysqli("localhost", $DBUser, $DBPass, $Database);
+	$result = formatAndQuery("SELECT passhash FROM %s WHERE user LIKE %sv;",$LoginTableName, $user);
+	if($result->num_rows > 0) {
+		$result = $result->fetch_assoc();
+	} else {
+		return False;
+	}
+	if(!isset($result["passhash"])) {
+		return False;
+	}
+	$DB->close();
+	$DB = $DBtmp;
+	return password_verify($password, $result["passhash"]);
+}
+function checkIsAdmin($user, $password) {
+	global $DBUser, $DBPass, $Database, $LoginTableName, $DB;
+	$DBTmp = $DB;
+	$DB = new mysqli("localhost", $DBUser, $DBPass, $Database);
+	$result = formatAndQuery("SELECT passhash, admin FROM %s WHERE user LIKE %sv;", $LoginTableName, $user);
+	if($result->num_rows > 0) {
+		$result = $result->fetch_assoc();
+	} else {
+		return False;
+	}
+	if(!isset($result["passhash"])) {
+		return False;
+	}
+	if(password_verify($password, $result["passhash"]) && isset($result["admin"])) {
+		return $result["admin"];
+	} else {
+		return False;
+	}
+	$DB->close();
+	$DB = $DBtmp;
+}
+function getUserName() {
+	if(session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
+	if(isset($_SESSION["loggedIn"]) and $_SESSION["loggedIn"] and checkUserPassword($_SESSION["user"], $_SESSION["pass"])) {
+		global $DB, $DBTmp, $DBUser, $DBPass, $Database, $LoginTableName;
+		$DBtmp = $DB;
+		$DB = new mysqli("localhost", $DBUser, $DBPass, $Database);
+		$result = formatAndQuery("SELECT name FROM %s WHERE user LIKE %sv;", $LoginTableName, $_SESSION["user"]);
+		$DB->close();
+		$DB = $DBtmp;
+		if($result->num_rows > 0) {
+			$result = $result->fetch_assoc();
+		} else {
+			return False;
+		}
+		if(isset($result["name"])) {
+			return $result["name"];
+		}
+	}
+	return False;
+}
+function createDBObject() {
+	global $roDBUser, $roDBPass, $DBUser, $DBPass, $Database;
+	if(session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
+	if (isset($_SESSION["loggedIn"]) and checkUserPassword($_SESSION["user"], $_SESSION["pass"])){
+		$DB = new mysqli("localhost",$DBUser,$DBPass,$Database);
+	} else {
+		$DB = new mysqli("localhost",$roDBUser,$roDBPass,$Database);
+	}
+	return $DB;
+}
+function getRootDir() {
+	global $appdir;
+	return $appdir;
 }
 ?>
