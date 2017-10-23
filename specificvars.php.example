@@ -9,7 +9,10 @@ $roDBPass = "";
 $Database = "";
 
 $LoginTableName = "";
-$CurrentTable = "";
+
+$TeamDataTable = "";
+$RobotDataTable = "";
+$EventDataTable = "";
 
 $appdir = "";
 
@@ -19,6 +22,16 @@ This causes createDBObject to check the user's username and password in the $Log
 
 The login table will have the following schema: (user VARCHAR(255) NOT NULL, passhash TEXT, name TEXT, admin BOOLEAN, INDEX `user_index` (user))
 
+The TeamDataTable will associate teams with robotids. It will have the following schema:
+(number INTEGER NOT NULL, robotids VARCHAR(255), INDEX `team_index` (number))
+
+The RobotDataTable will hold random key-value pairs for storing variable data. It will have the following schema:
+(robotid VARCHAR(255), key VARCHAR(255), value TEXT, INDEX `robotid_index` (robotid, key))
+
+The EventDataTable will hold varying key-value pairs and associates them with an eventid. This will hold info on a match the team has competed in. It has this schema:
+(eventid VARCHAR(255), key VARCHAR(255), value TEXT, INDEX `eventid_index` (eventid, key))
+
+There will be a JSON file (schema.json) describing the schema of the data to collect for each year's robot
 */
 
 

@@ -62,6 +62,9 @@ function checkUserPassword($user, $password) {
 }
 function checkIsAdmin($user, $password) {
 	global $DBUser, $DBPass, $Database, $LoginTableName, $DB;
+	if(!checkUserPassword($user, $password)) {
+		return False;
+	}
 	$DBTmp = $DB;
 	$DB = new mysqli("localhost", $DBUser, $DBPass, $Database);
 	$result = formatAndQuery("SELECT passhash, admin FROM %s WHERE user LIKE %sv;", $LoginTableName, $user);
