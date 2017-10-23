@@ -34,7 +34,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" and checkIfValidUser()) {
 ?>
 <html>
 <head>
-  <script src="scripts/jquery-3.1.1.min.js"></script>
+  <script src="<?php global $appdir; echo($appdir);?>scripts/jquery-3.1.1.min.js"></script>
   <link rel="stylesheet" href="<?php global $appdir; echo($appdir);?>styles/edituser.css">
   <script>
   $(document).ready(function() {
