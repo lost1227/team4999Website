@@ -1,7 +1,10 @@
 <?php session_start() ?>
 <?php
-
 require 'functions.php';
+global $appdir;
+?>
+<?php
+
 function checkIfValidUser() {
   return (isset($_SESSION["loggedIn"]) and $_SESSION["loggedIn"] and checkIsAdmin($_SESSION["user"], $_SESSION["pass"]));
 }
@@ -13,7 +16,7 @@ if(!checkIfValidUser()) {
 JSON File Structure:
 [{
   "year":"2017",
-  "rototdata":{
+  "robotdata":{
     "key1":{"type":"string","display_name":"Key 1"}
   },
   "matchdata":{
@@ -33,6 +36,27 @@ function getPlaceholder($type, $displayName, $data = array()) {
   }
 }
 
+function getTypeOptions($selected) {
+  $out = "";
+  $options = array("string"=>"Text Field","select"=>"Drop down","boolean"=>"Yes or No","number"=>"Number","textarea"=>"Text Area");
+  foreach($options as $option=>$name) {
+    if($selected == $option) {
+      $out .= '<option value="'.$option.'" selected="selected">'.$name."</option>\n";
+    } else {
+      $out .= '<option value="'.$option.'">'.$name."</option>\n";
+    }
+  }
+  return $out;
+}
+
+function getYearData($haystackJson, $needleYear) {
+  foreach($haystackJson as $yeard) {
+    if($yeard["year"] == $needleYear) {
+      return $yeard;
+    }
+  }
+}
+
 if(!file_exists("schema.json")) {
   $json = array();
 } else {
@@ -43,13 +67,12 @@ if(!file_exists("schema.json")) {
 <html>
 <head>
   <title>Edit Information Collection</title>
-  <script src="<?php global $appdir; echo($appdir);?>scripts/jquery-3.1.1.min.js"></script>
+  <script src="<?php echo($appdir);?>scripts/jquery-3.1.1.min.js"></script>
 </head>
 <body>
   <?php
   if(isset($_GET["year"])) {
     $year = $_GET["year"];
-    echo("You have selected: ". $year);
   } else {
     echo('<table><tr><th>Select year:</th></tr>');
     if(count($json) > 0 ) {
@@ -81,6 +104,34 @@ if(!file_exists("schema.json")) {
     exit();
   }
    ?>
+   <p id="YearTitle"><?php echo($year); ?></p>
+   <p>Robot data</p>
+   <form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post">
+   <table>
+     <tr>
+       <th>Key</th>
+       <th>Display Name</th>
+       <th>Type</th>
+       <th>Data</th>
+     </tr>
+     <?php
+     $year = getYearData($json, $year);
+     foreach($year["robotdata"] as $key => $data){
+       echo('
+        <tr>
+          <td><input type="text" name="'.$key.'[key]" value="'.$key.'"></td>
+          <td><input type="text" name="'.$key.'[display_name]" value="'.$data["display_name"].'"></td>
+          <td><select name="'.$key.'[type]" class="datatselector" data-key="'.$key.'">
+            '.getTypeOptions($data["type"]).'</select></td>
+          <td class="datar" data-key="'.$key.'"></td>
+        <tr>
+       ');
+     }
+    ?>
+  </table>
+  <input type="submit">
+</form>
+
 
 </body>
 </html>
