@@ -12,18 +12,6 @@ if(!checkIfValidUser()) {
   header( 'Location: login.php?redirect=editschema.php');
 }
 
-/*
-JSON File Structure:
-[{
-  "year":"2017",
-  "robotdata":{
-    "key1":{"type":"string","display_name":"Key 1"}
-  },
-  "matchdata":{
-    "key2":{"type":"number","display_name":"Key 2"}
-  }
-}]
-*/
 
 function getPlaceholder($type, $displayName, $data = array()) {
   if(!in_array($type, array("string","select","boolean","number","textarea"))) {
@@ -48,11 +36,23 @@ function getTypeOptions($selected) {
   }
   return $out;
 }
+function getSelectOptions($key,$data,$ctx) {
+  $out = "";
+  if($data["type"] == "select" && isset($data["values"]) ) {
+    $out .= "<table class=\"selectoptions\" ".'data-name="'.$ctx.'['.$key.'][values]"'.">\n";
+    foreach($data["values"] as $index=>$value) {
+      $out .= '<tr><td><input class="f_select" type="text" name="'.$ctx.'['.$key.'][values]['.$index.']" data-index="'.$index.'" value="'.$value."\"></td></tr>\n";
+    }
+    $out .= '<tr><td><button class="addSelectOption">Add</button></td></tr>'."\n";
+    $out .= "</table>";
+  }
+  return $out;
+}
 
 function getYearData($haystackJson, $needleYear) {
-  foreach($haystackJson as $yeard) {
+  foreach($haystackJson as $index=>$yeard) {
     if($yeard["year"] == $needleYear) {
-      return $yeard;
+      return array($index,$yeard);
     }
   }
 }
@@ -63,17 +63,41 @@ if(!file_exists("schema.json")) {
   $json = json_decode(file_get_contents("schema.json"), True);
 }
 
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+  $updated = array("year"=>$_POST["year"],"robotdata"=>array(), "matchdata"=>array());
+  $year = $_POST["year"];
+  $data = array();
+  if(isset($_POST["robotdata"])){
+    $data["robotdata"] = $_POST["robotdata"];
+  }
+  if(isset($_POST["matchdata"])){
+    $data["matchdata"] = $_POST["matchdata"];
+  }
+  foreach($data as $dkey=>$dval) {
+    foreach($dval as $key=>$value) {
+      $key = $value["key"];
+      unset($value["key"]);
+      $updated[$dkey][$key] = $value;
+    }
+  }
+
+  $json[getYearData($json,$year)[0]] = $updated;
+
+  file_put_contents("schema.json", json_encode($json, JSON_PRETTY_PRINT) );
+}
+
 ?>
 <html>
 <head>
   <title>Edit Information Collection</title>
   <script src="<?php echo($appdir);?>scripts/jquery-3.1.1.min.js"></script>
+  <script src="<?php echo($appdir);?>scripts/editschema.js"></script>
 </head>
 <body>
   <?php
-  if(isset($_GET["year"])) {
+  if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["year"])) {
     $year = $_GET["year"];
-  } else {
+  } else if(!($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["year"]))) {
     echo('<table><tr><th>Select year:</th></tr>');
     if(count($json) > 0 ) {
       foreach($json as $year) {
@@ -105,8 +129,9 @@ if(!file_exists("schema.json")) {
   }
    ?>
    <p id="YearTitle"><?php echo($year); ?></p>
+   <form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post" id="mainf">
+     <input type="hidden" name="year" value="<?php echo($year); ?>">
    <p>Robot data</p>
-   <form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post">
    <table>
      <tr>
        <th>Key</th>
@@ -115,20 +140,42 @@ if(!file_exists("schema.json")) {
        <th>Data</th>
      </tr>
      <?php
-     $year = getYearData($json, $year);
+     $year = getYearData($json, $year)[1];
      foreach($year["robotdata"] as $key => $data){
        echo('
         <tr>
-          <td><input type="text" name="'.$key.'[key]" value="'.$key.'"></td>
-          <td><input type="text" name="'.$key.'[display_name]" value="'.$data["display_name"].'"></td>
-          <td><select name="'.$key.'[type]" class="datatselector" data-key="'.$key.'">
+          <td><input type="text" name="robotdata['.$key.'][key]" value="'.$key.'" class="f_key"></td>
+          <td><input type="text" name="robotdata['.$key.'][display_name]" value="'.$data["display_name"].'" class="f_name"></td>
+          <td><select name="robotdata['.$key.'][type]" class="datatselector" data-key="'.$key.'">
             '.getTypeOptions($data["type"]).'</select></td>
-          <td class="datar" data-key="'.$key.'"></td>
+          <td class="datar" data-key="'.$key.'">'.getSelectOptions($key, $data, "robotdata").'</td>
         <tr>
        ');
      }
     ?>
   </table>
+  <p>Match data</p>
+  <table>
+    <tr>
+      <th>Key</th>
+      <th>Display Name</th>
+      <th>Type</th>
+      <th>Data</th>
+    </tr>
+    <?php
+    foreach($year["matchdata"] as $key => $data){
+      echo('
+       <tr>
+         <td><input type="text" name="matchdata['.$key.'][key]" value="'.$key.'" class="f_key"></td>
+         <td><input type="text" name="matchdata['.$key.'][display_name]" value="'.$data["display_name"].'" class="f_name" ></td>
+         <td><select name="matchdata['.$key.'][type]" class="datatselector" data-key="'.$key.'">
+           '.getTypeOptions($data["type"]).'</select></td>
+         <td class="datar" data-key="'.$key.'">'.getSelectOptions($key, $data, "matchdata").'</td>
+       <tr>
+      ');
+    }
+   ?>
+ </table>
   <input type="submit">
 </form>
 
