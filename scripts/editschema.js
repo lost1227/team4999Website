@@ -8,8 +8,6 @@ $("document").ready(function() {
     newrow.name = table.data("name") + "[" + (lastrow.data("index") + 1) +"]";
     newrow.setAttribute("data-index", lastrow.data("index") + 1);
     newrow.className = "f_select";
-    console.log(table.data("name"));
-    console.log(newrow);
     var tr = document.createElement("tr");
     var td = document.createElement("td");
     td.appendChild(newrow);
@@ -21,6 +19,8 @@ $("document").ready(function() {
     var selects = $("#mainf").find("input.f_select");
     var keys = $("#mainf").find("input.f_key");
     var names = $("#mainf").find("input.f_name");
+
+    var cKeys = [];
 
     for(var i = 0; i < selects.length; i++) {
       if(selects[i].value == "") {
@@ -38,6 +38,11 @@ $("document").ready(function() {
           return false;
         }
       }
+      if(cKeys.includes(keys[i].value)) {
+        window.alert("All keys must be unique");
+        return false;
+      }
+      cKeys.push(keys[i].value);
     }
 
     for(var i = 0; i < names.length; i++) {

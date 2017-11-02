@@ -45,6 +45,11 @@ function getSelectOptions($key,$data,$ctx) {
     }
     $out .= '<tr><td><button class="addSelectOption">Add</button></td></tr>'."\n";
     $out .= "</table>";
+  } else {
+    $out .= "<table class=\"hiddenselectoptions\" ".'data-name="'.$ctx.'['.$key.'][values]"'.">\n";
+    $out .= '<tr><td><input class="f_select" type="text" name="'.$ctx.'['.$key.'][values][0]" data-index="0" value=""></td></tr>'."\n";
+    $out .= '<tr><td><button class="addSelectOption">Add</button></td></tr>'."\n";
+    $out .= "</table>";
   }
   return $out;
 }
@@ -92,6 +97,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
   <title>Edit Information Collection</title>
   <script src="<?php echo($appdir);?>scripts/jquery-3.1.1.min.js"></script>
   <script src="<?php echo($appdir);?>scripts/editschema.js"></script>
+  <link rel="stylesheet" href="<?php global $appdir; echo($appdir);?>styles/editschema.css">
 </head>
 <body>
   <?php
