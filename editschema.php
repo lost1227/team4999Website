@@ -40,8 +40,8 @@ function getSelectOptions($key,$data,$ctx) {
   $out = "";
   if($data["type"] == "select" && isset($data["values"]) ) {
     $out .= "<table class=\"selectoptions\" ".'data-name="'.$ctx.'['.$key.'][values]"'.">\n";
-    foreach($data["values"] as $index=>$value) {
-      $out .= '<tr><td><input class="f_select" type="text" name="'.$ctx.'['.$key.'][values]['.$index.']" data-index="'.$index.'" value="'.$value."\"></td></tr>\n";
+    foreach($data["values"] as $value) {
+      $out .= '<tr><td><input class="f_select" type="text" name="'.$ctx.'['.$key.'][values][]" value="'.$value."\"></td></tr>\n";
     }
     $out .= '<tr><td><button class="addSelectOption">Add</button></td></tr>'."\n";
     $out .= "</table>";
