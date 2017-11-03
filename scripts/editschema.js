@@ -1,12 +1,10 @@
 $("document").ready(function() {
   $("button.addSelectOption").click(function(e) {
     var table = $(e.target).closest("table.selectoptions");
-    var lastrow = table.find("input:last");
     //<input type="text" name="matchdata[anotherUniqueKey][values][3]" data-index="3" value="Option 4">
     var newrow = document.createElement("input");
     newrow.type = "text";
-    newrow.name = table.data("name") + "[" + (lastrow.data("index") + 1) +"]";
-    newrow.setAttribute("data-index", lastrow.data("index") + 1);
+    newrow.name = table.data("name") + "[]";
     newrow.className = "f_select";
     var tr = document.createElement("tr");
     var td = document.createElement("td");
@@ -16,41 +14,67 @@ $("document").ready(function() {
     return false;
   });
   $("#mainf").submit(function(e) {
-    var selects = $("#mainf").find("input.f_select");
-    var keys = $("#mainf").find("input.f_key");
-    var names = $("#mainf").find("input.f_name");
+    var valid = true;
+
+    $("#mainf").find("table.hiddenselectoptions").remove();
 
     var cKeys = [];
 
-    for(var i = 0; i < selects.length; i++) {
-      if(selects[i].value == "") {
-        selects[i].remove();
+    $("#mainf").find("input.f_select").each(function() {
+      if(this.value == "") {
+        $(this).remove();
       }
-    }
+    });
 
     var confirmdel = false;
-    for(var i = 0; i < keys.length; i++) {
-      if(keys[i].value == "") {
+    $("#mainf").find("input.f_key").each(function() {
+      if(this.value == "") {
         if(confirmdel || window.confirm("Confirm deletion of key(s)?")){
           confirmdel = true;
-          keys[i].closest("tr").remove();
+          $(this).closest("tr").remove();
         } else {
+          valid = false;
           return false;
         }
-      }
-      if(cKeys.includes(keys[i].value)) {
+      } else if (cKeys.includes(this.value)) {
         window.alert("All keys must be unique");
+        valid = false;
         return false;
+      } else {
+        cKeys.push(this.value);
       }
-      cKeys.push(keys[i].value);
-    }
+    });
+    if(!valid) { return false; }
 
-    for(var i = 0; i < names.length; i++) {
-      if(names[i].value == "") {
+    $("#mainf").find("input.f_name").each(function() {
+      if(this.value == "") {
         window.alert("No display name may be blank!");
+        valid = false;
         return false;
       }
-    }
+    })
+
+    $("select.datatselector").each(function() {
+      console.log(this);
+      console.log($(this).closest("tr"));
+      if($(this).val() == "select" && $(this).closest("tr").find("input.f_select").length <= 0) {
+        window.alert("All drop downs must have at least one option!");
+        valid = false;
+        return false;
+      }
+    })
+    if(!valid) { return false; }
     return true;
-  })
+  });
+  $("select.datatselector").change(function(e) {
+    var target = $(e.target);
+    var t = target.closest("tr").find("table");
+    if(target.val() == "select") {
+      t.removeClass("hiddenselectoptions");
+      t.addClass("selectoptions");
+    } else {
+      t.removeClass("selectoptions");
+      t.addClass("hiddenselectoptions");
+    }
+  });
 });
