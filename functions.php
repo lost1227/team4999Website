@@ -4,6 +4,8 @@ $image_root = "photos/";
 $acceptableFileTypes = array("jpg","png","jpeg","gif","bmp");
 date_default_timezone_set("America/Los_Angeles");
 
+$explodeseparator = ",";
+
 function writeToLog($string, $log) {
 	if (!file_exists("./logs/")) {
 		mkdir("./logs/",0777,true);
@@ -13,14 +15,13 @@ function writeToLog($string, $log) {
 function formatAndQuery() { #first argument should be the query. %sv for strings to be escaped, %s for string and $d for int. the rest of the arguments should be the values in order
 	global $DB;
 	$args  = func_get_args();
-    $query = array_shift($args); #remove the first element of the array as its own variable
-		if(is_array($args[0])){$args = $args[0];}
-    $query = str_replace("%sv","'%s'",$query);
-	foreach ($args as $key => $val)
-    {
-        $args[$key] = $DB->real_escape_string($val);
+  $query = array_shift($args); #remove the first element of the array as its own variable
+	if(is_array($args[0])){$args = $args[0];}
+  $query = str_replace("%sv","'%s'",$query);
+	foreach ($args as $key => $val){
+    $args[$key] = $DB->real_escape_string($val);
 		$args[$key] = htmlspecialchars($val);
-    }
+  }
 	$query  = vsprintf($query, $args);
 	#writeToLog("Old Query: ".$query,"query");
 	$query = str_replace('\'\'',"null",$query);
@@ -40,6 +41,12 @@ function getCurrentTable() {
 function clean($data) {
 	$data = trim($data);
 	$data = stripslashes($data);
+	$data = htmlspecialchars($data);
+	return $data;
+}
+function dbclean($data) {
+	global $DB;
+	$data = $DB->real_escape_string($data);
 	$data = htmlspecialchars($data);
 	return $data;
 }
@@ -121,5 +128,86 @@ function createDBObject() {
 function getRootDir() {
 	global $appdir;
 	return $appdir;
+}
+function getYearData($haystackJson, $needleYear) {
+  foreach($haystackJson as $index=>$yeard) {
+    if($yeard["year"] == $needleYear) {
+      return array($index,$yeard);
+    }
+  }
+	return false;
+}
+function getDefaultYear() {
+	if(session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
+	if(isset($_SESSION["year"])) {
+		return $_SESSION["year"];
+	}
+	if(file_exists("schema.json")) {
+		$json = json_decode(file_get_contents("schema.json"), True);
+		$year = date("Y");
+		for($i = 0; $i < 10; $i++) {
+			$data = getYearData($json, $year - $i);
+			if(!($data === false)) {
+				return $year - $i;
+			}
+		}
+	}
+
+}
+function retrieveKeys($table, $id, $keys) {
+	global $DB, $RobotDataTable, $EventDataTable;
+	if($table == $RobotDataTable) {
+		$stmt = $DB->prepare("SELECT data_value FROM ".dbclean($table)." WHERE robotid = \"".dbclean($id)."\" AND data_key = ?;");
+	} elseif ($table == $EventDataTable) {
+		$stmt = $DB->prepare("SELECT data_value FROM ".dbclean($table)." WHERE eventid = \"".dbclean($id)."\" AND data_key = ?;");
+	} else {
+		return false;
+	}
+	$key = "";
+	$stmt->bind_param("s",$key);
+	$out = array();
+	foreach($keys as $key=>$data) {
+		$stmt->execute();
+		$stmt->store_result();
+		if($stmt->num_rows > 0) {
+			$stmt->bind_result($value);
+			$stmt->fetch();
+			$data["data_value"] = $value;
+		}
+		$out[$key] = $data;
+		$stmt->free_result();
+	}
+	$stmt->close();
+
+	return $out;
+}
+function getIdsForYear($table, $year, $ids) {
+	global $DB, $RobotDataTable, $EventDataTable;
+	if($table == $RobotDataTable) {
+		$stmt = $DB->prepare("SELECT data_value FROM ".dbclean($table)." WHERE robotid = ? AND data_key = \"year\";");
+	} elseif ($table == $EventDataTable) {
+		$stmt = $DB->prepare("SELECT data_value FROM ".dbclean($table)." WHERE eventid = ? AND data_key = \"year\";");
+	} else {
+		return false;
+	}
+	$id = "";
+	$stmt->bind_param("s",$id);
+	$out = array();
+	foreach($ids as $id) {
+		$stmt->execute();
+		$stmt->store_result();
+		if($stmt->num_rows > 0) {
+			$stmt->bind_result($val);
+			$stmt->fetch();
+			if($year == $val) {
+				$out[] = $id;
+			}
+		}
+		$stmt->free_result();
+	}
+	$stmt->close();
+	return $out;
 }
 ?>

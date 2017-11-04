@@ -32,7 +32,7 @@ $("document").ready(function() {
 
     $("#mainf").find("table.hiddenselectoptions").remove();
 
-    var cKeys = [];
+    var cKeys = ["year"];
 
     $("#mainf").find("input.f_select").each(function() {
       if(this.value == "") {

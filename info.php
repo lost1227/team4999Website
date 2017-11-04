@@ -37,70 +37,37 @@
 	<?php
 	require 'functions.php';
 	$DB = createDBObject();
-	$team = str_replace('_',' ',$_GET["team"]);
-	$data = formatAndQuery('SELECT * FROM '.getCurrentTable().' WHERE Team = %d;',$team);
-	if($data->num_rows > 0){
-		while($row = $data->fetch_assoc()) {
-			foreach($row as $key => $value) {
-				$key = str_replace('_',' ',$key);
-				switch($key) {
-					case("Team"):
-						echo('<h1>'.$key.': '.$value.'</h1>');
-						break;
-					case("Width"):
-					case("Depth"):
-					case("Height"):
-						if(!empty($value)){
-							echo('<p>'.$key.': '.$value.' inches</p>');
-						}
-						break;
-					case("Weight"):
-						if(!empty($value)){
-							echo('<p>'.$key.': '.$value.' lbs</p>');
-						}
-						break;
-					case("Can pickup gear from floor"):
-					case("Can place gear on lift"):
-					case("Can catch fuel from hoppers"):
-					case("Can pickup fuel from floor"):
-					case("Can shoot in low goal"):
-					case("Can shoot in high goal"):
-					case("Can climb rope"):
-					case("Brought own rope"):
-						if($value == 1) {
-							echo('<p>'.$key.': Yes</p>');
-						} else {
-							echo('<p>'.$key.': No</p>');
-						}
-						break;
-					case("Contributors"):
-						if(!empty($value)) {
-							echo('<p>Contributors to this information: ' . $value . '</p>');
-						}
-						break;
-					default:
-						if(!empty($value)){
-							echo('<p>'.$key.': '.$value.'</p>');
-						}
-						break;
-				}
-			}
+	$team = clean($_GET["team"]);
+	$results = formatAndQuery("SELECT robotids,eventids FROM %s WHERE number = %d;",$TeamDataTable,$team);
+	if($results->num_rows <= 0) {
+		echo("<p>No results!</p>");
+		exit();
+	}
+	$result = $results->fetch_assoc();
+	$robotids = explode($explodeseparator,$result["robotids"]);
+	$eventids = explode($explodeseparator,$result["eventids"]);
+
+	if(file_exists("schema.json")) {
+		$json = json_decode(file_get_contents("schema.json"), True);
+		$year = getYearData($json, getDefaultYear())[1];
+		if($year === false) {
+			echo("<p>Schema for this year does not exist</p>");
+			exit();
 		}
 	} else {
-		echo('<p>No results!</p>');
+		echo("<p>schema.json does not exist!</p>");
+		exit();
 	}
-	$image_dir = $image_root . getCurrentTable() . '/' . $team . "/";
-	#writeToLog("Imagedir: " . $image_dir, "images");
-	if(file_exists($image_dir)){
-		$files = scandir($image_dir);
-		foreach( $files as $file ) {
-			#writeToLog("File in image dir: " . $file, "images");
-			if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
-				echo('<a href="'.$image_dir.$file.'"><img src="'.$image_dir.$file.'" class="gallery"></a>');
-			}
-		}
+
+	$robotids = getIdsForYear($RobotDataTable, $year["year"], $robotids);
+	$eventids = getIdsForYear($EventDataTable, $year["year"], $eventids);
+
+	foreach($robotids as $robotid) {
+		$data = retrieveKeys($RobotDataTable, $robotid, $year["robotdata"]);
+		var_dump($data);
 	}
-	echo('<br><a id="edit" href="edit.php?team='.$_GET["team"].'">Edit</a>');
+
+
 	?>
 	<hr><div id="TBAheading"><span>The Blue Alliance info</span></div>
 	<div id="TBA">
