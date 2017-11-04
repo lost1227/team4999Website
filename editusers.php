@@ -48,9 +48,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST" and checkIfValidUser()) {
     	}
     });
     $(".trashbutton").click(function deleteUser(e) {
-      $user = $(e.target).data("user");
-      if(window.confirm("Are you sure you want to delete user " + $user + "?")) {
-        $("#deluser").val($user);
+      var user = $(e.target).data("user");
+      if(window.confirm("Are you sure you want to delete user " + user + "?")) {
+        $("#deluser").val(user);
         $("#deluserf").submit();
       }
     });

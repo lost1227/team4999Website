@@ -1,7 +1,17 @@
-$("document").ready(function() {
-  $("button.addSelectOption").click(function(e) {
+function setListeners(elem) {
+  elem.find("select.datatselector").change(function(e) {
+    var target = $(e.target);
+    var t = target.closest("tr").find("table");
+    if(target.val() == "select") {
+      t.removeClass("hiddenselectoptions");
+      t.addClass("selectoptions");
+    } else {
+      t.removeClass("selectoptions");
+      t.addClass("hiddenselectoptions");
+    }
+  });
+  elem.find("button.addSelectOption").click(function(e) {
     var table = $(e.target).closest("table.selectoptions");
-    //<input type="text" name="matchdata[anotherUniqueKey][values][3]" data-index="3" value="Option 4">
     var newrow = document.createElement("input");
     newrow.type = "text";
     newrow.name = table.data("name") + "[]";
@@ -13,6 +23,10 @@ $("document").ready(function() {
     table.find("button").closest("tr").before(tr);
     return false;
   });
+}
+
+$("document").ready(function() {
+  setListeners($(document));
   $("#mainf").submit(function(e) {
     var valid = true;
 
@@ -55,8 +69,6 @@ $("document").ready(function() {
     })
 
     $("select.datatselector").each(function() {
-      console.log(this);
-      console.log($(this).closest("tr"));
       if($(this).val() == "select" && $(this).closest("tr").find("input.f_select").length <= 0) {
         window.alert("All drop downs must have at least one option!");
         valid = false;
@@ -66,15 +78,18 @@ $("document").ready(function() {
     if(!valid) { return false; }
     return true;
   });
-  $("select.datatselector").change(function(e) {
-    var target = $(e.target);
-    var t = target.closest("tr").find("table");
-    if(target.val() == "select") {
-      t.removeClass("hiddenselectoptions");
-      t.addClass("selectoptions");
-    } else {
-      t.removeClass("selectoptions");
-      t.addClass("hiddenselectoptions");
-    }
+
+  $("#addrobotrow").click(function(e) {
+    var elem = $($.parseHTML(getRobotDataRow()));
+    setListeners(elem);
+    $("#addrobotrow").closest("tr").before(elem);
+    return false;
   });
+  $("#addmatchrow").click(function(e) {
+    var elem = $($.parseHTML(getMatchDataRow()));
+    setListeners(elem);
+    $("#addmatchrow").closest("tr").before(elem);
+    return false;
+  });
+
 });
