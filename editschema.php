@@ -24,7 +24,7 @@ function getPlaceholder($type, $displayName, $data = array()) {
   }
 }
 
-function getTypeOptions($selected) {
+function getTypeOptions($selected, $js = false) {
   $out = "";
   $options = array("string"=>"Text Field","select"=>"Drop down","boolean"=>"Yes or No","number"=>"Number","textarea"=>"Text Area");
   foreach($options as $option=>$name) {
@@ -34,6 +34,7 @@ function getTypeOptions($selected) {
       $out .= '<option value="'.$option.'">'.$name."</option>\n";
     }
   }
+  if($js) { $out = str_replace("\n", "','", $out); }
   return $out;
 }
 function getSelectOptions($key,$data,$ctx) {
@@ -47,7 +48,7 @@ function getSelectOptions($key,$data,$ctx) {
     $out .= "</table>";
   } else {
     $out .= "<table class=\"hiddenselectoptions\" ".'data-name="'.$ctx.'['.$key.'][values]"'.">\n";
-    $out .= '<tr><td><input class="f_select" type="text" name="'.$ctx.'['.$key.'][values][0]" data-index="0" value=""></td></tr>'."\n";
+    $out .= '<tr><td><input class="f_select" type="text" name="'.$ctx.'['.$key.'][values][]" ></td></tr>'."\n";
     $out .= '<tr><td><button class="addSelectOption">Add</button></td></tr>'."\n";
     $out .= "</table>";
   }
@@ -97,6 +98,42 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
   <title>Edit Information Collection</title>
   <script src="<?php echo($appdir);?>scripts/jquery-3.1.1.min.js"></script>
   <script src="<?php echo($appdir);?>scripts/editschema.js"></script>
+  <script>
+  var crindx = 0;
+  var cmindx = 0;
+  function getRobotDataRow() {
+    crindx++;
+    return ['<tr>',
+              '<td><input type="text" name="robotdata[' + crindx + '][key]" class="f_key"></td>',
+              '<td><input type="text" name="robotdata[' + crindx + '][display_name]" class="f_name"></td>',
+              '<td><select name="robotdata[' + crindx + '][type]" class="datatselector" >',
+                '<?php echo(getTypeOptions("",true)); ?></select></td>',
+              '<td class="datar" >',
+                '<table class="hiddenselectoptions" data-name="robotdata[' + crindx + '][values]">',
+                  '<tr><td><input class="f_select" type="text" name="robotdata[' + crindx + '][values][]" ></td></tr>',
+                  '<tr><td><button class="addSelectOption">Add</button></td></tr>',
+                '</table>',
+              '</td>',
+            '</tr>'
+          ].join("\n");
+  }
+  function getMatchDataRow() {
+    cmindx++;
+    return ['<tr>',
+              '<td><input type="text" name="matchdata[' + cmindx + '][key]" class="f_key"></td>',
+              '<td><input type="text" name="matchdata[' + cmindx + '][display_name]" class="f_name"></td>',
+              '<td><select name="matchdata[' + cmindx + '][type]" class="datatselector" >',
+                '<?php echo(getTypeOptions("", true)); ?></select></td>',
+              '<td class="datar" >',
+                '<table class="hiddenselectoptions" data-name="matchdata[' + cmindx + '][values]">',
+                  '<tr><td><input class="f_select" type="text" name="matchdata[' + cmindx + '][values][]" ></td></tr>',
+                  '<tr><td><button class="addSelectOption">Add</button></td></tr>',
+                '</table>',
+              '</td>',
+            '</tr>'
+          ].join("\n");
+  }
+  </script>
   <link rel="stylesheet" href="<?php global $appdir; echo($appdir);?>styles/editschema.css">
 </head>
 <body>
@@ -111,10 +148,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
       }
     }
     echo('<tr><td>
-      <form action='.htmlentities($_SERVER['PHP_SELF']).' method="get" autocomplete="off">
-        <input id="addyear" type="number" name="year">
-        <input type="submit" value="Add">
-      </form>
+      <input id="addyear" type="number" name="year">
+      <button id="addyearb">Add</button>
       </td></tr>');
     echo('</table>');
     echo('
@@ -125,8 +160,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     echo('<script>
     $(document).ready(function() {
       $(".yearchoice").click(function(e) {
-        $user = $(e.target).data("year");
-        $("#selectyear").val($user);
+        var year = $(e.target).data("year");
+        $("#selectyear").val(year);
+        $("#selectyearf").submit();
+      });
+      $("#addyearb").click(function(e) {
+        $("#selectyear").val($("#addyear").val());
         $("#selectyearf").submit();
       });
     });
@@ -137,51 +176,57 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
    <p id="YearTitle"><?php echo($year); ?></p>
    <form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post" id="mainf">
      <input type="hidden" name="year" value="<?php echo($year); ?>">
-   <p>Robot data</p>
-   <table>
-     <tr>
-       <th>Key</th>
-       <th>Display Name</th>
-       <th>Type</th>
-       <th>Data</th>
-     </tr>
-     <?php
-     $year = getYearData($json, $year)[1];
-     foreach($year["robotdata"] as $key => $data){
-       echo('
+     <fieldset>
+       <legend>Robot data</legend>
+       <table>
+         <tr>
+           <th>Key</th>
+           <th>Display Name</th>
+           <th>Type</th>
+           <th>Data</th>
+         </tr>
+         <?php
+         $year = getYearData($json, $year)[1];
+         foreach($year["robotdata"] as $key => $data){
+           echo('
+            <tr>
+              <td><input type="text" name="robotdata['.$key.'][key]" value="'.$key.'" class="f_key"></td>
+              <td><input type="text" name="robotdata['.$key.'][display_name]" value="'.$data["display_name"].'" class="f_name"></td>
+              <td><select name="robotdata['.$key.'][type]" class="datatselector">
+                '.getTypeOptions($data["type"]).'</select></td>
+              <td class="datar">'.getSelectOptions($key, $data, "robotdata").'</td>
+            </tr>
+           ');
+         }
+        ?>
+        <tr><td colspan="4"><button id="addrobotrow">Add row</button></tr>
+      </table>
+    </fieldset>
+    <fieldset>
+      <legend>Match data</legend>
+      <table>
         <tr>
-          <td><input type="text" name="robotdata['.$key.'][key]" value="'.$key.'" class="f_key"></td>
-          <td><input type="text" name="robotdata['.$key.'][display_name]" value="'.$data["display_name"].'" class="f_name"></td>
-          <td><select name="robotdata['.$key.'][type]" class="datatselector" data-key="'.$key.'">
-            '.getTypeOptions($data["type"]).'</select></td>
-          <td class="datar" data-key="'.$key.'">'.getSelectOptions($key, $data, "robotdata").'</td>
-        <tr>
-       ');
-     }
-    ?>
-  </table>
-  <p>Match data</p>
-  <table>
-    <tr>
-      <th>Key</th>
-      <th>Display Name</th>
-      <th>Type</th>
-      <th>Data</th>
-    </tr>
-    <?php
-    foreach($year["matchdata"] as $key => $data){
-      echo('
-       <tr>
-         <td><input type="text" name="matchdata['.$key.'][key]" value="'.$key.'" class="f_key"></td>
-         <td><input type="text" name="matchdata['.$key.'][display_name]" value="'.$data["display_name"].'" class="f_name" ></td>
-         <td><select name="matchdata['.$key.'][type]" class="datatselector" data-key="'.$key.'">
-           '.getTypeOptions($data["type"]).'</select></td>
-         <td class="datar" data-key="'.$key.'">'.getSelectOptions($key, $data, "matchdata").'</td>
-       <tr>
-      ');
-    }
-   ?>
- </table>
+          <th>Key</th>
+          <th>Display Name</th>
+          <th>Type</th>
+          <th>Data</th>
+        </tr>
+        <?php
+        foreach($year["matchdata"] as $key => $data){
+          echo('
+           <tr>
+             <td><input type="text" name="matchdata['.$key.'][key]" value="'.$key.'" class="f_key"></td>
+             <td><input type="text" name="matchdata['.$key.'][display_name]" value="'.$data["display_name"].'" class="f_name" ></td>
+             <td><select name="matchdata['.$key.'][type]" class="datatselector">
+               '.getTypeOptions($data["type"]).'</select></td>
+             <td class="datar" >'.getSelectOptions($key, $data, "matchdata").'</td>
+           </tr>
+          ');
+        }
+       ?>
+       <tr><td colspan="4"><button id="addmatchrow">Add row</button></tr>
+     </table>
+   </fieldset>
   <input type="submit">
 </form>
 
