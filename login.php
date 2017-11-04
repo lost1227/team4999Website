@@ -17,9 +17,11 @@
 			}
 			$user = clean($_POST["user"]);
 			$pass = clean($_POST["pass"]);
-			$_SESSION["user"] = $user;
-			$_SESSION["pass"] = $pass;
+			$year = clean($_POST["year"]);
 			if (checkUserPassword($user, $pass)) {
+				$_SESSION["user"] = $user;
+				$_SESSION["pass"] = $pass;
+				$_SESSION["year"] = $year;
 				$_SESSION["loggedIn"] = True;
 			} else {
 				$passFailed = True;
@@ -53,17 +55,30 @@
 		<meta name="theme-color" content="#ffffff">
 	</head>
 	<body>
-		<form id="loginform" action="<?php echo(htmlspecialchars($_SERVER["PHP_SELF"]));?>" method="post">
+		<form id="loginform" action="<?php echo(clean($_SERVER["PHP_SELF"]));?>" method="post">
 			<p id="userlabel">Username:</p><br>
 			<input id="usernamefield" type="text" name="user" <?php if($_SERVER["REQUEST_METHOD"] == "POST"){echo('value="'.$user.'"');}?>><br>
 			<p id="passlabel">Password:</p><br>
 			<input id="passwordfield" type="password" name="pass"><br>
 			<?php
+			if(file_exists("schema.json")) {
+				$json = json_decode(file_get_contents("schema.json"), True);
+				echo('<select id="yearselectfield" name="year">');
+				foreach($json as $year) {
+					if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["year"]) && $_POST["year"] == $year["year"]){
+						echo('<option value='.$year["year"].' selected="selected">'.$year["year"].'</option>');
+					} else {
+						echo('<option value='.$year["year"].'>'.$year["year"].'</option>');
+					}
+	      }
+				echo('</select>');
+			}
+
 			if ($passFailed) {
 				echo('<p style="font-size: 25px; color: red;">Access Denied: Check Username and Password</p>');
 			}
 			if(isset($redirect)){
-				echo('<input type="hidden" name="redirect" value="'.$redirect.'">');
+				echo('<input type="hidden" name="redirect" value="'.clean($redirect).'">');
 			}
 			?>
 			<input type="submit" hidden value="Login"><!-- Push enter to login -->

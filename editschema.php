@@ -55,14 +55,6 @@ function getSelectOptions($key,$data,$ctx) {
   return $out;
 }
 
-function getYearData($haystackJson, $needleYear) {
-  foreach($haystackJson as $index=>$yeard) {
-    if($yeard["year"] == $needleYear) {
-      return array($index,$yeard);
-    }
-  }
-}
-
 if(!file_exists("schema.json")) {
   $json = array();
 } else {
