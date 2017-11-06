@@ -62,9 +62,32 @@
 	$robotids = getIdsForYear($RobotDataTable, $year["year"], $robotids);
 	$eventids = getIdsForYear($EventDataTable, $year["year"], $eventids);
 
-	foreach($robotids as $robotid) {
-		$data = retrieveKeys($RobotDataTable, $robotid, $year["robotdata"]);
-		var_dump($data);
+	echo('<p>Robots:</p>');
+	if(count($robotids) > 0) {
+		foreach($robotids as $index=>$robotid) {
+			$data = retrieveKeys($RobotDataTable, $robotid, $year["robotdata"]);
+			echo('<div class="robotdiv"><p>Robot #'. ($index + 1 ) .':</p>');
+			foreach($data as $key=>$value) {
+				echo('<p><span class="robotkey">'.$value["display_name"].':</span> '.$value["data_value"].'</p>');
+			}
+			echo('</div>');
+		}
+	} else {
+		echo("<p>No data!</p>");
+	}
+
+	echo('<p>Events:</p>');
+	if(count($eventids) > 0 ) {
+		foreach($eventids as $index=>$eventid) {
+			$data = retrieveKeys($EventDataTable, $eventid, $year["eventdata"]);
+			echo('<div class="event">Event #'. ($index + 1) .':</p>');
+			foreach($data as $key=>$value) {
+				echo('<p><span class="eventkey">'.$value["display_name"].':</span> '.$value["data_value"].'</p>');
+			}
+			echo('</div>');
+		}
+	} else {
+		echo("<p>No data!</p>");
 	}
 
 

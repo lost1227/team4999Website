@@ -71,15 +71,62 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
   if(isset($_POST["matchdata"])){
     $data["matchdata"] = $_POST["matchdata"];
   }
+  /*
+    Example form data:
+
+    robotdata[key1][key]:key1
+    robotdata[key1][display_name]:Key 1
+    robotdata[key1][type]:string
+    robotdata[key2][key]:key2
+    robotdata[key2][display_name]:Key 2
+    robotdata[key2][type]:select
+    robotdata[key2][values][]:Option 1
+    robotdata[key2][values][]:Option 2
+    robotdata[key2][values][]:Option 3
+    matchdata[Key3][key]:Key3
+    matchdata[Key3][display_name]:UniqueKey 2
+    matchdata[Key3][type]:select
+    matchdata[Key3][values][]:Option 1
+    matchdata[Key3][values][]:Option 2
+    matchdata[Key3][values][]:Option 3
+    matchdata[Key3][values][]:Option 4
+    matchdata[key4][key]:key4
+    matchdata[key4][display_name]:Unique Key 3
+    matchdata[key4][type]:boolean
+    matchdata[key5][key]:key5
+    matchdata[key5][display_name]:Unique Key 3
+    matchdata[key5][type]:textarea
+
+  */
+  $olddataindex = getYearData($json,$year)[0];
+  $olddata = $json[$olddataindex];
+
   foreach($data as $dkey=>$dval) {
+    $rn = array();
     foreach($dval as $key=>$value) {
-      $key = $value["key"];
-      unset($value["key"]);
-      $updated[$dkey][$key] = $value;
+      $nkey = $value["key"]; // store the new key
+      if($key != $nkey) {
+        if(isset($olddata[$dkey][$key])) {
+          $rn[] = $key;
+          echo($dkey.'['.$key .'] has been renamed to '. $nkey);
+          // UPDATE (robotdata or matchdata) SET key = $nkey WHERE key = $key
+          // loop through the robotdata or matchdata table and update the key to the new key
+        } else {
+          echo($dkey.'['.$nkey .'] has been added');
+          // Nothing needs to be updated
+        }
+      }
+      unset($value["key"]); // remove the key field from the array
+      $updated[$dkey][$nkey] = $value; // store the array of data under the key saved above
+    }
+    foreach($olddata[$dkey] as $jdkey=>$jdval) { // loop through the old data
+      if(!isset($updated[$dkey][$jdkey]) && !in_array($jdkey, $rn)) {
+        echo($jdkey . ' has been deleted');
+      } // if the old data contains a key the new data does not, it has been deleted
     }
   }
 
-  $json[getYearData($json,$year)[0]] = $updated;
+  $json[$olddataindex] = $updated;
 
   file_put_contents("schema.json", json_encode($json, JSON_PRETTY_PRINT) );
 }
