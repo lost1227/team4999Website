@@ -61,7 +61,7 @@ if(!file_exists("schema.json")) {
   $json = json_decode(file_get_contents("schema.json"), True);
 }
 
-if($_SERVER["REQUEST_METHOD"] == "POST") {
+if($_SERVER["REQUEST_METHOD"] == "POST" && checkIfValidUser()) {
   $updated = array("year"=>$_POST["year"],"robotdata"=>array(), "matchdata"=>array());
   $year = $_POST["year"];
   $data = array();
@@ -108,11 +108,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
       if($key != $nkey) {
         if(isset($olddata[$dkey][$key])) {
           $rn[] = $key;
-          echo($dkey.'['.$key .'] has been renamed to '. $nkey);
+          // echo($dkey.'['.$key .'] has been renamed to '. $nkey);
+
           // UPDATE (robotdata or matchdata) SET key = $nkey WHERE key = $key
           // loop through the robotdata or matchdata table and update the key to the new key
+          if($dkey == "robotdata") {
+            renameKeyInTable($RobotDataTable, $key, $nkey, $year);
+          } elseif ($dkey = "matchdata") {
+            renameKeyInTable($EventDataTable, $key, $nkey, $year);
+          }
+
         } else {
-          echo($dkey.'['.$nkey .'] has been added');
+          // echo($dkey.'['.$nkey .'] has been added');
           // Nothing needs to be updated
         }
       }
@@ -121,7 +128,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     foreach($olddata[$dkey] as $jdkey=>$jdval) { // loop through the old data
       if(!isset($updated[$dkey][$jdkey]) && !in_array($jdkey, $rn)) {
-        echo($jdkey . ' has been deleted');
+        // echo($jdkey . ' has been deleted');
+        if($dkey == "robotdata") {
+          deleteKeyInTable($RobotDataTable, $jdkey, $year);
+        } elseif ($dkey = "matchdata") {
+          deleteKeyInTable($EventDataTable, $jdkey, $year);
+        }
       } // if the old data contains a key the new data does not, it has been deleted
     }
   }
