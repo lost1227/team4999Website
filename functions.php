@@ -210,4 +210,74 @@ function getIdsForYear($table, $year, $ids) {
 	$stmt->close();
 	return $out;
 }
+function renameKeyInTable($table, $oldkey, $newkey, $year) {
+	global $DB, $RobotDataTable, $EventDataTable;
+	if($table == $RobotDataTable) {
+		$idres = formatAndQuery('SELECT robotid FROM %s WHERE data_key = "year" AND data_value = %d;',$RobotDataTable, $year);
+	} elseif ($table == $EventDataTable) {
+		$idres = formatAndQuery('SELECT eventid FROM %s WHERE data_key = "year" AND data_value = %d;',$EventDataTable, $year);
+	} else {
+		return false;
+	}
+	$ids = array();
+	if($idres->num_rows > 0) {
+		while($d = $idres->fetch_assoc()) {
+			if($table == $RobotDataTable) {
+				$ids[] = $d["robotid"];
+			} elseif ($table == $EventDataTable) {
+				$ids[] = $d["eventid"];
+			}
+		}
+	}
+
+	if($table == $RobotDataTable) {
+		$stmt = $DB->prepare("UPDATE ".dbclean($RobotDataTable)." SET data_key = \"".dbclean($newkey)."\" WHERE data_key = \"".dbclean($oldkey)."\" AND robotid = ?;");
+	} elseif ($table == $EventDataTable) {
+		$stmt = $DB->prepare("UPDATE ".dbclean($EventDataTable)." SET data_key = \"".dbclean($newkey)."\" WHERE data_key = \"".dbclean($oldkey)."\" AND eventid = ?;");
+	} else {
+		return false;
+	}
+	$id = "";
+	$stmt->bind_param("s",$id);
+	foreach($ids as $id) {
+		$stmt->execute();
+	}
+	$stmt->close();
+	return true;
+}
+function deleteKeyInTable($table, $key, $year) {
+	global $DB, $RobotDataTable, $EventDataTable;
+	if($table == $RobotDataTable) {
+		$idres = formatAndQuery('SELECT robotid FROM %s WHERE data_key = "year" AND data_value = %d;',$RobotDataTable, $year);
+	} elseif ($table == $EventDataTable) {
+		$idres = formatAndQuery('SELECT eventid FROM %s WHERE data_key = "year" AND data_value = %d;',$EventDataTable, $year);
+	} else {
+		return false;
+	}
+	$ids = array();
+	if($idres->num_rows > 0) {
+		while($d = $idres->fetch_assoc()) {
+			if($table == $RobotDataTable) {
+				$ids[] = $d["robotid"];
+			} elseif ($table == $EventDataTable) {
+				$ids[] = $d["eventid"];
+			}
+		}
+	}
+
+	if($table == $RobotDataTable) {
+		$stmt = $DB->prepare("DELETE FROM ".dbclean($RobotDataTable)." WHERE data_key = \"".dbclean($key)."\" AND robotid = ?;");
+	} elseif ($table == $EventDataTable) {
+		$stmt = $DB->prepare("DELETE FROM ".dbclean($EventDataTable)." WHERE data_key = \"".dbclean($key)."\" AND robotid = ?;");
+	} else {
+		return false;
+	}
+	$id = "";
+	$stmt->bind_param("s",$id);
+	foreach($ids as $id) {
+		$stmt->execute();
+	}
+	$stmt->close();
+	return true;
+}
 ?>
