@@ -66,7 +66,11 @@
 	if(count($robotids) > 0) {
 		foreach($robotids as $index=>$robotid) {
 			$data = retrieveKeys($RobotDataTable, $robotid, $year["robotdata"]);
-			echo('<div class="robotdiv"><p>Robot #'. ($index + 1 ) .':</p>');
+			if(isset($data["name"])) {
+				echo('<div class="robotdiv"><p class="robottitle">'.$data["name"].':</p>');
+			} else {
+				echo('<div class="robotdiv"><p class="robottitle">Robot #'. ($index + 1 ) .':</p>');
+			}
 			foreach($data as $key=>$value) {
 				echo('<p><span class="robotkey">'.$value["display_name"].':</span> '.$value["data_value"].'</p>');
 			}
@@ -80,7 +84,11 @@
 	if(count($eventids) > 0 ) {
 		foreach($eventids as $index=>$eventid) {
 			$data = retrieveKeys($EventDataTable, $eventid, $year["eventdata"]);
-			echo('<div class="event">Event #'. ($index + 1) .':</p>');
+			if(isset($data["name"])) {
+				echo('<div class="eventdiv"><p class="eventtitle">'.$data["name"].':</p>');
+			} else {
+				echo('<div class="eventdiv"><p class="eventtitle">Event #'. ($index + 1 ) .':</p>');
+			}
 			foreach($data as $key=>$value) {
 				echo('<p><span class="eventkey">'.$value["display_name"].':</span> '.$value["data_value"].'</p>');
 			}
@@ -92,6 +100,7 @@
 
 
 	?>
+	<a id="edit" href="edit.php?team=<?php echo($team); ?>">Edit</a>
 	<hr><div id="TBAheading"><span>The Blue Alliance info</span></div>
 	<div id="TBA">
 	</div>

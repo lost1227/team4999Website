@@ -71,3 +71,14 @@ h1{
 	cursor: pointer;
 	color: #06ceff;
 }
+
+div.robotdiv, div.eventdiv {
+	padding-left: 15px;
+}
+div.robotdiv > p, div.eventdiv > p{
+	padding-left: 15px;
+}
+div.robotdiv > p.robottitle, div.eventdiv > p.eventtitle {
+	padding-left: 0px;
+	text-decoration: underline;
+}
