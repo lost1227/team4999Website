@@ -9,10 +9,6 @@ $(".deletePix").on("change",function() {
 	}
 });
 
-window.onunload = function() {
-	history.replaceState({},"Scouting Website","/scouting/");
-};
-
 var disableSubmit = {
 	addValue : function(name,value) {
 		this[name] = value;

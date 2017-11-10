@@ -83,7 +83,7 @@
 	echo('<p>Events:</p>');
 	if(count($eventids) > 0 ) {
 		foreach($eventids as $index=>$eventid) {
-			$data = retrieveKeys($EventDataTable, $eventid, $year["eventdata"]);
+			$data = retrieveKeys($EventDataTable, $eventid, $year["matchdata"]);
 			if(isset($data["name"])) {
 				echo('<div class="eventdiv"><p class="eventtitle">'.$data["name"].':</p>');
 			} else {
