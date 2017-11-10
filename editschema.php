@@ -104,7 +104,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && checkIfValidUser()) {
   foreach($data as $dkey=>$dval) {
     $rn = array();
     foreach($dval as $key=>$value) {
-      $nkey = $value["key"]; // store the new key
+      $nkey = clean($value["key"]); // store the new key
       if($key != $nkey) {
         if(isset($olddata[$dkey][$key])) {
           $rn[] = $key;
@@ -124,6 +124,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && checkIfValidUser()) {
         }
       }
       unset($value["key"]); // remove the key field from the array
+      // (hopefully) safeguard against xss
+      $value["display_name"] = clean($value["display_name"]);
+      if(isset($value["values"])) {
+        foreach($value["values"] as $i=>$d) {
+          $value["values"][$i] = clean($d);
+        }
+      }
+
       $updated[$dkey][$nkey] = $value; // store the array of data under the key saved above
     }
     foreach($olddata[$dkey] as $jdkey=>$jdval) { // loop through the old data
