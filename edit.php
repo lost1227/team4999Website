@@ -18,6 +18,7 @@
 </head>
 <body>
 <div id="main">
+<form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post">
 <?php
 require 'functions.php';
 function image_fix_orientation(&$image, $filename) {
@@ -39,7 +40,14 @@ function image_fix_orientation(&$image, $filename) {
         }
     }
 }
-$image_root = "photos/";
+
+function getAccordion($title,$content) {
+	return '<div class="accordion">
+		<button class="accordionbutton">'.$title.'</button>
+		<div class="accordioncontent">'.$content.'</div>
+		</div>';
+}
+
 $acceptableFileTypes = array("jpg","png","jpeg","gif","bmp",);
 #check if logged in and redirect if not
 if (isset($_SESSION["loggedIn"])){
@@ -52,231 +60,127 @@ if (isset($_SESSION["loggedIn"])){
 	}
 	exit();
 }
-#get columns into an associative array
-$columnData = $DB->query('DESCRIBE '.getCurrentTable().';');
-$columns = array();
-while($row = $columnData->fetch_assoc()) {
-	$columns[] = $row;
-}
-#handle submissions
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	if (isset($_SERVER["CONTENT_LENGTH"])) {
-		if($_SERVER["CONTENT_LENGTH"]>((int)ini_get('post_max_size')*1024*1024)) {
-			die("FILE EXCEEDS SIZE LIMIT");
-		}
-	}
-	#handle file submission
-	writeToLog("Recieved " . count($_FILES["uploadImages"]["tmp_name"]) . " images","images");
-	for( $i = 0; $i < count($_FILES["uploadImages"]["tmp_name"]); $i++) {
-		if(file_exists($_FILES["uploadImages"]["tmp_name"][$i])) {
-			if ($_FILES["uploadImages"]["error"][$i] == UPLOAD_ERR_OK) {
-				if (is_uploaded_file($_FILES["uploadImages"]["tmp_name"][$i])) {
-					if (!file_exists($image_root)) {
-						mkdir($image_root,0777,true);
-					}
-					$image_dir = $image_root . getCurrentTable() . '/' . $_POST["Team"] ."/";
-					if (!file_exists($image_dir)) {
-						mkdir($image_dir,0777,true);
-					}
-					$files = scandir($image_dir);
-					$biggestFile = 0;
-					foreach( $files as $file ) {
-						if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
-							$base = basename($file, "." . pathinfo(basename($file),PATHINFO_EXTENSION));
-							if ( $base > $biggestFile) {
-								$biggestFile = $base;
-							}
-						}
-					}
-					unset($file);
-					$imgeFileExtension = pathinfo(basename($_FILES["uploadImages"]["name"][$i]),PATHINFO_EXTENSION);
-					$target_file_path = $image_dir . ($biggestFile + 1) .".png";
-					$continueUpload = TRUE;
-					#check if is image
-					$imgSize = getimagesize($_FILES["uploadImages"]["tmp_name"][$i]);
-					if($imgSize == FALSE) {
-						writeToLog("INVALID FILE: getimagesize","images");
-						$continueUpload = FALSE;
-					}
-					#check if acceptable image (trusts extension)
-					if(!in_array($imgeFileExtension,$acceptableFileTypes)) {
-						writeToLog("INVALID FILE: extension","images");
-						$continueUpload = FALSE;
-					}
-					if($continueUpload) {
-						#instead of moving the image to the new directory, load the image from the temp dir and rotate it as necessary. then save it in the correct place as a png
-						$file = $_FILES["uploadImages"]["tmp_name"][$i];
-						switch(strtolower($imgSize['mime'])) {
-							case 'image/bmp':
-								$img = imagecreatefrombmp($file);
-								break;
-							case 'image/png':
-								$img = imagecreatefrompng($file);
-								break;
-							case 'image/jpeg':
-								$img = imagecreatefromjpeg($file);
-								break;
-							case 'image/gif':
-								$img = imagecreatefromgif($file);
-								break;
-							default:
-								writeToLog("INVALID FILE: rotate","images");
-								break;
-						}
-						if(isset($img)) {
-							image_fix_orientation($img,$file);
-							if(!imagepng($img,$target_file_path)) {
-								writeToLog("FAILED TO SAVE UPLOADED FILE","images");
-							}
-						}
-
-
-						/*if (!move_uploaded_file($_FILES["uploadImages"]["tmp_name"][$i], $target_file_path)) {
-							writeToLog("ERROR MOVING UPLOADED FILE","images");
-						}}*/
-					}
-				}
-			} else {
-				exit($_FILES["uploadImages"]["error"][$i]);
-			}
-		}
-	}
-	#Update actual data
-	$data = formatAndQuery('SELECT Team FROM '.getCurrentTable().' WHERE Team = %d;',$_POST["Team"]); #check if team exists
-	if($data->num_rows == 0){ # add team if it doesn't exist yet
-		formatAndQuery('INSERT INTO '.getCurrentTable().' (Team) VALUES (%d);',$_POST["Team"]);
-	}
-	$update = 'UPDATE '.getCurrentTable().' SET %s = %sv WHERE Team = %d;';
-	foreach($columns as $column) {
-		if($column["Field"] != "Team" and $column["Field"] != "Stored_Images"){
-			formatAndQuery($update,$column["Field"],$_POST[$column["Field"]],$_POST["Team"]);
-		}
-	}
-	#handle deletions
-	if(isset($_POST["images"])) {
-		$images = $_POST["images"];
-	}
-	if(!empty($images)) {
-		foreach($images as $image ) {
-			$target_file_path = $image_root . getCurrentTable() . '/' . $_POST["Team"] . "/" . $image;
-			writeToLog("Will unlink: ". $target_file_path,"images");
-			unlink($target_file_path);
-		}
-	} else {
-		writeToLog("Images was empty!","images");
-	}
-	header( 'Location: '.getRootDir().'info.php?team='.$_POST["Team"]);
-}
-#check if creating a new entry, or editing an existing entry
-#creates an associative array of the existing entry
-if(isset($_GET["team"])){
-	$data = formatAndQuery('SELECT * FROM '.getCurrentTable().' WHERE Team = %d;',$_GET["team"]);
-	if($data->num_rows > 0){
-		$row = $data->fetch_assoc();
-		echo('<h1>Team: '.$_GET["team"].'</h1>');
-	}
-}
-#create the form
-echo('<form id="edit" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post" autocomplete="off" enctype="multipart/form-data">');
-foreach($columns as $column) {
-	#remove underscores from column names
-	$PrettyColumn = str_replace('_',' ',$column["Field"]);
-	switch($column["Field"]) {
-		case("Team"):
-			if(isset($_GET["team"])) {
-				echo('<input type="hidden" name="Team" value="'.$row[$column["Field"]].'">');
-			} else {
-				echo('<p>'.$PrettyColumn.':</p>');
-				echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9]*" required>
-					<a href="/" id="teamExists">TEAM EXISTS</a>');
-			}
-			break;
-		case("Width"):
-		case("Depth"):
-		case("Height"):
-			echo('<p>'.$PrettyColumn.':</p>');
-			echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9.]*"><span> inches</span>');
-			break;
-		case("Weight"):
-			echo('<p>'.$PrettyColumn.':</p>');
-			echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'" pattern="[0-9.]*"><span> lbs</span>');
-			break;
-		case("Drive_System"): #Create select menu with options for each type of drive system. The array $options can have new drive systems added to it to create more options
-			echo('<p>'.$PrettyColumn.':</p>');
-			echo('<select name="'.$column["Field"].'">');
-			$options=array("West Coast","Mechanum","Tank","Swerve");
-			foreach($options as $option) {
-				if ($option == $row[$column["Field"]]) { #if the value is already set, set the option to that value
-					echo('<option value="'.$option.'" selected>'.$option.'</option>');
-				} else {
-					echo('<option value="'.$option.'">'.$option.'</option>');
-				}
-			}
-			echo('</select>');
-			break;
-		case("Can_pickup_gear_from_floor"):
-		case("Can_place_gear_on_lift"):
-		case("Can_catch_fuel_from_hoppers"):
-		case("Can_pickup_fuel_from_floor"):
-		case("Can_shoot_in_low_goal"):
-		case("Can_shoot_in_high_goal"):
-		case("Can_climb_rope"):
-		case("Brought_own_rope"):
-			echo('<p>'.$PrettyColumn.':</p>');
-			echo('<select name="'.$column["Field"].'">');
-			if ($row[$column["Field"]] == 0) {
-				echo('<option value="0" selected>No</option>
-				<option value="1">Yes</option>');
-			} else {
-				echo('<option value="0">No</option>
-				<option value="1" selected>Yes</option>');
-			}
-			echo('</select>');
-			break;
-		case("Autonomous_capabilities"):
-		case("Other_info"):
-			echo('<p>'.$PrettyColumn.':</p>');
-			echo('<textarea rows="4" cols="50" name="'.$column["Field"].'">'.$row[$column["Field"]].'</textarea>');
-			break;
-		case("Contributors"):
-			$name = getUserName();
-			if(strpos($row[$column["Field"]],$name) === FALSE) {
-				if(empty($row[$column["Field"]])) {
-					echo('<input type="hidden" name="'.$column["Field"].'" value="'.$name.'">');
-				} else {
-					echo('<input type="hidden" name="'.$column["Field"].'" value="'.$row[$column["Field"]].', '. $name.'">');
-				}
-			} else {
-				echo('<input type="hidden" name="'.$column["Field"].'" value="'. $row[$column["Field"]] .'">');
-			}
-			break;
-		default:
-			echo('<p>'.$PrettyColumn.':</p>');
-			echo('<input type="text" name="'.$column["Field"].'" value="'.$row[$column["Field"]].'">');
-	}
-}
-echo('<br><input id="uploadImage" type="file" name="uploadImages[]" accept="image/jpeg,image/png,image/gif,image/bmp" multiple><span id="invalidFile">MAX UPLOAD IS 250MB</span><br>');
-if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
-	$team = $_POST["Team"];
-} elseif (isset($_GET["team"])) {
-	$team = $_GET["team"];
+$team = clean($_GET["team"]);
+$results = formatAndQuery("SELECT robotids,eventids FROM %s WHERE number = %d;",$TeamDataTable,$team);
+if($results->num_rows <= 0) {
+	echo("<p>No results!</p>");
+	$robotids = array();
+	$eventids = array();
 } else {
-	$team = "";
+	$result = $results->fetch_assoc();
+	$robotids = explode($explodeseparator,$result["robotids"]);
+	$eventids = explode($explodeseparator,$result["eventids"]);
 }
-$image_dir = $image_root . getCurrentTable() . '/' . $team ."/";
-#writeToLog("Imagedir: " . $image_dir, "images");
-if(file_exists($image_dir)){
-	$files = scandir($image_dir);
-	foreach( $files as $file ) {
-		#writeToLog("File in image dir: " . $file, "images");
-		if (in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
-			echo('<label><input class="deletePix" type="checkbox" name="images[]" value="'.$file.'"><img id="'.$file.'" src="'.$image_dir.$file.'" class="gallery"></label>');
-		}
+
+if(file_exists("schema.json")) {
+	$json = json_decode(file_get_contents("schema.json"), True);
+	$year = getYearData($json, getDefaultYear())[1];
+	if($year === false) {
+		echo("<p>Schema for this year does not exist</p>");
+		exit();
 	}
+} else {
+	echo("<p>schema.json does not exist!</p>");
+	exit();
 }
-echo('<br><input id="submit" type="submit" value="Submit"></form>');
+
+$robotids = getIdsForYear($RobotDataTable, $year["year"], $robotids);
+$eventids = getIdsForYear($EventDataTable, $year["year"], $eventids);
+echo("<p>Robots:</p>");
+if(count($robotids) > 0) {
+	foreach($robotids as $index=>$robotid) {
+		$data = retrieveKeys($RobotDataTable, $robotid, $year["robotdata"]);
+		if(isset($data["name"])) {
+			$title = $data["name"];
+		} else {
+			$title = "Robot #" . ($index + 1);
+		}
+		$content = "";
+		foreach($data as $key=>$value) {
+			switch($value["type"]) {
+				case "string":
+					$content .= '<p>'.$value["display_name"].'</p><input type="text" name="robot['.$robotid.']['.$key.']" value="'.$value["data_value"].'">';
+					break;
+				case "select":
+					$content .= '<p>'.$value["display_name"].'</p><select name="robot['.$robotid.']['.$key.']">';
+					foreach($value["values"] as $option) {
+						if($option == $value["data_value"]) {
+							$content .= '<option value="'.$option.'" selected="selected">'.$option.'</option>';
+						} else {
+							$content .= '<option value="'.$option.'">'.$option.'</option>';
+						}
+					}
+					$content .= '</select>';
+					break;
+				case "boolean": // store booleans as strings in the DB, where "true" is true
+					if($value["data_value"] == "true") {
+						$content .= '<label>'.$value["display_name"].'<input type="checkbox" name="robot['.$robotid.']['.$key.']" value="true" checked>';
+					} else {
+						$content .= '<label>'.$value["display_name"].'<input type="checkbox" name="robot['.$robotid.']['.$key.']" value="false">';
+					}
+					break;
+				case "number":
+					$content .= '<p>'.$value["display_name"].'</p><input type="number" name="robot['.$robotid.']['.$key.']" value="'.$value["data_value"].'">';
+					break;
+				case "textarea":
+					$content .= '<p>'.$value["display_name"].'</p><input type="nummber" name="robot['.$robotid.']['.$key.']">'.$value["data_value"].'</textarea>';
+					break;
+			}
+		}
+		echo(getAccordion($title, $content));
+	}
+} else {
+	echo("<p>No data!</p>");
+}
+echo("<p>Events:</p>");
+if(count($eventids) > 0) {
+	foreach($eventids as $index=>$eventid) {
+		$data = retrieveKeys($EventDataTable, $eventid, $year["matchdata"]);
+		if(isset($data["name"])) {
+			$title = $data["name"];
+		} else {
+			$title = "Event #" . ($index + 1);
+		}
+		$content = "";
+		foreach($data as $key=>$value) {
+			switch($value["type"]) {
+				case "string":
+					$content .= '<p>'.$value["display_name"].'</p><input type="text" name="event['.$eventid.']['.$key.']" value="'.$value["data_value"].'">';
+					break;
+				case "select":
+					$content .= '<p>'.$value["display_name"].'</p><select name="event['.$eventid.']['.$key.']">';
+					foreach($value["values"] as $option) {
+						if($option == $value["data_value"]) {
+							$content .= '<option value="'.$option.'" selected="selected">'.$option.'</option>';
+						} else {
+							$content .= '<option value="'.$option.'">'.$option.'</option>';
+						}
+					}
+					$content .= '</select>';
+					break;
+				case "boolean": // store booleans as strings in the DB, where "true" is true
+					if($value["data_value"] == "true") {
+						$content .= '<label>'.$value["display_name"].'<input type="checkbox" name="event['.$eventid.']['.$key.']" value="true" checked>';
+					} else {
+						$content .= '<label>'.$value["display_name"].'<input type="checkbox" name="event['.$eventid.']['.$key.']" value="false">';
+					}
+					break;
+				case "number":
+					$content .= '<p>'.$value["display_name"].'</p><input type="number" name="event['.$eventid.']['.$key.']" value="'.$value["data_value"].'">';
+					break;
+				case "textarea":
+					$content .= '<p>'.$value["display_name"].'</p><textarea name="event['.$eventid.']['.$key.']">'.$value["data_value"].'</textarea>';
+					break;
+			}
+		}
+		echo(getAccordion($title, $content));
+	}
+} else {
+	echo("<p>No data!</p>");
+}
+
 ?>
-<p>All values are in lbs and inches</p>
+</form>
 <script src="scripts/jquery-3.1.1.min.js"></script>
 <script src="scripts/deleteImages.js"></script>
 <script src="scripts/checkteam.js"></script>
