@@ -15,6 +15,8 @@
 	<meta name="application-name" content="Scouting">
 	<meta name="msapplication-config" content="/favicons/browserconfig.xml">
 	<meta name="theme-color" content="#ffffff">
+	<script src="scripts/jquery-3.1.1.min.js"></script>
+	<script src="scripts/edit.js"></script>
 </head>
 <body>
 <div id="main">
@@ -97,12 +99,13 @@ if(count($robotids) > 0) {
 		}
 		$content = "";
 		foreach($data as $key=>$value) {
+			$content .= '<div class="keypair">';
 			switch($value["type"]) {
 				case "string":
-					$content .= '<p>'.$value["display_name"].'</p><input type="text" name="robot['.$robotid.']['.$key.']" value="'.$value["data_value"].'">';
+					$content .= '<p class="key">'.$value["display_name"].': </p><input type="text" name="robot['.$robotid.']['.$key.']" value="'.$value["data_value"].'">';
 					break;
 				case "select":
-					$content .= '<p>'.$value["display_name"].'</p><select name="robot['.$robotid.']['.$key.']">';
+					$content .= '<p class="key">'.$value["display_name"].': </p><select name="robot['.$robotid.']['.$key.']">';
 					foreach($value["values"] as $option) {
 						if($option == $value["data_value"]) {
 							$content .= '<option value="'.$option.'" selected="selected">'.$option.'</option>';
@@ -114,18 +117,19 @@ if(count($robotids) > 0) {
 					break;
 				case "boolean": // store booleans as strings in the DB, where "true" is true
 					if($value["data_value"] == "true") {
-						$content .= '<label>'.$value["display_name"].'<input type="checkbox" name="robot['.$robotid.']['.$key.']" value="true" checked>';
+						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="robot['.$robotid.']['.$key.']" value="true" checked></label>';
 					} else {
-						$content .= '<label>'.$value["display_name"].'<input type="checkbox" name="robot['.$robotid.']['.$key.']" value="false">';
+						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="robot['.$robotid.']['.$key.']" value="false"></label>';
 					}
 					break;
 				case "number":
-					$content .= '<p>'.$value["display_name"].'</p><input type="number" name="robot['.$robotid.']['.$key.']" value="'.$value["data_value"].'">';
+					$content .= '<p class="key">'.$value["display_name"].': </p><input type="number" name="robot['.$robotid.']['.$key.']" value="'.$value["data_value"].'">';
 					break;
 				case "textarea":
-					$content .= '<p>'.$value["display_name"].'</p><input type="nummber" name="robot['.$robotid.']['.$key.']">'.$value["data_value"].'</textarea>';
+					$content .= '<p class="key">'.$value["display_name"].': </p><input type="nummber" name="robot['.$robotid.']['.$key.']">'.$value["data_value"].'</textarea>';
 					break;
 			}
+			$content .= '</div>';
 		}
 		echo(getAccordion($title, $content));
 	}
@@ -143,12 +147,13 @@ if(count($eventids) > 0) {
 		}
 		$content = "";
 		foreach($data as $key=>$value) {
+			$content .= '<div class="keypair">';
 			switch($value["type"]) {
 				case "string":
-					$content .= '<p>'.$value["display_name"].'</p><input type="text" name="event['.$eventid.']['.$key.']" value="'.$value["data_value"].'">';
+					$content .= '<p class="key">'.$value["display_name"].': </p><input type="text" name="event['.$eventid.']['.$key.']" value="'.$value["data_value"].'">';
 					break;
 				case "select":
-					$content .= '<p>'.$value["display_name"].'</p><select name="event['.$eventid.']['.$key.']">';
+					$content .= '<p class="key">'.$value["display_name"].': </p><select name="event['.$eventid.']['.$key.']">';
 					foreach($value["values"] as $option) {
 						if($option == $value["data_value"]) {
 							$content .= '<option value="'.$option.'" selected="selected">'.$option.'</option>';
@@ -160,18 +165,19 @@ if(count($eventids) > 0) {
 					break;
 				case "boolean": // store booleans as strings in the DB, where "true" is true
 					if($value["data_value"] == "true") {
-						$content .= '<label>'.$value["display_name"].'<input type="checkbox" name="event['.$eventid.']['.$key.']" value="true" checked>';
+						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="event['.$eventid.']['.$key.']" value="true" checked></label>';
 					} else {
-						$content .= '<label>'.$value["display_name"].'<input type="checkbox" name="event['.$eventid.']['.$key.']" value="false">';
+						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="event['.$eventid.']['.$key.']" value="false"></label>';
 					}
 					break;
 				case "number":
-					$content .= '<p>'.$value["display_name"].'</p><input type="number" name="event['.$eventid.']['.$key.']" value="'.$value["data_value"].'">';
+					$content .= '<p class="key">'.$value["display_name"].': </p><input type="number" name="event['.$eventid.']['.$key.']" value="'.$value["data_value"].'">';
 					break;
 				case "textarea":
-					$content .= '<p>'.$value["display_name"].'</p><textarea name="event['.$eventid.']['.$key.']">'.$value["data_value"].'</textarea>';
+					$content .= '<p class="key">'.$value["display_name"].': </p><textarea name="event['.$eventid.']['.$key.']">'.$value["data_value"].'</textarea>';
 					break;
 			}
+			$content .= '</div>';
 		}
 		echo(getAccordion($title, $content));
 	}
@@ -181,9 +187,6 @@ if(count($eventids) > 0) {
 
 ?>
 </form>
-<script src="scripts/jquery-3.1.1.min.js"></script>
-<script src="scripts/deleteImages.js"></script>
-<script src="scripts/checkteam.js"></script>
 </div>
 </body>
 </html>
