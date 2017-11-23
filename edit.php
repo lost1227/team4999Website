@@ -62,7 +62,21 @@ if (isset($_SESSION["loggedIn"])){
 	}
 	exit();
 }
-$team = clean($_GET["team"]);
+if($_SERVER["REQUEST_METHOD"] == "GET") {
+	if(!isset($_GET["team"])) {
+		header( 'Location: '.getRootDir().'index.php');
+	} else {
+		$team = clean($_GET["team"]);
+	}
+}
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+	if(!isset($_POST["team"])) {
+		header( 'Location: '.getRootDir().'index.php');
+	} else {
+		$team = clean($_POST["team"]);
+	}
+}
+
 $results = formatAndQuery("SELECT robotids,eventids FROM %s WHERE number = %d;",$TeamDataTable,$team);
 if($results->num_rows <= 0) {
 	echo("<p>No results!</p>");
@@ -126,7 +140,7 @@ if(count($robotids) > 0) {
 					$content .= '<p class="key">'.$value["display_name"].': </p><input type="number" name="robot['.$robotid.']['.$key.']" value="'.$value["data_value"].'">';
 					break;
 				case "textarea":
-					$content .= '<p class="key">'.$value["display_name"].': </p><input type="nummber" name="robot['.$robotid.']['.$key.']">'.$value["data_value"].'</textarea>';
+					$content .= '<p class="key">'.$value["display_name"].': </p><input type="number" name="robot['.$robotid.']['.$key.']">'.$value["data_value"].'</textarea>';
 					break;
 			}
 			$content .= '</div>';
@@ -184,8 +198,9 @@ if(count($eventids) > 0) {
 } else {
 	echo("<p>No data!</p>");
 }
-
+echo('<input type="hidden" name="team" value="'.$team.'">');
 ?>
+<input type="submit" value="Save">
 </form>
 </div>
 </body>
