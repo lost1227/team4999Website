@@ -12,6 +12,7 @@ function writeToLog($string, $log) {
 	}
 	file_put_contents("./logs/".$log.".log", date("d-m-Y_h:i:s")."-- ".$string."\r\n", FILE_APPEND);
 }
+
 function formatAndQuery() { #first argument should be the query. %sv for strings to be escaped, %s for string and $d for int. the rest of the arguments should be the values in order
 	global $DB;
 	$args  = func_get_args();
@@ -34,22 +35,26 @@ function formatAndQuery() { #first argument should be the query. %sv for strings
     }
     return $result;
 }
+
 function getCurrentTable() {
 	global $CurrentTable;
 	return $CurrentTable;
 }
+
 function clean($data) {
 	$data = trim($data);
 	$data = stripslashes($data);
 	$data = htmlspecialchars($data);
 	return $data;
 }
+
 function dbclean($data) {
 	global $DB;
 	$data = $DB->real_escape_string($data);
 	$data = htmlspecialchars($data);
 	return $data;
 }
+
 function checkUserPassword($user, $password) {
 	global $DBUser, $DBPass, $Database, $LoginTableName, $DB;
 	$DBtmp = $DB;
@@ -67,6 +72,7 @@ function checkUserPassword($user, $password) {
 	$DB = $DBtmp;
 	return password_verify($password, $result["passhash"]);
 }
+
 function checkIsAdmin($user, $password) {
 	global $DBUser, $DBPass, $Database, $LoginTableName, $DB;
 	if(!checkUserPassword($user, $password)) {
@@ -91,6 +97,10 @@ function checkIsAdmin($user, $password) {
 	$DB->close();
 	$DB = $DBtmp;
 }
+
+/**
+ * Gets the full name of a user
+*/
 function getUserName() {
 	if(session_status() == PHP_SESSION_NONE) {
 		session_start();
@@ -113,6 +123,7 @@ function getUserName() {
 	}
 	return False;
 }
+
 function createDBObject() {
 	global $roDBUser, $roDBPass, $DBUser, $DBPass, $Database;
 	if(session_status() == PHP_SESSION_NONE) {
@@ -125,10 +136,12 @@ function createDBObject() {
 	}
 	return $DB;
 }
+
 function getRootDir() {
 	global $appdir;
 	return $appdir;
 }
+
 function getYearData($haystackJson, $needleYear) {
   foreach($haystackJson as $index=>$yeard) {
     if($yeard["year"] == $needleYear) {
@@ -137,6 +150,7 @@ function getYearData($haystackJson, $needleYear) {
   }
 	return false;
 }
+
 function getDefaultYear() {
 	if(session_status() == PHP_SESSION_NONE) {
 		session_start();
@@ -156,6 +170,7 @@ function getDefaultYear() {
 	}
 
 }
+
 function retrieveKeys($table, $id, $keys) {
 	global $DB, $RobotDataTable, $EventDataTable;
 	if($table == $RobotDataTable) {
@@ -183,6 +198,83 @@ function retrieveKeys($table, $id, $keys) {
 
 	return $out;
 }
+
+/**
+ * Updates all the entries in the specified table with the specified id.
+ * @param $table Table to update. Either $RobotDataTable or $EventDataTable
+ * @param $id Robot and/or event id to update
+ * @param $keyvalues An associative array containing the keys to be updated and their new values. Example format: ["key_1"=>"value 1", "key_2"=>"value 2"]
+*/
+function updateDBKeys($table, $id, $keyvalues) {
+	global $DB, $RobotDataTable, $EventDataTable;
+	if($table == $RobotDataTable) {
+		$stmt = $DB->prepare("UPDATE ".dbclean($table)." SET data_value = ? WHERE data_key = ? AND robotid = \"".dbclean($id)."\";");
+	} elseif ($table == $EventDataTable) {
+		$stmt = $DB->prepare("UPDATE ".dbclean($table)." SET data_value = ? WHERE data_key = ? AND = \"".dbclean($id)."\";");
+	} else {
+		return false;
+	}
+
+	if($stmt === false) {
+		die("Failed to prepare statement: " . $DB->error);
+	}
+
+	$key = "";
+	$value = "";
+	$stmt->bind_param("ss",$value,$key);
+	foreach($keyvalues as $key=>$value) {
+		$stmt->execute();
+	}
+	$stmt->close();
+}
+
+/**
+ * Inserts new entries in the specified table with the specified id.
+ * @param $table Table to update. Either $RobotDataTable or $EventDataTable
+ * @param $id Robot and/or event id to update
+ * @param $keyvalues An associative array containing the keys to be inserted and their values. Example format: ["key_1"=>"value 1", "key_2"=>"value 2"]
+*/
+function insertDBKeys($table, $id, $keyvalues) {
+	global $DB, $RobotDataTable, $EventDataTable;
+	$stmt = $DB->prepare("INSERT INTO ".dbclean($table)."VALUES ('".dbclean($id)."',?,?)");
+
+	$key = "";
+	$value = "";
+	$statement->bind_param("ss",$key,$value);
+	foreach($keyvalues as $key=>$value) {
+		$stmt->execute();
+	}
+	$stmt->close();
+}
+
+/**
+ * Adds an id to a Team
+ * @param $team The team to add the id to
+ * @param $idtype The type of id to add. Either "robotid" or "eventid"
+ * @param $newId The new id to add
+*/
+function addIdToTeam($team, $idtype, $newId) {
+	global $TeamDataTable;
+	if($idtype == "robotid") {
+		formatAndQuery("UPDATE %s SET robotids = CONCAT(robotids, %sv) WHERE number = %s", $TeamDataTable, $newId, $team);
+	} else {
+		formatAndQuery("UPDATE %s SET eventids = CONCAT(eventids, %sv) WHERE number = %s", $TeamDataTable, $newId, $team);
+	}
+}
+
+function getTeamIds($team) {
+	global $TeamDataTable, $explodeseparator;
+	$results = formatAndQuery("SELECT robotids,eventids FROM %s WHERE number = %d;",$TeamDataTable,$team);
+	if($results->num_rows <= 0) {
+		return false;
+	} else {
+		$result = $results->fetch_assoc();
+		$robotids = explode($explodeseparator,$result["robotids"]);
+		$eventids = explode($explodeseparator,$result["eventids"]);
+		return array("robotids"=>$robotids, "eventids"=>$eventids);
+	}
+}
+
 function getIdsForYear($table, $year, $ids) {
 	global $DB, $RobotDataTable, $EventDataTable;
 	if($table == $RobotDataTable) {
@@ -210,6 +302,7 @@ function getIdsForYear($table, $year, $ids) {
 	$stmt->close();
 	return $out;
 }
+
 function renameKeyInTable($table, $oldkey, $newkey, $year) {
 	global $DB, $RobotDataTable, $EventDataTable;
 	if($table == $RobotDataTable) {
@@ -245,6 +338,7 @@ function renameKeyInTable($table, $oldkey, $newkey, $year) {
 	$stmt->close();
 	return true;
 }
+
 function deleteKeyInTable($table, $key, $year) {
 	global $DB, $RobotDataTable, $EventDataTable;
 	if($table == $RobotDataTable) {

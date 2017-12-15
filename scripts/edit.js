@@ -3,4 +3,16 @@ $(document).ready(function() {
     $(e.target).closest("div.accordion").find("div.accordioncontent").slideToggle();
     return false;
   });
+
+  $("#mainf").submit(function(e) {
+    $(e.target).find("input[type=checkbox]").each(function() {
+      var me = $(this);
+      if(me.prop("checked")) {
+        me.val("true");
+      } else {
+        me.val("false");
+        me.prop("checked", "true");
+      }
+    })
+  });
 });

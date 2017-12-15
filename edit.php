@@ -20,7 +20,7 @@
 </head>
 <body>
 <div id="main">
-<form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post">
+<form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post" id="mainf">
 <?php
 require 'functions.php';
 function image_fix_orientation(&$image, $filename) {
@@ -77,16 +77,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 }
 
-$results = formatAndQuery("SELECT robotids,eventids FROM %s WHERE number = %d;",$TeamDataTable,$team);
-if($results->num_rows <= 0) {
-	echo("<p>No results!</p>");
-	$robotids = array();
-	$eventids = array();
-} else {
-	$result = $results->fetch_assoc();
-	$robotids = explode($explodeseparator,$result["robotids"]);
-	$eventids = explode($explodeseparator,$result["eventids"]);
-}
+	$data = getTeamIds($team);
+	if($data === false) {
+		$robotids = array();
+		$eventids = array();
+	} else {
+		$robotids = $data["robotids"];
+		$eventids = $data["eventids"];
+	}
 
 if(file_exists("schema.json")) {
 	$json = json_decode(file_get_contents("schema.json"), True);
@@ -98,6 +96,29 @@ if(file_exists("schema.json")) {
 } else {
 	echo("<p>schema.json does not exist!</p>");
 	exit();
+}
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+	$robotdata = $_POST["robot"];
+	$robotschema = $year["robotdata"];
+	foreach($robotdata as $robotid=>$robot){
+		$changedKeyValues = array();
+		if(in_array($robotid, $robotids)) {
+			foreach($robot as $robotkey=>$robotdata) {
+				if(isset($robotschema[$robotkey])) {
+					$changedKeyValues[$robotkey] = clean($robotdata);
+				}
+			}
+		} else {
+			// TODO: Account for newly added robots
+		}
+		updateDBKeys($RobotDataTable, $robotid, $changedKeyValues);
+	}
+
+	$eventdata = $_POST["event"];
+
+	// TODO: Account for updates in event data
+
 }
 
 $robotids = getIdsForYear($RobotDataTable, $year["year"], $robotids);
@@ -131,9 +152,9 @@ if(count($robotids) > 0) {
 					break;
 				case "boolean": // store booleans as strings in the DB, where "true" is true
 					if($value["data_value"] == "true") {
-						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="robot['.$robotid.']['.$key.']" value="true" checked></label>';
+						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="robot['.$robotid.']['.$key.']" checked></label>';
 					} else {
-						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="robot['.$robotid.']['.$key.']" value="false"></label>';
+						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="robot['.$robotid.']['.$key.']"></label>';
 					}
 					break;
 				case "number":
