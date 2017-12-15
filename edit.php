@@ -102,22 +102,49 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 	$robotdata = $_POST["robot"];
 	$robotschema = $year["robotdata"];
 	foreach($robotdata as $robotid=>$robot){
-		$changedKeyValues = array();
 		if(in_array($robotid, $robotids)) {
+			$changedKeyValues = array();
 			foreach($robot as $robotkey=>$robotdata) {
 				if(isset($robotschema[$robotkey])) {
 					$changedKeyValues[$robotkey] = clean($robotdata);
 				}
 			}
+			updateDBKeys($RobotDataTable, $robotid, $changedKeyValues);
 		} else {
-			// TODO: Account for newly added robots
+			$id = getNewId("rb_");
+			$newentries = array();
+			foreach($robot as $robotkey=>$robotdata) {
+				if(isset($robotschema[$robotkey])) {
+					$newentries[$robotkey] = clean($robotdata);
+				}
+			}
+			updateDBKeys($RobotDataTable, $id, $newentries);
 		}
-		updateDBKeys($RobotDataTable, $robotid, $changedKeyValues);
 	}
 
 	$eventdata = $_POST["event"];
+	$eventschema = $year["matchdata"];
 
-	// TODO: Account for updates in event data
+	foreach($eventdata as $eventid=>$event){
+		if(in_array($eventid, $eventids)) {
+			$changedKeyValues = array();
+			foreach($event as $eventkey=>$eventdata) {
+				if(isset($eventschema[$eventkey])) {
+					$changedKeyValues[$eventkey] = clean($eventdata);
+				}
+			}
+			updateDBKeys($EventDataTable, $eventid, $changedKeyValues);
+		} else {
+			$id = getNewId("mt_");
+			$newentries = array();
+			foreach($event as $eventkey=>$eventdata) {
+				if(isset($eventschema[$eventkey])) {
+					$newentries[$eventkey] = clean($eventdata);
+				}
+			}
+			updateDBKeys($EventDataTable, $id, $newentries);
+		}
+	}
 
 }
 
@@ -127,13 +154,16 @@ echo("<p>Robots:</p>");
 if(count($robotids) > 0) {
 	foreach($robotids as $index=>$robotid) {
 		$data = retrieveKeys($RobotDataTable, $robotid, $year["robotdata"]);
-		if(isset($data["name"])) {
-			$title = $data["name"];
+		if(isset($data["name"]["data_value"]) && !empty($data["name"]["data_value"])) {
+			$title = $data["name"]["data_value"];
 		} else {
 			$title = "Robot #" . ($index + 1);
 		}
 		$content = "";
 		foreach($data as $key=>$value) {
+			if(!isset($value["data_value"])) {
+				$value["data_value"] = "";
+			}
 			$content .= '<div class="keypair">';
 			switch($value["type"]) {
 				case "string":
@@ -171,17 +201,21 @@ if(count($robotids) > 0) {
 } else {
 	echo("<p>No data!</p>");
 }
-echo("<p>Events:</p>");
+echo("<p>Matches:</p>");
 if(count($eventids) > 0) {
 	foreach($eventids as $index=>$eventid) {
 		$data = retrieveKeys($EventDataTable, $eventid, $year["matchdata"]);
-		if(isset($data["name"])) {
-			$title = $data["name"];
+		// event_name and match_num are special
+		if(isset($data["event_name"]["data_value"]) && isset($data["match_num"]["data_value"]) &&!empty($data["event_name"]["data_value"]) && !empty($data["match_num"]["data_value"])) {
+			$title = $data["event_name"]["data_value"]." Match #".$data["match_num"]["data_value"];
 		} else {
-			$title = "Event #" . ($index + 1);
+			$title = "Match #" . ($index + 1);
 		}
 		$content = "";
 		foreach($data as $key=>$value) {
+			if(!isset($value["data_value"])) {
+				$value["data_value"] = "";
+			}
 			$content .= '<div class="keypair">';
 			switch($value["type"]) {
 				case "string":
