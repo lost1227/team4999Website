@@ -66,13 +66,15 @@
 	if(count($robotids) > 0) {
 		foreach($robotids as $index=>$robotid) {
 			$data = retrieveKeys($RobotDataTable, $robotid, $year["robotdata"]);
-			if(isset($data["name"])) {
-				echo('<div class="robotdiv"><p class="robottitle">'.$data["name"].':</p>');
+			if(isset($data["name"]["data_value"]) && !empty($data["name"]["data_value"])) {
+				echo('<div class="robotdiv"><p class="robottitle">'.$data["name"]["data_value"].':</p>');
 			} else {
 				echo('<div class="robotdiv"><p class="robottitle">Robot #'. ($index + 1 ) .':</p>');
 			}
 			foreach($data as $key=>$value) {
-				echo('<p><span class="robotkey">'.$value["display_name"].':</span> '.$value["data_value"].'</p>');
+				if(isset($value["data_value"]) && !empty($value["data_value"])) {
+					echo('<p><span class="robotkey">'.$value["display_name"].':</span> '.$value["data_value"].'</p>');
+				}
 			}
 			echo('</div>');
 		}
@@ -80,17 +82,19 @@
 		echo("<p>No data!</p>");
 	}
 
-	echo('<p>Events:</p>');
+	echo('<p>Matches:</p>');
 	if(count($eventids) > 0 ) {
 		foreach($eventids as $index=>$eventid) {
 			$data = retrieveKeys($EventDataTable, $eventid, $year["matchdata"]);
-			if(isset($data["name"])) {
-				echo('<div class="eventdiv"><p class="eventtitle">'.$data["name"].':</p>');
+			if(isset($data["event_name"]["data_value"]) && isset($data["match_num"]["data_value"]) && !empty($data["event_name"]["data_value"]) && !empty($data["match_num"]["data_value"])) {
+				echo('<div class="eventdiv"><p class="eventtitle">'.$data["event_name"]["data_value"]." Match #".$data["match_num"]["data_value"].':</p>');
 			} else {
-				echo('<div class="eventdiv"><p class="eventtitle">Event #'. ($index + 1 ) .':</p>');
+				echo('<div class="eventdiv"><p class="eventtitle">Match #'. ($index + 1 ) .':</p>');
 			}
 			foreach($data as $key=>$value) {
-				echo('<p><span class="eventkey">'.$value["display_name"].':</span> '.$value["data_value"].'</p>');
+				if(isset($value["data_value"]) && !empty($value["data_value"])) {
+					echo('<p><span class="eventkey">'.$value["display_name"].':</span> '.$value["data_value"].'</p>');
+				}
 			}
 			echo('</div>');
 		}

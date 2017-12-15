@@ -171,6 +171,13 @@ function getDefaultYear() {
 
 }
 
+/**
+ * Gets the data associated some keys
+ * @param $table The table to retrieve the data from. Either $RobotDataTable or $EventDataTable
+ * @param $id The robot or event to retrieve the info about
+ * @param $keys The keys to retrieve data from. Either the "robotdata" or "matchdata" sections of schema.json
+ * @return Array The keys object provided, with an additional field added to each key called "data_value"
+*/
 function retrieveKeys($table, $id, $keys) {
 	global $DB, $RobotDataTable, $EventDataTable;
 	if($table == $RobotDataTable) {
@@ -200,47 +207,18 @@ function retrieveKeys($table, $id, $keys) {
 }
 
 /**
- * Updates all the entries in the specified table with the specified id.
- * @param $table Table to update. Either $RobotDataTable or $EventDataTable
- * @param $id Robot and/or event id to update
- * @param $keyvalues An associative array containing the keys to be updated and their new values. Example format: ["key_1"=>"value 1", "key_2"=>"value 2"]
-*/
-function updateDBKeys($table, $id, $keyvalues) {
-	global $DB, $RobotDataTable, $EventDataTable;
-	if($table == $RobotDataTable) {
-		$stmt = $DB->prepare("UPDATE ".dbclean($table)." SET data_value = ? WHERE data_key = ? AND robotid = \"".dbclean($id)."\";");
-	} elseif ($table == $EventDataTable) {
-		$stmt = $DB->prepare("UPDATE ".dbclean($table)." SET data_value = ? WHERE data_key = ? AND = \"".dbclean($id)."\";");
-	} else {
-		return false;
-	}
-
-	if($stmt === false) {
-		die("Failed to prepare statement: " . $DB->error);
-	}
-
-	$key = "";
-	$value = "";
-	$stmt->bind_param("ss",$value,$key);
-	foreach($keyvalues as $key=>$value) {
-		$stmt->execute();
-	}
-	$stmt->close();
-}
-
-/**
- * Inserts new entries in the specified table with the specified id.
+ * Updated data in the table, making a new row if necessary
  * @param $table Table to update. Either $RobotDataTable or $EventDataTable
  * @param $id Robot and/or event id to update
  * @param $keyvalues An associative array containing the keys to be inserted and their values. Example format: ["key_1"=>"value 1", "key_2"=>"value 2"]
 */
-function insertDBKeys($table, $id, $keyvalues) {
+function updateDBKeys($table, $id, $keyvalues) {
 	global $DB, $RobotDataTable, $EventDataTable;
-	$stmt = $DB->prepare("INSERT INTO ".dbclean($table)."VALUES ('".dbclean($id)."',?,?)");
+	$stmt = $DB->prepare("INSERT INTO ".dbclean($table)." VALUES ('".dbclean($id)."',?,?) ON DUPLICATE KEY UPDATE data_value = VALUES(data_value)");
 
 	$key = "";
 	$value = "";
-	$statement->bind_param("ss",$key,$value);
+	$stmt->bind_param("ss",$key,$value);
 	foreach($keyvalues as $key=>$value) {
 		$stmt->execute();
 	}
@@ -373,5 +351,19 @@ function deleteKeyInTable($table, $key, $year) {
 	}
 	$stmt->close();
 	return true;
+}
+/**
+ * Gets a unique ID, checking that the ID is unique against the $RobotDataTable and the $EventDataTable
+ * @param $prefix A prefix to apply to the ID
+*/
+function getNewId($prefix) {
+	global $RobotDataTable, $EventDataTable;
+	$id = uniqid($prefix);
+	$res = formatAndQuery("SELECT * FROM %s WHERE robotid = %sv UNION SELECT * FROM %s WHERE eventid = %sv;", $RobotDataTable, $id, $EventDataTable, $id);
+	if($res->num_rows > 0) {
+		return getNewId($prefix);
+	} else {
+		return $id;
+	}
 }
 ?>
