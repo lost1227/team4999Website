@@ -15,14 +15,13 @@
 	<meta name="application-name" content="Scouting">
 	<meta name="msapplication-config" content="/favicons/browserconfig.xml">
 	<meta name="theme-color" content="#ffffff">
-	<script src="scripts/jquery-3.1.1.min.js"></script>
-	<script src="scripts/edit.js"></script>
 </head>
 <body>
 <div id="main">
 <form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post" id="mainf">
 <?php
 require 'functions.php';
+$acceptableFileTypes = array("jpg","png","jpeg","gif","bmp",);
 function image_fix_orientation(&$image, $filename) {
     $exif = exif_read_data($filename);
 
@@ -46,11 +45,133 @@ function image_fix_orientation(&$image, $filename) {
 function getAccordion($title,$content) {
 	return '<div class="accordion">
 		<button class="accordionbutton">'.$title.'</button>
+		<button class="deletebutton">-</button>
 		<div class="accordioncontent">'.$content.'</div>
 		</div>';
 }
 
-$acceptableFileTypes = array("jpg","png","jpeg","gif","bmp",);
+/**
+ * Get data associated with the ids and format it into an html string to be shown
+ * @param $ids The ids to Query
+ * @param $datatable Which table to query, $RobotDataTable or $EventDataTable
+ * @param $dataschema The schema of the data to show
+*/
+function getAndFormatData($ids, $datatable, $dataschema) {
+	global $RobotDataTable, $EventDataTable;
+
+	if($datatable == $RobotDataTable) {
+		$prefix = "robot";
+	} elseif ($datatable == $EventDataTable){
+		$prefix = "event";
+	} else {
+		return false;
+	}
+
+	$out = "";
+	# Loop through the robots
+	foreach($ids as $index=>$id) {
+		# Get data for each robot
+		$data = retrieveKeys($datatable, $id, $dataschema);
+
+		# Figure out a title for the accordioncontent
+		if($datatable == $RobotDataTable) {
+			if(isset($data["name"]["data_value"]) && !empty($data["name"]["data_value"])) {
+				$title = $data["name"]["data_value"];
+			} else {
+				$title = "Robot #" . ($index + 1);
+			}
+		} elseif ($datatable == $EventDataTable) {
+			// event_name and match_num are special
+			if(isset($data["event_name"]["data_value"]) && isset($data["match_num"]["data_value"]) &&!empty($data["event_name"]["data_value"]) && !empty($data["match_num"]["data_value"])) {
+				$title = $data["event_name"]["data_value"]." Match #".$data["match_num"]["data_value"];
+			} else {
+				$title = "Match #" . ($index + 1);
+			}
+		} else {
+			$title = $index + 1;
+		}
+
+
+		# Populate the accordion with the data retrieved
+		$content = "";
+		foreach($data as $key=>$value) {
+			if(!isset($value["data_value"])) {
+				$value["data_value"] = "";
+			}
+			$content .= '<div class="keypair">';
+			switch($value["type"]) {
+				case "string":
+					$content .= '<p class="key">'.$value["display_name"].': </p><input type="text" name="'.$prefix.'['.$id.']['.$key.']" value="'.$value["data_value"].'">';
+					break;
+				case "select":
+					$content .= '<p class="key">'.$value["display_name"].': </p><select name="'.$prefix.'['.$id.']['.$key.']">';
+					foreach($value["values"] as $option) {
+						if($option == $value["data_value"]) {
+							$content .= '<option value="'.$option.'" selected="selected">'.$option.'</option>';
+						} else {
+							$content .= '<option value="'.$option.'">'.$option.'</option>';
+						}
+					}
+					$content .= '</select>';
+					break;
+				case "boolean": // store booleans as strings in the DB, where "true" is true
+					if($value["data_value"] == "true") {
+						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="'.$prefix.'['.$id.']['.$key.']" checked></label>';
+					} else {
+						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="'.$prefix.'['.$id.']['.$key.']"></label>';
+					}
+					break;
+				case "number":
+					$content .= '<p class="key">'.$value["display_name"].': </p><input type="number" name="'.$prefix.'['.$id.']['.$key.']" value="'.$value["data_value"].'">';
+					break;
+				case "textarea":
+					$content .= '<p class="key">'.$value["display_name"].': </p><textarea name="'.$prefix.'['.$id.']['.$key.']">'.$value["data_value"].'</textarea>';
+					break;
+			}
+			$content .= '</div>';
+		}
+		$out .= getAccordion($title, $content);
+	}
+	return $out;
+}
+
+function getRowConstructor($functionname, $prefix, $dataschema) {
+	$out = "function ".$functionname."(id){";
+	$out .= "return `";
+
+	# Populate the accordion with the data
+	$content = "";
+	foreach($dataschema as $key=>$value) {
+		$content .= '<div class="keypair">';
+		switch($value["type"]) {
+			case "string":
+				$content .= '<p class="key">'.$value["display_name"].': </p><input type="text" name="'.$prefix.'[${id}]['.$key.']">';
+				break;
+			case "select":
+				$content .= '<p class="key">'.$value["display_name"].': </p><select name="'.$prefix.'[${id}]['.$key.']">';
+				foreach($value["values"] as $option) {
+					$content .= '<option value="'.$option.'">'.$option.'</option>';
+				}
+				$content .= '</select>';
+				break;
+			case "boolean": // store booleans as strings in the DB, where "true" is true
+				$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="'.$prefix.'[${id}]['.$key.']"></label>';
+				break;
+			case "number":
+				$content .= '<p class="key">'.$value["display_name"].': </p><input type="number" name="'.$prefix.'[${id}]['.$key.']">';
+				break;
+			case "textarea":
+				$content .= '<p class="key">'.$value["display_name"].': </p><textarea name="'.$prefix.'[${id}]['.$key.']"></textarea>';
+				break;
+		}
+		$content .= '</div>';
+	}
+	$out .= getAccordion("", $content);
+	$out .= "`; }";
+	return $out;
+}
+
+
 #check if logged in and redirect if not
 if (isset($_SESSION["loggedIn"])){
 	$DB = createDBObject();
@@ -99,164 +220,114 @@ if(file_exists("schema.json")) {
 }
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
-	$robotdata = $_POST["robot"];
+	if(isset($_POST["robot"])) {
+		$robotdata = $_POST["robot"];
+	} else {
+		$robotdata = array();
+	}
 	$robotschema = $year["robotdata"];
-	foreach($robotdata as $robotid=>$robot){
-		if(in_array($robotid, $robotids)) {
-			$changedKeyValues = array();
-			foreach($robot as $robotkey=>$robotdata) {
-				if(isset($robotschema[$robotkey])) {
-					$changedKeyValues[$robotkey] = clean($robotdata);
-				}
-			}
-			updateDBKeys($RobotDataTable, $robotid, $changedKeyValues);
-		} else {
-			$id = getNewId("rb_");
-			$newentries = array();
-			foreach($robot as $robotkey=>$robotdata) {
-				if(isset($robotschema[$robotkey])) {
-					$newentries[$robotkey] = clean($robotdata);
-				}
-			}
-			updateDBKeys($RobotDataTable, $id, $newentries);
+
+	foreach($robotids as $robotid) {
+		if(!isset($robotdata[$robotid])) {
+			deleteItem($RobotDataTable, $robotid);
 		}
 	}
 
-	$eventdata = $_POST["event"];
+	foreach($robotdata as $robotid=>$robot){
+		if(!in_array($robotid, $robotids)) {
+			addIdToTeam($team, "robotid", $robotid);
+			$changedKeyValues = array("year"=>$year["year"]);
+		} else {
+			$changedKeyValues = array();
+		}
+
+		foreach($robot as $robotkey=>$robotdata) {
+			if(isset($robotschema[$robotkey])) {
+				$changedKeyValues[$robotkey] = clean($robotdata);
+			}
+		}
+		updateDBKeys($RobotDataTable, clean($robotid), $changedKeyValues);
+	}
+
+	if(isset($_POST["event"])){
+		$eventdata = $_POST["event"];
+	} else {
+		$eventdata = array();
+	}
 	$eventschema = $year["matchdata"];
 
-	foreach($eventdata as $eventid=>$event){
-		if(in_array($eventid, $eventids)) {
-			$changedKeyValues = array();
-			foreach($event as $eventkey=>$eventdata) {
-				if(isset($eventschema[$eventkey])) {
-					$changedKeyValues[$eventkey] = clean($eventdata);
-				}
-			}
-			updateDBKeys($EventDataTable, $eventid, $changedKeyValues);
-		} else {
-			$id = getNewId("mt_");
-			$newentries = array();
-			foreach($event as $eventkey=>$eventdata) {
-				if(isset($eventschema[$eventkey])) {
-					$newentries[$eventkey] = clean($eventdata);
-				}
-			}
-			updateDBKeys($EventDataTable, $id, $newentries);
+	foreach($eventids as $eventid) {
+		if(!isset($eventdata[$eventid])) {
+			deleteItem($EventDataTable, $eventid);
 		}
+	}
+
+	foreach($eventdata as $eventid=>$event){
+
+		if(!in_array($eventid, $eventids)) {
+			addIdToTeam($team, "eventid", $eventid);
+			$changedKeyValues = array("year"=>$year["year"]);
+		} else {
+			$changedKeyValues = array();
+		}
+
+		foreach($event as $eventkey=>$eventdata) {
+			if(isset($eventschema[$eventkey])) {
+				$changedKeyValues[$eventkey] = clean($eventdata);
+			}
+		}
+		updateDBKeys($EventDataTable, clean($eventid), $changedKeyValues);
 	}
 
 }
 
+$data = getTeamIds($team);
+if($data === false) {
+	$robotids = array();
+	$eventids = array();
+} else {
+	$robotids = $data["robotids"];
+	$eventids = $data["eventids"];
+}
 $robotids = getIdsForYear($RobotDataTable, $year["year"], $robotids);
 $eventids = getIdsForYear($EventDataTable, $year["year"], $eventids);
-echo("<p>Robots:</p>");
-if(count($robotids) > 0) {
-	foreach($robotids as $index=>$robotid) {
-		$data = retrieveKeys($RobotDataTable, $robotid, $year["robotdata"]);
-		if(isset($data["name"]["data_value"]) && !empty($data["name"]["data_value"])) {
-			$title = $data["name"]["data_value"];
+?>
+<p>Robots:</p>
+<div id="robotaccordion">
+	<?php
+		if(count($robotids) > 0) {
+			echo(getAndFormatData($robotids, $RobotDataTable, $year["robotdata"]));
 		} else {
-			$title = "Robot #" . ($index + 1);
-		}
-		$content = "";
-		foreach($data as $key=>$value) {
-			if(!isset($value["data_value"])) {
-				$value["data_value"] = "";
-			}
-			$content .= '<div class="keypair">';
-			switch($value["type"]) {
-				case "string":
-					$content .= '<p class="key">'.$value["display_name"].': </p><input type="text" name="robot['.$robotid.']['.$key.']" value="'.$value["data_value"].'">';
-					break;
-				case "select":
-					$content .= '<p class="key">'.$value["display_name"].': </p><select name="robot['.$robotid.']['.$key.']">';
-					foreach($value["values"] as $option) {
-						if($option == $value["data_value"]) {
-							$content .= '<option value="'.$option.'" selected="selected">'.$option.'</option>';
-						} else {
-							$content .= '<option value="'.$option.'">'.$option.'</option>';
-						}
-					}
-					$content .= '</select>';
-					break;
-				case "boolean": // store booleans as strings in the DB, where "true" is true
-					if($value["data_value"] == "true") {
-						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="robot['.$robotid.']['.$key.']" checked></label>';
-					} else {
-						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="robot['.$robotid.']['.$key.']"></label>';
-					}
-					break;
-				case "number":
-					$content .= '<p class="key">'.$value["display_name"].': </p><input type="number" name="robot['.$robotid.']['.$key.']" value="'.$value["data_value"].'">';
-					break;
-				case "textarea":
-					$content .= '<p class="key">'.$value["display_name"].': </p><input type="number" name="robot['.$robotid.']['.$key.']">'.$value["data_value"].'</textarea>';
-					break;
-			}
-			$content .= '</div>';
-		}
-		echo(getAccordion($title, $content));
-	}
-} else {
-	echo("<p>No data!</p>");
-}
-echo("<p>Matches:</p>");
-if(count($eventids) > 0) {
-	foreach($eventids as $index=>$eventid) {
-		$data = retrieveKeys($EventDataTable, $eventid, $year["matchdata"]);
-		// event_name and match_num are special
-		if(isset($data["event_name"]["data_value"]) && isset($data["match_num"]["data_value"]) &&!empty($data["event_name"]["data_value"]) && !empty($data["match_num"]["data_value"])) {
-			$title = $data["event_name"]["data_value"]." Match #".$data["match_num"]["data_value"];
+			echo("<p>No data!</p>");
+		} ?>
+		<button class="add" id="addRobot">+</button>
+</div>
+
+<p>Matches:</p>
+<div id="matchaccordion">
+	<?php
+		if(count($eventids) > 0) {
+			echo(getAndFormatData($eventids, $EventDataTable, $year["matchdata"]));
 		} else {
-			$title = "Match #" . ($index + 1);
+			echo("<p>No data!</p>");
 		}
-		$content = "";
-		foreach($data as $key=>$value) {
-			if(!isset($value["data_value"])) {
-				$value["data_value"] = "";
-			}
-			$content .= '<div class="keypair">';
-			switch($value["type"]) {
-				case "string":
-					$content .= '<p class="key">'.$value["display_name"].': </p><input type="text" name="event['.$eventid.']['.$key.']" value="'.$value["data_value"].'">';
-					break;
-				case "select":
-					$content .= '<p class="key">'.$value["display_name"].': </p><select name="event['.$eventid.']['.$key.']">';
-					foreach($value["values"] as $option) {
-						if($option == $value["data_value"]) {
-							$content .= '<option value="'.$option.'" selected="selected">'.$option.'</option>';
-						} else {
-							$content .= '<option value="'.$option.'">'.$option.'</option>';
-						}
-					}
-					$content .= '</select>';
-					break;
-				case "boolean": // store booleans as strings in the DB, where "true" is true
-					if($value["data_value"] == "true") {
-						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="event['.$eventid.']['.$key.']" value="true" checked></label>';
-					} else {
-						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="event['.$eventid.']['.$key.']" value="false"></label>';
-					}
-					break;
-				case "number":
-					$content .= '<p class="key">'.$value["display_name"].': </p><input type="number" name="event['.$eventid.']['.$key.']" value="'.$value["data_value"].'">';
-					break;
-				case "textarea":
-					$content .= '<p class="key">'.$value["display_name"].': </p><textarea name="event['.$eventid.']['.$key.']">'.$value["data_value"].'</textarea>';
-					break;
-			}
-			$content .= '</div>';
-		}
-		echo(getAccordion($title, $content));
-	}
-} else {
-	echo("<p>No data!</p>");
-}
+	?>
+	<button class="add" id="addMatch">+</button>
+</div>
+
+<?php
 echo('<input type="hidden" name="team" value="'.$team.'">');
 ?>
 <input type="submit" value="Save">
 </form>
 </div>
+<script>
+<?php
+	echo(getRowConstructor("getRobotRow","robot",$year["robotdata"]));
+	echo(getRowConstructor("getMatchRow","event",$year["matchdata"]));
+?>
+</script>
+<script src="scripts/jquery-3.1.1.min.js"></script>
+<script src="scripts/edit.js"></script>
 </body>
 </html>

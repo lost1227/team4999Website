@@ -13,6 +13,10 @@ function writeToLog($string, $log) {
 	file_put_contents("./logs/".$log.".log", date("d-m-Y_h:i:s")."-- ".$string."\r\n", FILE_APPEND);
 }
 
+function logToJS($str) {
+	echo('<script>console.log("'.clean($str).'");</script>');
+}
+
 function formatAndQuery() { #first argument should be the query. %sv for strings to be escaped, %s for string and $d for int. the rest of the arguments should be the values in order
 	global $DB;
 	$args  = func_get_args();
@@ -232,11 +236,11 @@ function updateDBKeys($table, $id, $keyvalues) {
  * @param $newId The new id to add
 */
 function addIdToTeam($team, $idtype, $newId) {
-	global $TeamDataTable;
+	global $TeamDataTable, $explodeseparator;
 	if($idtype == "robotid") {
-		formatAndQuery("UPDATE %s SET robotids = CONCAT(robotids, %sv) WHERE number = %s", $TeamDataTable, $newId, $team);
+		formatAndQuery("UPDATE %s SET robotids = CONCAT(robotids, %sv) WHERE number = %s", $TeamDataTable, $explodeseparator.$newId, $team);
 	} else {
-		formatAndQuery("UPDATE %s SET eventids = CONCAT(eventids, %sv) WHERE number = %s", $TeamDataTable, $newId, $team);
+		formatAndQuery("UPDATE %s SET eventids = CONCAT(eventids, %sv) WHERE number = %s", $TeamDataTable, $explodeseparator.$newId, $team);
 	}
 }
 
@@ -354,7 +358,7 @@ function deleteKeyInTable($table, $key, $year) {
 }
 /**
  * Gets a unique ID, checking that the ID is unique against the $RobotDataTable and the $EventDataTable
- * @param $prefix A prefix to apply to the ID
+ * @param $prefix A prefix to apply to the ID. Usually rb_ for a robot and mt_ for a match
 */
 function getNewId($prefix) {
 	global $RobotDataTable, $EventDataTable;
@@ -365,5 +369,50 @@ function getNewId($prefix) {
 	} else {
 		return $id;
 	}
+}
+/**
+ * Deletes a robot or a match
+ * @param $datatable $RobotDataTable or $EventDataTable
+ * @param $id The id to remove
+*/
+function deleteItem($datatable, $id) {
+	global $DB, $RobotDataTable, $EventDataTable, $TeamDataTable, $explodeseparator;
+
+	if($datatable == $RobotDataTable) {
+		$column = "robotids";
+		$column2 = "robotid";
+	} elseif ($datatable == $EventDataTable) {
+		$column = "eventids";
+		$column2 = "eventid";
+	} else {
+		return false;
+	}
+
+	$data = formatAndQuery("SELECT %s FROM %s WHERE %s LIKE \"%%%s%%\"",$column,$TeamDataTable,$column,$id);
+
+	if($data->num_rows > 0) {
+
+		$stmt = $DB->prepare("UPDATE ".$TeamDataTable." SET ".$column." = ? WHERE ".$column." = ?");
+
+		if($stmt === False) {
+			die("Error: ".$DB->error);
+		}
+
+		$idscompact = "";
+		$newidscompact = "";
+		$stmt->bind_param("ss",$newidscompact, $idscompact);
+
+		while($row = $data->fetch_assoc()) {
+			$idscompact = $row[$column];
+			$ids = explode($explodeseparator,$idscompact);
+			unset($ids[array_search($id, $ids)]);
+			$newidscompact = implode($explodeseparator,$ids);
+			$stmt->execute();
+		}
+		$stmt->close();
+	}
+
+	formatAndQuery("DELETE FROM %s WHERE %s = %sv", $datatable, $column2, $id);
+
 }
 ?>

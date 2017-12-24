@@ -36,13 +36,38 @@ select {
 	margin: 0px 5px;
 }
 button.accordionbutton {
-	width: 100%;
+	width: calc(100% - 25px);
+	padding: 1px 0px;
 	border-radius: 0px;
 	border: none;
 	background: none;
+	min-height: 15px;
 }
 button.accordionbutton:hover {
 	background: #f1f1f1;
+	cursor: pointer;
+}
+button.add {
+	width: 100%;
+	border-radius: 0px;
+	border: 1px solid #00da00;
+	color: #004c00;
+	background: rgba(0,255,0,0.15);
+}
+button.add:hover {
+	background: rgba(0,100,0,0.30);
+	cursor: pointer;
+}
+
+button.deletebutton {
+	width: 20px;
+	padding: 1px 0px;
+	border: 1px solid red;
+	background: rgba(255,0,0,0.2);
+	min-height: 15px;
+}
+button.deletebutton:hover{
+	background: rgba(255,0,0,0.7);
 	cursor: pointer;
 }
 
