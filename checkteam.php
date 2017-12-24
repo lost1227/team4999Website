@@ -1,14 +1,10 @@
 <?php session_start(); ?>
 <?php
 require 'functions.php';
-if(!isset($_SESSION["loggedIn"])) {
-	echo("LOGIN_ERROR");
-} elseif (!isset($_GET["team"]))	{
+if (!isset($_GET["team"]))	{
 	echo("NO_TEAM");
 } else {
-	$DB = new mysqli("localhost","momentu2_" . $_SESSION["user"],$_SESSION["pass"],"momentu2_frcteam4999");
-	$result = formatAndQuery('SELECT Team FROM '.getCurrentTable().' WHERE Team = %sv',$_GET["team"]);
-	if($result->num_rows == 0) {
+	if(!checkTeamInDB($_GET["team"])) {
 		echo("TRUE");
 	} else {
 		echo("FALSE");
