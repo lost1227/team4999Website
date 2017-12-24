@@ -1,30 +1,8 @@
-function clearFilters(){
-	filter.enabled = false;
-	get();
-}
-var filter = {
-	enabled : false,
-	filterData : function () {
-		var data = '';
-		for (index in this) {
-			if (!(index == 'enabled' || index == 'filterData')) {
-				if (index) {
-					data += index + '=' + this[index];
-				} else {
-					data += index + '=%';
-				}
-				data += '&';
-			}
-		}
-		return data.substring(0, data.length-1);
-	}
-}
-
 function get() {
-				if (filter.enabled) {
+				if (Object.keys(filters.robot).length > 0 || Object.keys(filters.match).length || filters.team != "") {
 					request.open("POST","query.php",true);
-					request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-					request.send(filter.filterData());
+					request.setRequestHeader("Content-type", "application/json");
+					request.send(JSON.stringify(filters));
 				} else {
 					request.open("GET","query.php",true);
 					request.send();
@@ -32,11 +10,12 @@ function get() {
 }
 
 var request = new XMLHttpRequest();
-request.onreadystatechange = function() {
-	if (this.readyState == this.DONE && this.status == 200){
-		document.getElementById("container").innerHTML = this.responseText;
-	}
-};
-request.open("GET","query.php",true);
-request.send();
+$(document).ready(function() {
+	request.onreadystatechange = function() {
+		if (this.readyState == this.DONE && this.status == 200){
+			$("#container").html(this.responseText);
+		}
+	};
+	get();
+});
 var loop = window.setInterval(function() {get();}, 5000);

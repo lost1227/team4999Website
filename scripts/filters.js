@@ -1,4 +1,60 @@
-function ShowFilters(){
+var filters = {
+	robot: {},
+	match: {},
+	team: ""
+}
+
+$(document).ready(function() {
+	$(".filtercontainer > input, .filtercontainer > select").on('change input', function(e) {
+		var target = $(e.target);
+		if(target.siblings(".filterbox").is(":checked")) {
+			target.siblings(".filterbox").click();
+		}
+	});
+
+	$("input.filterbox").click(function(e) {
+		var target = $(e.target);
+		var container = target.closest("div.filtercontainer");
+		var key = container.data("key");
+		var type = container.data("type");
+		var place = container.data("place");
+		var value = "";
+		switch(type){
+			case "string":
+				value = target.siblings("input[type=text]").val();
+				break;
+			case "select":
+				value = target.siblings("select").find(":selected").text();
+				break;
+			case "boolean":
+				value = (target.siblings("select").find(":selected").text() == "Yes")?"true":"false";
+				break;
+			case "number":
+				value = target.siblings("input[type=number]").val();
+				break;
+		}
+		if(target.is(":checked")) {
+			if(value === "") {
+				target.prop('checked', false);
+			} else {
+				if(place == "robot") {
+					filters.robot[key] = value;
+				} else {
+					filters.match[key] = value;
+				}
+			}
+		} else {
+			if(place == "robot") {
+				delete filters.robot[key];
+			} else {
+				delete filters.match[key];
+			}
+		}
+		get();
+	});
+});
+
+$("#filterli").click(function() {
 	$("#hamburgermenu").slideUp(100);
 	$("#Filters").show();
 	if($('#TeamSearch').is(':visible')) {
@@ -8,41 +64,4 @@ function ShowFilters(){
 		$("#Filters").css('top','80px');
 		$("#container").css('top','80px');
 	}
-}
-
-$("#filterli").click(function() {
-	ShowFilters();
-});
-
-	
-$("#DriveSystemSelect").on("change",function() {
-	$("#DriveSystemCheck").prop('checked',false);
-	$("#Filters input").trigger("change");
-});
-
-$("#Filters input").on("change",function() {
-	var filterIDs = $("#filters input").map(function() { return this.id; }).get(); // get ids of each filter element
-	for (var i = 0; i < filterIDs.length; i++) {
-		if(document.getElementById(filterIDs[i]).checked) {
-			filter.enabled = true;
-			break;
-		} else {
-			filter.enabled = false;
-		}
-	}
-	if(this.checked) {
-		//alert(this.id);
-		if(this.id == "DriveSystemCheck") {
-			filter.Drive_System = $("#DriveSystemSelect").val();
-		} else {
-			filter[this.id.replace(/ /g,"_")] = 1;
-		}
-	} else {
-		if(this.id == "DriveSystemCheck") {
-			delete filter.Drive_System;
-		} else {
-			delete filter[this.id.replace(/ /g,"_")];
-		}
-	}
-	get();
 });

@@ -31,10 +31,9 @@ $("#TeamSearch > input").keypress( function(e) {
 //update the results on input into the search box
 $("#TeamSearch > input").on('input', function() {
 	if(!$("#TeamSearch > input").val()) {
-		filter.Team = "%";
+		filters.team = "";
 	} else {
-		filter.enabled = true;
-		filter.Team = "%25" + $("#TeamSearch > input").val() + "%25";
+		filters.team = $("#TeamSearch > input").val();
 	}
 	get();
 });
@@ -48,7 +47,5 @@ function closeSearchbar(){
 		ShowFilters();
 	}
 	$("#TeamSearch > input").val(''); //empty contents of searchbar
-	delete filter.Team; //delete the team filter from the object
 	$("#container").css('top','80px');
-	clearFilters();
 }
