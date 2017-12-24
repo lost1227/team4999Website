@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>Log in</title>
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="styles/style.css">
 		<?php
 		require 'functions.php';
 

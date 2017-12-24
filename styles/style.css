@@ -7,11 +7,11 @@
 
 @font-face{
 	font-family: "StormFaze";
-	src: url("fonts/stormfaze.ttf");
+	src: url("../fonts/stormfaze.ttf");
 }
 
 body {
-	background-image: url("images/grey.png");
+	background-image: url("../images/grey.png");
 	background-attachment: fixed;
 	margin: 0px;
 }
@@ -21,7 +21,7 @@ body {
 	top: 80px;
 	background-color: transparent;
 	margin: 0px;
-	
+
 }
 
 #hamburger {
@@ -33,7 +33,7 @@ body {
 
 #hamburger:active {
 	background-color: #8101ce;
-	
+
 	-moz-box-shadow:    inset 0 0 15px rgba(0, 0, 0, 0.13);
 	-webkit-box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.13);
 	box-shadow:         inset 0 0 15px rgba(0, 0, 0, 0.13);
@@ -43,18 +43,18 @@ body {
 	display: none;
 	z-index: 99999;
 	background-color: #ffffff;
-	
+
 	position: fixed;
 	border-radius: 5px;
 	top: 79px;
-	
+
 	margin: 0px;
 	padding: 0px;
-	
+
 	left: 0;
     width: 100%;
-	
-	
+
+
 	-moz-box-shadow:     0px 5px 20px rgba(85, 85, 85, 0.6);
 	-webkit-box-shadow:  0px 5px 20px rgba(85, 85, 85, 0.6);
 	box-shadow:          0px 5px 20px rgba(85, 85, 85, 0.6);
@@ -76,7 +76,7 @@ body {
 	border-top: 1px dashed #06ceff;
 
 	text-decoration: none;
-	
+
 	cursor: pointer;
 }
 
@@ -98,9 +98,9 @@ body {
 	z-index: 999999;
 	position: fixed;
 	width: 100%;
-	
+
 	top: 0px;
-	
+
 	text-align: center;
 	font-family: "StormFaze";
 	background-color: #9f01ff;
@@ -108,11 +108,11 @@ body {
 	font-size: 40px;
 	line-height: 80px;
 	height: 80px;
-	
+
 	padding: 0px;
-	
+
 	color: #FFFFFF;
-	
+
 	margin: 0px;
 }
 
@@ -187,7 +187,7 @@ div.infoRow:hover{
 	height: 30px;
 	z-index: 1;
 	width: 100%;
-	
+
 }
 /*The Searchbox element*/
 #TeamSearch input {
@@ -244,10 +244,10 @@ label {
 	text-align: center;
 	top: 25px;
 	width: 250px;
-	
+
 	border: 1px solid #06ceff;
 	border-radius: 5px;
-	
+
 	box-shadow: 0px 0px 50px #00000033;
 }
 
@@ -261,7 +261,7 @@ label {
 	font-family: "arial";
 	padding: 10px;
 	width: 200px;
-	
+
 	border: 2px solid  #06ceff;
 
 }
@@ -283,7 +283,7 @@ label {
 	border: 2px solid  #06ceff;
 	text-align: center;
 	cursor: pointer;
-	
+
 }
 
 #submitbtn:hover{
@@ -291,3 +291,13 @@ label {
 	color: white;
 }
 
+p.filterlabel {
+	display: inline-block;
+	padding: 3px 3px;
+	margin: 0px;
+}
+
+#robotfilterlabel, #matchfilterlabel {
+	margin: 0px 3px;
+	text-decoration: underline;
+}
