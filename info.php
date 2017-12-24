@@ -40,13 +40,14 @@
 	$team = clean($_GET["team"]);
 	$results = formatAndQuery("SELECT robotids,eventids FROM %s WHERE number = %d;",$TeamDataTable,$team);
 	if($results->num_rows <= 0) {
-		echo("<p>No results!</p>");
-		exit();
+		$robotids = array();
+		$eventids = array();
+	} else {
+		$result = $results->fetch_assoc();
+		$robotids = explode($explodeseparator,$result["robotids"]);
+		$eventids = explode($explodeseparator,$result["eventids"]);
 	}
-	$result = $results->fetch_assoc();
-	$robotids = explode($explodeseparator,$result["robotids"]);
-	$eventids = explode($explodeseparator,$result["eventids"]);
-
+	
 	if(file_exists("schema.json")) {
 		$json = json_decode(file_get_contents("schema.json"), True);
 		$year = getYearData($json, getDefaultYear())[1];
