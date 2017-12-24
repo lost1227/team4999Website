@@ -61,7 +61,7 @@
 		<ul id="menuitems">
 			<li id="searchli">Search</li>
 			<li id="filterli">Filters</li>
-			<a href="edit.php"><li id="addli">Add Robot</li></a>
+			<a href="addTeam.php"><li id="addli">Add Team</li></a>
 		</ul>
 	</div>
 

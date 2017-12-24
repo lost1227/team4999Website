@@ -15,10 +15,14 @@
 	<meta name="application-name" content="Scouting">
 	<meta name="msapplication-config" content="/favicons/browserconfig.xml">
 	<meta name="theme-color" content="#ffffff">
+	<script>
+		function setUrl(url) {
+			document.location.href = url;
+		}
+	</script>
 </head>
 <body>
 <div id="main">
-<form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post" id="mainf">
 <?php
 require 'functions.php';
 $acceptableFileTypes = array("jpg","png","jpeg","gif","bmp",);
@@ -197,6 +201,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 		$team = clean($_POST["team"]);
 	}
 }
+if(!checkTeamInDB($team)) {
+	header('Location: '.getRootDir().'index.php');
+}
+?>
+<img src="images/back.png" id="back" onclick="setUrl('<?php require 'specificvars.php'; echo($appdir.'info.php?team='.clean($team)); ?>')">
+<h1>Edit Team <?php echo(clean($team))?></h1>
+<form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post" id="mainf">
+
+<?php
 
 	$data = getTeamIds($team);
 	if($data === false) {

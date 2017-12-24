@@ -19,6 +19,9 @@ function logToJS($str) {
 
 function formatAndQuery() { #first argument should be the query. %sv for strings to be escaped, %s for string and $d for int. the rest of the arguments should be the values in order
 	global $DB;
+	if(!isset($DB)){
+		$DB = createDBObject();
+	}
 	$args  = func_get_args();
   $query = array_shift($args); #remove the first element of the array as its own variable
 	if(is_array($args[0])){$args = $args[0];}
@@ -238,21 +241,30 @@ function updateDBKeys($table, $id, $keyvalues) {
 function addIdToTeam($team, $idtype, $newId) {
 	global $TeamDataTable, $explodeseparator;
 	if($idtype == "robotid") {
-		formatAndQuery("UPDATE %s SET robotids = CONCAT(robotids, %sv) WHERE number = %s", $TeamDataTable, $explodeseparator.$newId, $team);
+		formatAndQuery("UPDATE %s SET robotids = CONCAT(robotids, %sv) WHERE number = %sv", $TeamDataTable, $explodeseparator.$newId, $team);
 	} else {
-		formatAndQuery("UPDATE %s SET eventids = CONCAT(eventids, %sv) WHERE number = %s", $TeamDataTable, $explodeseparator.$newId, $team);
+		formatAndQuery("UPDATE %s SET eventids = CONCAT(eventids, %sv) WHERE number = %sv", $TeamDataTable, $explodeseparator.$newId, $team);
+	}
+}
+
+function separate($input) {
+	global $explodeseparator;
+	if(empty($input)){
+		return array();
+	} else {
+		return explode($explodeseparator, trim($input, ","));
 	}
 }
 
 function getTeamIds($team) {
-	global $TeamDataTable, $explodeseparator;
+	global $TeamDataTable;
 	$results = formatAndQuery("SELECT robotids,eventids FROM %s WHERE number = %d;",$TeamDataTable,$team);
 	if($results->num_rows <= 0) {
 		return false;
 	} else {
 		$result = $results->fetch_assoc();
-		$robotids = explode($explodeseparator,$result["robotids"]);
-		$eventids = explode($explodeseparator,$result["eventids"]);
+		$robotids = separate($result["robotids"]);
+		$eventids = separate($result["eventids"]);
 		return array("robotids"=>$robotids, "eventids"=>$eventids);
 	}
 }
@@ -378,6 +390,10 @@ function getNewId($prefix) {
 function deleteItem($datatable, $id) {
 	global $DB, $RobotDataTable, $EventDataTable, $TeamDataTable, $explodeseparator;
 
+	if(empty($id)) {
+		throw new Exception("ID IS EMPTY!");
+	}
+
 	if($datatable == $RobotDataTable) {
 		$column = "robotids";
 		$column2 = "robotid";
@@ -404,6 +420,9 @@ function deleteItem($datatable, $id) {
 
 		while($row = $data->fetch_assoc()) {
 			$idscompact = $row[$column];
+			if(empty($idscompact)) {
+				continue;
+			}
 			$ids = explode($explodeseparator,$idscompact);
 			unset($ids[array_search($id, $ids)]);
 			$newidscompact = implode($explodeseparator,$ids);
@@ -414,5 +433,14 @@ function deleteItem($datatable, $id) {
 
 	formatAndQuery("DELETE FROM %s WHERE %s = %sv", $datatable, $column2, $id);
 
+}
+/**
+ * Checks if a team is already in the database.
+ * @return Boolean A boolean indicating if the team is already set
+*/
+function checkTeamInDB($team) {
+	global $TeamDataTable;
+	$result = formatAndQuery('SELECT number FROM %s WHERE number = %sv', $TeamDataTable, $team);
+	return $result->num_rows > 0;
 }
 ?>
