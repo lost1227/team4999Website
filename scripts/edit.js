@@ -33,7 +33,7 @@ $(document).ready(function() {
   });
 
   $("#mainf").submit(function(e) {
-    $(e.target).find("input[type=checkbox]").each(function() {
+    $(e.target).find("input.optionboolean").each(function() {
       var me = $(this);
       if(me.prop("checked")) {
         me.val("true");
@@ -42,6 +42,19 @@ $(document).ready(function() {
         me.prop("checked", "true");
       }
     })
+  });
+
+  $("img.gallery").click(function(e) {
+    var pic = $(e.target);
+    var check = pic.siblings("input.deletePix");
+    if(check.prop("checked")) {
+      check.prop("checked", false);
+      pic.removeClass("delete");
+    } else {
+      check.prop("checked", true);
+      pic.addClass("delete");
+    }
+    return false;
   });
 });
 function getId(prefix, callback) {

@@ -25,9 +25,9 @@
 <div id="main">
 <?php
 require 'functions.php';
-$acceptableFileTypes = array("jpg","png","jpeg","gif","bmp",);
+$acceptableFileTypes = array("jpg","png","jpeg","gif","bmp");
 function image_fix_orientation(&$image, $filename) {
-    $exif = exif_read_data($filename);
+    $exif = @exif_read_data($filename); # @ symbol is to supress warnings that occur with files with no exif data
 
     if (!empty($exif['Orientation'])) {
         switch ($exif['Orientation']) {
@@ -52,6 +52,34 @@ function getAccordion($title,$content) {
 		<button class="deletebutton">-</button>
 		<div class="accordioncontent">'.$content.'</div>
 		</div>';
+}
+
+function getPhotoDiv($id) {
+	global $appdir, $image_root,$acceptableFileTypes;
+	$out = '<div id="photogallery">';
+	$image_dir = $image_root . $id.'/thumb/';
+	if(file_exists($image_dir)) {
+		$files = scandir($image_dir);
+		foreach($files as $file) {
+
+			if(in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
+				// POST will recieve the id to remove and the name of the thumbnail.
+				$out .= '<label>
+									<input class="deletePix" type="checkbox" name="delimgs['.clean($id).'][]" value="'.clean($file).'">
+									<img src="'.$image_dir.$file.'" class="gallery">
+								</label>';
+			}
+		}
+	}
+	$out .= '<input id="uploadImage" type="file" name="uploadImages['.clean($id).'][]" accept="image/jpeg,image/png,image/gif,image/bmp" multiple>';
+	$out .= '</div>';
+	return $out;
+}
+
+function checkExists($dir) {
+	if(!file_exists($dir)) {
+		mkdir($dir,0777,true);
+	}
 }
 
 /**
@@ -134,6 +162,7 @@ function getAndFormatData($ids, $datatable, $dataschema) {
 			}
 			$content .= '</div>';
 		}
+		$content .= getPhotoDiv($id);
 		$out .= getAccordion($title, $content);
 	}
 	return $out;
@@ -159,7 +188,7 @@ function getRowConstructor($functionname, $prefix, $dataschema) {
 				$content .= '</select>';
 				break;
 			case "boolean": // store booleans as strings in the DB, where "true" is true
-				$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="'.$prefix.'[${id}]['.$key.']"></label>';
+				$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="'.$prefix.'[${id}]['.$key.']" class="optionboolean"></label>';
 				break;
 			case "number":
 				$content .= '<p class="key">'.$value["display_name"].': </p><input type="number" name="'.$prefix.'[${id}]['.$key.']">';
@@ -207,7 +236,7 @@ if(!checkTeamInDB($team)) {
 ?>
 <img src="images/back.png" id="back" onclick="setUrl('<?php require 'specificvars.php'; echo($appdir.'info.php?team='.clean($team)); ?>')">
 <h1>Edit Team <?php echo(clean($team))?></h1>
-<form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post" id="mainf">
+<form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post" id="mainf" enctype="multipart/form-data">
 
 <?php
 
@@ -233,6 +262,7 @@ if(file_exists("schema.json")) {
 }
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
+
 	if(isset($_POST["robot"])) {
 		$robotdata = $_POST["robot"];
 	} else {
@@ -291,6 +321,68 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 		}
 		updateDBKeys($EventDataTable, clean($eventid), $changedKeyValues);
 	}
+
+
+	foreach($_FILES["uploadImages"]["tmp_name"] as $id=>$files) {
+		foreach($files as $idx=>$file) {
+			if(file_exists($file) && $_FILES["uploadImages"]["error"][$id][$idx] == UPLOAD_ERR_OK && is_uploaded_file($file)){
+				checkExists($image_root);
+				$image_dir = $image_root .$id.'/full/';
+				$thumb_dir = $image_root . $id.'/thumb/';
+				checkExists($image_dir);
+				checkExists($thumb_dir);
+
+				$filename = getUniqueFilename($image_dir);
+				$extension = strtolower(pathinfo(basename($_FILES["uploadImages"]["name"][$id][$idx]),PATHINFO_EXTENSION));
+				$targetfilepath = $image_dir . $filename . ".jpg";
+				$targetthumbpath = $thumb_dir . $filename . ".jpg";
+
+				writeToLog("Saving " . $_FILES["uploadImages"]["name"][$id][$idx] ." to " . $targetfilepath, "images");
+
+				$imgsize = getimagesize($file);
+				if($imgsize === False || !in_array($extension,$acceptableFileTypes)) {
+					writeToLog($_FILES["uploadImages"]["name"][$id][$idx] . " is not a valid image", "images");
+					continue;
+				}
+
+				switch(strtolower($imgsize['mime'])) {
+					case 'img/bmp':
+						$img = imagecreatefrombmp($file);
+						break;
+					case 'image/png':
+						$img = imagecreatefrompng($file);
+						break;
+					case 'image/jpeg':
+						$img = imagecreatefromjpeg($file);
+						break;
+					case 'image/gif':
+						$img = imagecreatefromgif($file);
+						break;
+					default:
+						writeToLog($_FILES["uploadImages"]["name"][$id][$idx] . " is not a valid image", "images");
+						continue;
+				}
+				image_fix_orientation($img,$file);
+				if(!imagejpeg($img,$targetfilepath)){
+					writeToLog("Failed to save file ".$_FILES["uploadImages"]["name"][$id][$idx],"images");
+				}
+				if(!imagejpeg(imagescale($img,$thumbnail_width),$targetthumbpath)){
+					writeToLog("Failed to save thumbnail for ".$_FILES["uploadImages"]["name"][$id][$idx],"images");
+				}
+			}
+		}
+	}
+	if(isset($_POST["delimgs"])) {
+		foreach($_POST["delimgs"] as $id=>$pics) {
+			foreach($pics as $pic) {
+				$image_dir = $image_root .$id.'/full/'.$pic;
+				$thumb_dir = $image_root . $id.'/thumb/'.$pic;
+				unlink($image_dir);
+				unlink($thumb_dir);
+			}
+		}
+	}
+
 
 }
 

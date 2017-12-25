@@ -36,6 +36,24 @@
 	<img src="images/back.png" id="back" onclick="setUrl('<?php require 'specificvars.php'; echo($appdir); ?>')">
 	<?php
 	require 'functions.php';
+
+	function getPhotoDiv($id) {
+		global $appdir, $image_root,$acceptableFileTypes;
+		$out = '<div id="photogallery">';
+		$image_dir = $image_root . $id.'/full/';
+		$thumb_dir = $image_root . $id.'/thumb/';
+		if(file_exists($image_dir)) {
+			$files = scandir($image_dir);
+			foreach($files as $file) {
+				if(in_array(pathinfo(basename($file),PATHINFO_EXTENSION),$acceptableFileTypes)) {
+					$out .= '<a href="'.$image_dir.$file.'"><img src="'.$thumb_dir.$file.'" class="gallery"></a>';
+				}
+			}
+		}
+		$out .= '</div>';
+		return $out;
+	}
+
 	$DB = createDBObject();
 	$team = clean($_GET["team"]);
 	$results = formatAndQuery("SELECT robotids,eventids FROM %s WHERE number = %d;",$TeamDataTable,$team);
@@ -47,7 +65,7 @@
 		$robotids = explode($explodeseparator,$result["robotids"]);
 		$eventids = explode($explodeseparator,$result["eventids"]);
 	}
-	
+
 	if(file_exists("schema.json")) {
 		$json = json_decode(file_get_contents("schema.json"), True);
 		$year = getYearData($json, getDefaultYear())[1];
@@ -77,6 +95,7 @@
 					echo('<p><span class="robotkey">'.$value["display_name"].':</span> '.$value["data_value"].'</p>');
 				}
 			}
+			echo(getPhotoDiv($robotid));
 			echo('</div>');
 		}
 	} else {
@@ -97,6 +116,7 @@
 					echo('<p><span class="eventkey">'.$value["display_name"].':</span> '.$value["data_value"].'</p>');
 				}
 			}
+			echo(getPhotoDiv($robotid));
 			echo('</div>');
 		}
 	} else {

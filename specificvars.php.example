@@ -16,6 +16,7 @@ $EventDataTable = "";
 
 $appdir = "";
 $image_root = "";
+$thumbnail_width = ;
 
 /*
 The user's username and password are checked against the database to see if they match. If they match, then the user has the LoggedIn flag set to true on their session.

@@ -443,4 +443,21 @@ function checkTeamInDB($team) {
 	$result = formatAndQuery('SELECT number FROM %s WHERE number = %sv', $TeamDataTable, $team);
 	return $result->num_rows > 0;
 }
+
+function getUniqueFilename($dir) {
+	if(file_exists($dir)) {
+		$bases = array();
+		$files = scandir($dir);
+		foreach($files as $file) {
+			//var_dump($file);
+			$bases[] = basename($file, ".".pathinfo(basename($file),PATHINFO_EXTENSION));
+		}
+		do {
+			$id = uniqid("pic_");
+		} while(in_array($id, $bases));
+		return $id;
+	} else {
+		return False;
+	}
+}
 ?>
