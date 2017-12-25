@@ -28,7 +28,7 @@ function getTeamsForRobotids($ids) {
 
 function getTeamsForMatchids($ids) {
 	global $DB, $TeamDataTable;
-	$mquery = $DB->prepare("SELECT number FROM ".dbclean($TeamDataTable)." WHERE eventids LIKE %?%");
+	$mquery = $DB->prepare("SELECT number FROM ".dbclean($TeamDataTable)." WHERE eventids LIKE ?");
 	$mteams = array();
 	$m = "";
 	if($mquery === false) {

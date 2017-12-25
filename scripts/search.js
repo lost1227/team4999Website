@@ -44,7 +44,8 @@ $("#closesearchbar").click(function() { closeSearchbar(); });
 function closeSearchbar(){
 	$("#TeamSearch").hide(0);
 	if($("#Filters").is(':visible')) {
-		ShowFilters();
+		$("#Filters").css('top','80px');
+		$("#container").css('top','80px');
 	}
 	$("#TeamSearch > input").val(''); //empty contents of searchbar
 	$("#container").css('top','80px');
