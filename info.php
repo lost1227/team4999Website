@@ -54,6 +54,50 @@
 		return $out;
 	}
 
+	function getAccordion($title,$content) {
+		return '<div class="accordion">
+			<button class="accordionbutton">'.$title.'</button>
+			<div class="accordioncontent">'.$content.'</div>
+			</div>';
+	}
+	function formatContent($ids, $schema,$table) {
+		global $RobotDataTable, $EventDataTable;
+		$out = "";
+		foreach($ids as $index=>$id) {
+			$data = retrieveKeys($table, $id, $schema);
+
+			if($table == $RobotDataTable) {
+				if(isset($data["name"]["data_value"]) && !empty($data["name"]["data_value"])) {
+					$title = $data["name"]["data_value"];
+				} else {
+					$title = "Robot #" . ($index + 1);
+				}
+			} elseif ($table == $EventDataTable) {
+				// event_name and match_num are special
+				if(isset($data["event_name"]["data_value"]) && isset($data["match_num"]["data_value"]) &&!empty($data["event_name"]["data_value"]) && !empty($data["match_num"]["data_value"])) {
+					$title = $data["event_name"]["data_value"]." Match #".$data["match_num"]["data_value"];
+				} else {
+					$title = "Match #" . ($index + 1);
+				}
+			} else {
+				$title = $index + 1;
+			}
+
+			$content = "";
+			foreach($data as $key=>$value) {
+				if(isset($value["data_value"]) && !empty($value["data_value"])) {
+					if(($table == $RobotDataTable && $key == "name") || ($table == $EventDataTable && ($key == "event_name" || $key == "match_num"))) {
+						continue;
+					}
+					$content .= '<p><span class="key">'.$value["display_name"].':</span> '.$value["data_value"].'</p>';
+				}
+			}
+			$content .= getPhotoDiv($id);
+			$out .= getAccordion($title, $content);
+		}
+		return $out;
+	}
+
 	$DB = createDBObject();
 	$team = clean($_GET["team"]);
 	$results = formatAndQuery("SELECT robotids,eventids FROM %s WHERE number = %d;",$TeamDataTable,$team);
@@ -83,42 +127,14 @@
 
 	echo('<p>Robots:</p>');
 	if(count($robotids) > 0) {
-		foreach($robotids as $index=>$robotid) {
-			$data = retrieveKeys($RobotDataTable, $robotid, $year["robotdata"]);
-			if(isset($data["name"]["data_value"]) && !empty($data["name"]["data_value"])) {
-				echo('<div class="robotdiv"><p class="robottitle">'.$data["name"]["data_value"].':</p>');
-			} else {
-				echo('<div class="robotdiv"><p class="robottitle">Robot #'. ($index + 1 ) .':</p>');
-			}
-			foreach($data as $key=>$value) {
-				if(isset($value["data_value"]) && !empty($value["data_value"])) {
-					echo('<p><span class="robotkey">'.$value["display_name"].':</span> '.$value["data_value"].'</p>');
-				}
-			}
-			echo(getPhotoDiv($robotid));
-			echo('</div>');
-		}
+		echo(formatContent($robotids,$year["robotdata"],$RobotDataTable));
 	} else {
 		echo("<p>No data!</p>");
 	}
 
 	echo('<p>Matches:</p>');
 	if(count($eventids) > 0 ) {
-		foreach($eventids as $index=>$eventid) {
-			$data = retrieveKeys($EventDataTable, $eventid, $year["matchdata"]);
-			if(isset($data["event_name"]["data_value"]) && isset($data["match_num"]["data_value"]) && !empty($data["event_name"]["data_value"]) && !empty($data["match_num"]["data_value"])) {
-				echo('<div class="eventdiv"><p class="eventtitle">'.$data["event_name"]["data_value"]." Match #".$data["match_num"]["data_value"].':</p>');
-			} else {
-				echo('<div class="eventdiv"><p class="eventtitle">Match #'. ($index + 1 ) .':</p>');
-			}
-			foreach($data as $key=>$value) {
-				if(isset($value["data_value"]) && !empty($value["data_value"])) {
-					echo('<p><span class="eventkey">'.$value["display_name"].':</span> '.$value["data_value"].'</p>');
-				}
-			}
-			echo(getPhotoDiv($robotid));
-			echo('</div>');
-		}
+		echo(formatContent($eventids,$year["matchdata"],$EventDataTable));
 	} else {
 		echo("<p>No data!</p>");
 	}
@@ -130,6 +146,8 @@
 	<div id="TBA">
 	</div>
 </div>
+<script src="scripts/jquery-3.1.1.min.js"></script>
+<script src="scripts/info.js"></script>
 <script src="scripts/TBAIntegration.js"></script>
 </body>
 </html>
