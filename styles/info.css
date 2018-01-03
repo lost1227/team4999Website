@@ -16,10 +16,6 @@ p {
 	margin: 0px;
 }
 
-/* Image Gallery style */
-img.gallery {
-	width: 150px;
-}
 #info {
 	width: 60%;
 	margin: auto;
@@ -69,13 +65,31 @@ h1{
 	color: #06ceff;
 }
 
-div.robotdiv, div.eventdiv {
-	padding-left: 15px;
+div.accordion {
+	border: 1px solid #b1b1b1;
 }
-div.robotdiv > p, div.eventdiv > p{
-	padding-left: 15px;
+
+div.accordioncontent {
+	display: none;
+	background-color: #ebfbff;
+	box-shadow: inset 0 0 5px 0px black;
+	padding: 2px;
 }
-div.robotdiv > p.robottitle, div.eventdiv > p.eventtitle {
-	padding-left: 0px;
-	text-decoration: underline;
+button.accordionbutton {
+	width: 100%;
+	padding: 1px 0px;
+	border-radius: 0px;
+	border: none;
+	background: none;
+	min-height: 15px;
+}
+button.accordionbutton:hover {
+	background: #f1f1f1;
+	cursor: pointer;
+}
+img.gallery {
+	width: 150px;
+}
+span.key {
+	font-weight: bold;
 }
