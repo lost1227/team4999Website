@@ -53,7 +53,7 @@ function validateTeam(team, callback) {
       callback(this.responseText == "TRUE");
     }
   }
-  request.open("GET", "checkTeam.php?team="+encodeURIComponent(team), true);
+  request.open("GET", "checkteam.php?team="+encodeURIComponent(team), true);
   request.send();
 
 }

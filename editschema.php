@@ -98,8 +98,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && checkIfValidUser()) {
     matchdata[key5][type]:textarea
 
   */
-  $olddataindex = getYearData($json,$year)[0];
-  $olddata = $json[$olddataindex];
+  $olddataindex = getYearData($json,$year);
+  if($olddataindex === false) {
+    end($json);
+    $olddataindex = key($json)+1;
+    reset($json);
+    $olddata = array("year"=>$year, "robotdata"=>array(), "matchdata"=>array());
+  } else {
+    $olddataindex = $olddataindex[0];
+    $olddata = $json[$olddataindex];
+  }
+
 
   foreach($data as $dkey=>$dval) {
     $rn = array();
@@ -245,7 +254,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && checkIfValidUser()) {
            <th>Data</th>
          </tr>
          <?php
-         $year = getYearData($json, $year)[1];
+         $yeard = $year;
+         $year = getYearData($json, $year);
+         if($year === false) {
+           $year = array("year"=>$yeard, "robotdata"=>array(), "matchdata"=>array());
+         } else {
+           $year = $year[1];
+         }
          foreach($year["robotdata"] as $key => $data){
            echo('
             <tr>
