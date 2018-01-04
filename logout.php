@@ -3,7 +3,11 @@
 session_unset();
 session_destroy();
 require 'functions.php';
-header( 'Location: '.getRootDir().'index.php')
+if(isset($_GET["redirect"])) {
+  header('Location: '.clean($_GET["redirect"]));
+} else {
+  header( 'Location: '.getRootDir().'index.php');
+}
 ?>
 <html>
 <head>

@@ -148,9 +148,9 @@ function getAndFormatData($ids, $datatable, $dataschema) {
 					break;
 				case "boolean": // store booleans as strings in the DB, where "true" is true
 					if($value["data_value"] == "true") {
-						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="'.$prefix.'['.$id.']['.$key.']" checked></label>';
+						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="'.$prefix.'['.$id.']['.$key.']" class="optionboolean" checked></label>';
 					} else {
-						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="'.$prefix.'['.$id.']['.$key.']"></label>';
+						$content .= '<label><p class="key">'.$value["display_name"].': </p><input type="checkbox" name="'.$prefix.'['.$id.']['.$key.']" class="optionboolean"></label>';
 					}
 					break;
 				case "number":
@@ -199,7 +199,10 @@ function getRowConstructor($functionname, $prefix, $dataschema) {
 		}
 		$content .= '</div>';
 	}
+	$content .= '<div id="photogallery">';
+	$content .= '<input id="uploadImage" type="file" name="uploadImages[${id}][]" accept="image/jpeg,image/png,image/gif,image/bmp" multiple>';
 	$out .= getAccordion("", $content);
+	$out .= '</div>';
 	$out .= "`; }";
 	return $out;
 }
@@ -240,6 +243,18 @@ if(!checkTeamInDB($team)) {
 
 <?php
 
+	if(file_exists("schema.json")) {
+		$json = json_decode(file_get_contents("schema.json"), True);
+		$year = getYearData($json, getDefaultYear())[1];
+		if($year === false) {
+			echo("<p>Schema for this year does not exist</p>");
+			exit();
+		}
+	} else {
+		echo("<p>schema.json does not exist!</p>");
+		exit();
+	}
+
 	$data = getTeamIds($team);
 	if($data === false) {
 		$robotids = array();
@@ -249,17 +264,9 @@ if(!checkTeamInDB($team)) {
 		$eventids = $data["eventids"];
 	}
 
-if(file_exists("schema.json")) {
-	$json = json_decode(file_get_contents("schema.json"), True);
-	$year = getYearData($json, getDefaultYear())[1];
-	if($year === false) {
-		echo("<p>Schema for this year does not exist</p>");
-		exit();
-	}
-} else {
-	echo("<p>schema.json does not exist!</p>");
-	exit();
-}
+	$robotids = getIdsForYear($RobotDataTable, $year["year"], $robotids);
+	$eventids = getIdsForYear($EventDataTable, $year["year"], $eventids);
+
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -273,6 +280,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 	foreach($robotids as $robotid) {
 		if(!isset($robotdata[$robotid])) {
 			deleteItem($RobotDataTable, $robotid);
+			if (file_exists($image_root . $robotid)) {
+				rrmdir($image_root . $robotid);
+			}
 		}
 	}
 
@@ -302,6 +312,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 	foreach($eventids as $eventid) {
 		if(!isset($eventdata[$eventid])) {
 			deleteItem($EventDataTable, $eventid);
+			if (file_exists($image_root . $eventid)) {
+				rrmdir($image_root . $eventid);
+			}
 		}
 	}
 
@@ -397,24 +410,21 @@ if($data === false) {
 $robotids = getIdsForYear($RobotDataTable, $year["year"], $robotids);
 $eventids = getIdsForYear($EventDataTable, $year["year"], $eventids);
 ?>
-<p>Robots:</p>
+<p class="category">Robots:</p>
 <div id="robotaccordion">
 	<?php
 		if(count($robotids) > 0) {
 			echo(getAndFormatData($robotids, $RobotDataTable, $year["robotdata"]));
-		} else {
-			echo("<p>No data!</p>");
-		} ?>
-		<button class="add" id="addRobot">+</button>
+		}
+	?>
+	<button class="add" id="addRobot">+</button>
 </div>
 
-<p>Matches:</p>
+<p class="category">Matches:</p>
 <div id="matchaccordion">
 	<?php
 		if(count($eventids) > 0) {
 			echo(getAndFormatData($eventids, $EventDataTable, $year["matchdata"]));
-		} else {
-			echo("<p>No data!</p>");
 		}
 	?>
 	<button class="add" id="addMatch">+</button>

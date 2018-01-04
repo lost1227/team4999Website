@@ -89,7 +89,15 @@
 					if(($table == $RobotDataTable && $key == "name") || ($table == $EventDataTable && ($key == "event_name" || $key == "match_num"))) {
 						continue;
 					}
-					$content .= '<p><span class="key">'.$value["display_name"].':</span> '.$value["data_value"].'</p>';
+					if($value["type"] == "boolean") {
+						if($value["data_value"] == "true") {
+							$content .= '<p><span class="key">'.$value["display_name"].':</span> Yes</p>';
+						} else {
+							$content .= '<p><span class="key">'.$value["display_name"].':</span> No</p>';
+						}
+					} else {
+						$content .= '<p><span class="key">'.$value["display_name"].':</span> '.$value["data_value"].'</p>';
+					}
 				}
 			}
 			$content .= getPhotoDiv($id);
@@ -125,14 +133,14 @@
 	$robotids = getIdsForYear($RobotDataTable, $year["year"], $robotids);
 	$eventids = getIdsForYear($EventDataTable, $year["year"], $eventids);
 
-	echo('<p>Robots:</p>');
+	echo('<p class="category">Robots:</p>');
 	if(count($robotids) > 0) {
 		echo(formatContent($robotids,$year["robotdata"],$RobotDataTable));
 	} else {
 		echo("<p>No data!</p>");
 	}
 
-	echo('<p>Matches:</p>');
+	echo('<p class="category">Matches:</p>');
 	if(count($eventids) > 0 ) {
 		echo(formatContent($eventids,$year["matchdata"],$EventDataTable));
 	} else {

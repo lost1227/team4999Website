@@ -64,13 +64,18 @@
 			if(file_exists("schema.json")) {
 				$json = json_decode(file_get_contents("schema.json"), True);
 				echo('<select id="yearselectfield" name="year">');
+				$years = array();
 				foreach($json as $year) {
-					if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["year"]) && $_POST["year"] == $year["year"]){
-						echo('<option value='.$year["year"].' selected="selected">'.$year["year"].'</option>');
-					} else {
-						echo('<option value='.$year["year"].'>'.$year["year"].'</option>');
-					}
+					$years[] = $year["year"];
 	      }
+				rsort($years);
+				foreach($years as $year) {
+					if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["year"]) && $_POST["year"] == $year){
+						echo('<option value='.$year.' selected="selected">'.$year.'</option>');
+					} else {
+						echo('<option value='.$year.'>'.$year.'</option>');
+					}
+				}
 				echo('</select>');
 			}
 

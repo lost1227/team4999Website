@@ -121,3 +121,6 @@ input.deletePix {
 #photogallery {
 	padding: 0px 2px;
 }
+p.category {
+	font-family: StormFaze, sans-serif;
+}
