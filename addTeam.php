@@ -37,7 +37,7 @@
   <div id="main">
     <h1>Add Team</h1>
     <form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post" id="mainf">
-      <input type="text" id="teaminput" name="team">
+      <input type="text" id="teaminput" name="team" <?php if(isset($_GET["team"])){echo('value="'.$_GET["team"].'"');} ?> >
       <input type="submit" id="submitbutton">
       <p id="exists" style="display: none;">Team alredy exists in database</p>
     </form>
