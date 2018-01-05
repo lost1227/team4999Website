@@ -237,20 +237,10 @@ foreach($events as $event) {
   if(!is_null($status)) {
     if(!is_null($status["playoff"])) {
       $record = $status["playoff"]["record"];
-      $content .= '<div class="detailcontainer">';
-      $content .= '<p class="section">Playoffs</p>';
-      $content .= '<div class="details">';
-      $content .= '<p><span class="description">Record: </span>'.$record["wins"].'-'.$record["losses"].'-'.$record["ties"].'</p>';
-      $content .= '<p><span class="description">Level: </span>'.switchLevel($status["playoff"]["level"]).'</p>';
-      $content .= '</div></div>';
+      $content .= '<p class="section"><span class="label">Playoffs:</span> <span class="record">'.$record["wins"].'-'.$record["losses"].'-'.$record["ties"].'</span> '.switchLevel($status["playoff"]["level"]).'</p>';
     }
-    $content .= '<div class="detailcontainer">';
-    $content .= '<p class="section">Qualification matches</p>';
     $record = $status["qual"]["ranking"]["record"];
-    $content .= '<div class="details">';
-    $content .= '<p><span class="description">Record: </span>'.$record["wins"].'-'.$record["losses"].'-'.$record["ties"].'</p>';
-    $content .= '<p><span class="description">Rank: </span>'.$status["qual"]["ranking"]["rank"].'/'.$status["qual"]["num_teams"].'</p>';
-    $content .= '</div></div>';
+    $content .= '<p class="section"><span class="label">Qualification matches:</span> <span class="record">'.$record["wins"].'-'.$record["losses"].'-'.$record["ties"].'</span> '.$status["qual"]["ranking"]["rank"].'/'.$status["qual"]["num_teams"].'</p>';
   }
   $now = new DateTime();
   $start = DateTime::createFromFormat("Y-m-d",$event["start_date"]);
