@@ -20,7 +20,7 @@ p {
 	width: 60%;
 	margin: auto;
 	background-color: rgba(255, 255, 255, 0.67);
-	padding: 15px 70px;
+	padding: 0px 70px;
 	min-height: 100%;
 	box-shadow: 0px 0px 10px 1px #06ceff;
 }
@@ -29,6 +29,7 @@ h1{
 	font-size: 2em;
 }
 #back {
+	margin-top: 15px;
 	width: 50px;
 	position: relative;
 	left: -55px;
