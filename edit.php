@@ -234,7 +234,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 }
 if(!checkTeamInDB($team)) {
-	header('Location: '.getRootDir().'index.php');
+	header('Location: '.getRootDir().'addTeam.php?team='.$team);
 }
 ?>
 <img src="images/back.png" id="back" onclick="setUrl('<?php require 'specificvars.php'; echo($appdir.'info.php?team='.clean($team)); ?>')">

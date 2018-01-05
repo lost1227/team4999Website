@@ -7,6 +7,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="styles/info.css">
+		<link rel="stylesheet" href="styles/loading.css">
 		<title>Team: <?php echo(str_replace('_',' ',$_GET["team"])); ?></title>
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0" />
 		<meta name="apple-mobile-web-app-capable" content="no" />
@@ -133,14 +134,14 @@
 	$robotids = getIdsForYear($RobotDataTable, $year["year"], $robotids);
 	$eventids = getIdsForYear($EventDataTable, $year["year"], $eventids);
 
-	echo('<p class="category">Robots:</p>');
+	echo('<p class="category">Robots</p>');
 	if(count($robotids) > 0) {
 		echo(formatContent($robotids,$year["robotdata"],$RobotDataTable));
 	} else {
 		echo("<p>No data!</p>");
 	}
 
-	echo('<p class="category">Matches:</p>');
+	echo('<p class="category">Matches</p>');
 	if(count($eventids) > 0 ) {
 		echo(formatContent($eventids,$year["matchdata"],$EventDataTable));
 	} else {
@@ -152,10 +153,14 @@
 	<a id="edit" href="edit.php?team=<?php echo($team); ?>">Edit</a>
 	<hr><div id="TBAheading"><span>The Blue Alliance info</span></div>
 	<div id="TBA">
+	  <div class="loader">
+	    <svg class="circular-loader"viewBox="25 25 50 50" >
+	      <circle class="loader-path" cx="50" cy="50" r="20" fill="none" stroke="#06ceff" stroke-width="2" />
+	    </svg>
+		</div>
 	</div>
 </div>
 <script src="scripts/jquery-3.1.1.min.js"></script>
 <script src="scripts/info.js"></script>
-<script src="scripts/TBAIntegration.js"></script>
 </body>
 </html>
