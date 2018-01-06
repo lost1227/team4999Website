@@ -122,6 +122,14 @@ a {
 	text-decoration: none;
 }
 
+a.teamurl {
+	color: initial;
+	text-decoration: underline;
+}
+a.teamurl:hover {
+	color: #06ceff;
+}
+
 table {
   border-collapse: collapse;
 	width: 100%;

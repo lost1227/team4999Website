@@ -39,7 +39,7 @@ function getTeamEventMatches($team,$eventkey) {
 
 function getTeamInfo($team) {
   $teamkey = "frc".$team;
-  $url = "/team/".$teamkey."/simple";
+  $url = "/team/".$teamkey;
   return readTBA($url);
 }
 
@@ -222,6 +222,9 @@ if($info["country"] == "USA") {
   echo("<p>Location: ".$info["city"].", ".$info["state_prov"]."</p>");
 } else {
   echo("<p>Location: ".$info["city"].", ".$info["country"]."</p>");
+}
+if(!is_null($info["website"])) {
+  echo('<p>Website: <a class="teamurl" href="'.$info["website"].'">'.$info["website"].'</a></p>');
 }
 
 
