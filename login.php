@@ -32,6 +32,10 @@
 				header( 'Location: '.getRootDir().clean($_POST["redirect"]));
 				exit();
 			}
+			if (isset($_GET["redirect"])) {
+				header( 'Location: '.getRootDir().clean($_GET["redirect"]));
+				exit();
+			}
 			header( 'Location: '.getRootDir().'index.php');
 			exit();
 		}
