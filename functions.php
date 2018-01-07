@@ -1,5 +1,9 @@
 <?php
 require 'specificvars.php';
+
+error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
+ini_set('display_errors', TRUE);
+
 $image_root = "photos/";
 $acceptableFileTypes = array("jpg","png","jpeg","gif","bmp");
 date_default_timezone_set("America/Los_Angeles");

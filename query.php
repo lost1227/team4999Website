@@ -14,12 +14,10 @@ function getTeamsForRobotids($ids) {
 	foreach($ids as $rb) {
 		$rb = '%'.$rb.'%';
 		$rbquery->execute();
-		$result = $rbquery->get_result();
-		if($result->num_rows > 0) {
-			while($rrow = $result->fetch_assoc()) {
-				if(!in_array($rrow["number"], $rteams)){
-					$rteams[] = $rrow["number"];
-				}
+		$rbquery->bind_result($number);
+		while($rbquery->fetch()) {
+			if(!in_array($number, $rteams)){
+				$rteams[] = $number;
 			}
 		}
 	}
@@ -38,12 +36,10 @@ function getTeamsForMatchids($ids) {
 	foreach($ids as $m) {
 		$m = '%'.$m.'%';
 		$mquery->execute();
-		$result = $mquery->get_result();
-		if($result->num_rows > 0) {
-			while($mrow = $result->fetch_assoc()) {
-				if(!in_array($mrow["number"], $mteams)){
-					$mteams[] = $mrow["number"];
-				}
+		$rbquery->bind_result($number);
+		while($mrow = $result->fetch_assoc()) {
+			if(!in_array($number, $mteams)){
+				$mteams[] = $number;
 			}
 		}
 	}
