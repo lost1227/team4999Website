@@ -17,13 +17,13 @@
   <meta name="theme-color" content="#ffffff">
 </head>
 <?php
+require 'functions.php';
   #check if logged in and redirect if not
   if (!isset($_SESSION["loggedIn"])) {
   	header( 'Location: '.getRootDir().'login.php?redirect=addTeam.php');
   	exit();
   }
   if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["team"])) {
-    require 'functions.php';
     $result = formatAndQuery('SELECT number FROM %s WHERE number = %sv', $TeamDataTable, $_POST["team"]);
   	if($result->num_rows == 0) {
       formatAndQuery('INSERT INTO %s VALUES (%sv,"","")', $TeamDataTable, $_POST["team"]);

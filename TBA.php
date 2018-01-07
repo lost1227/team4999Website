@@ -16,7 +16,16 @@ function readTBA($url) {
   $result = curl_exec($ch);
   curl_close($ch);
 
-  return json_decode($result,true);
+  $result = json_decode($result,true);
+
+  if(isset($result["Errors"])) {
+    foreach($result["Errors"] as $error) {
+      writeToLog("Error: ".json_encode($error),"TBA");
+    }
+    return False;
+  } else {
+    return $result;
+  }
 }
 
 function getTeamEvents($team) {
@@ -215,68 +224,72 @@ if(!isset($_GET["team"])) {
 }
 $team = $_GET["team"];
 
-echo('<p class="label">Team Info</p>');
 $info = getTeamInfo($team);
-echo("<p>Name: ".$info["nickname"]."</p>");
-if($info["country"] == "USA") {
-  echo("<p>Location: ".$info["city"].", ".$info["state_prov"]."</p>");
-} else {
-  echo("<p>Location: ".$info["city"].", ".$info["country"]."</p>");
+if($info !== False) {
+  echo('<p class="label">Team Info</p>');
+  $info = getTeamInfo($team);
+  echo("<p>Name: ".$info["nickname"]."</p>");
+  if($info["country"] == "USA") {
+    echo("<p>Location: ".$info["city"].", ".$info["state_prov"]."</p>");
+  } else {
+    echo("<p>Location: ".$info["city"].", ".$info["country"]."</p>");
+  }
+  if(!is_null($info["website"])) {
+    echo('<p>Website: <a class="teamurl" href="'.$info["website"].'">'.$info["website"].'</a></p>');
+  }
 }
-if(!is_null($info["website"])) {
-  echo('<p>Website: <a class="teamurl" href="'.$info["website"].'">'.$info["website"].'</a></p>');
-}
 
 
-
-echo('<p class="label">Events</p>');
 $events = getTeamEvents($team);
-if(empty($events)) {
-  echo("<p>".$team." participated in no events in ".getDefaultYear()."</p>");
-}
-foreach($events as $event) {
-  $status = getTeamEventStatus($team,$event["key"]);
-  $content = "";
-  if(!is_null($status)) {
-    if(!is_null($status["playoff"])) {
-      $record = $status["playoff"]["record"];
-      $content .= '<p class="section"><span class="label">Playoffs:</span> <span class="record">'.$record["wins"].'-'.$record["losses"].'-'.$record["ties"].'</span> '.switchLevel($status["playoff"]["level"]).'</p>';
+if($events !== False) {
+  echo('<p class="label">Events</p>');
+  if(empty($events)) {
+    echo("<p>".$team." participated in no events in ".getDefaultYear()."</p>");
+  }
+  foreach($events as $event) {
+    $status = getTeamEventStatus($team,$event["key"]);
+    $content = "";
+    if(!is_null($status)) {
+      if(!is_null($status["playoff"])) {
+        $record = $status["playoff"]["record"];
+        $content .= '<p class="section"><span class="label">Playoffs:</span> <span class="record">'.$record["wins"].'-'.$record["losses"].'-'.$record["ties"].'</span> '.switchLevel($status["playoff"]["level"]).'</p>';
+      }
+      $record = $status["qual"]["ranking"]["record"];
+      $content .= '<p class="section"><span class="label">Qualification matches:</span> <span class="record">'.$record["wins"].'-'.$record["losses"].'-'.$record["ties"].'</span> '.$status["qual"]["ranking"]["rank"].'/'.$status["qual"]["num_teams"].'</p>';
     }
-    $record = $status["qual"]["ranking"]["record"];
-    $content .= '<p class="section"><span class="label">Qualification matches:</span> <span class="record">'.$record["wins"].'-'.$record["losses"].'-'.$record["ties"].'</span> '.$status["qual"]["ranking"]["rank"].'/'.$status["qual"]["num_teams"].'</p>';
-  }
-  $now = new DateTime();
-  $start = DateTime::createFromFormat("Y-m-d",$event["start_date"]);
-  $end = DateTime::createFromFormat("Y-m-d",$event["end_date"]);
-  $endend = clone $end;
-  $endend->add(new DateInterval("P1D"));
-  if($start <= $now) {
-    $content .= '<p class="date"><span class="description">Started: </span>'.$start->format("F j, Y").'</p>';
-  } else {
-    $content .= '<p class="date"><span class="description">Starts: </span>'.$start->format("F j, Y").'</p>';
-  }
-  if($endend < $now) {
-    $content .= '<p class="date"><span class="description">Ended: </span>'.$end->format("F j, Y").'</p>';
-  } else {
-    $content .= '<p class="date"><span class="description">Ends: </span>'.$end->format("F j, Y").'</p>';
-  }
-
-  $matches = getTeamEventMatches($team, $event["key"]);
-
-  $matchsorted = array("qm"=>array(),"ef"=>array(),"qf"=>array(),"sf"=>array(),"f"=>array());
-  foreach($matches as $match) {
-    $matchsorted[$match["comp_level"]][] = $match;
-  }
-  foreach($matchsorted as $matchtype=>$matches) {
-    if(!empty($matches)){
-      $content .= getAccordion(switchLevel($matchtype),getMatchTable($matchtype,$matches,$team));
+    $now = new DateTime();
+    $start = DateTime::createFromFormat("Y-m-d",$event["start_date"]);
+    $end = DateTime::createFromFormat("Y-m-d",$event["end_date"]);
+    $endend = clone $end;
+    $endend->add(new DateInterval("P1D"));
+    if($start <= $now) {
+      $content .= '<p class="date"><span class="description">Started: </span>'.$start->format("F j, Y").'</p>';
+    } else {
+      $content .= '<p class="date"><span class="description">Starts: </span>'.$start->format("F j, Y").'</p>';
     }
+    if($endend < $now) {
+      $content .= '<p class="date"><span class="description">Ended: </span>'.$end->format("F j, Y").'</p>';
+    } else {
+      $content .= '<p class="date"><span class="description">Ends: </span>'.$end->format("F j, Y").'</p>';
+    }
+
+    $matches = getTeamEventMatches($team, $event["key"]);
+
+    $matchsorted = array("qm"=>array(),"ef"=>array(),"qf"=>array(),"sf"=>array(),"f"=>array());
+    foreach($matches as $match) {
+      $matchsorted[$match["comp_level"]][] = $match;
+    }
+    foreach($matchsorted as $matchtype=>$matches) {
+      if(!empty($matches)){
+        $content .= getAccordion(switchLevel($matchtype),getMatchTable($matchtype,$matches,$team));
+      }
+    }
+
+
+
+    // check is_null($status["playoff"]) to see if made playoffs for the event
+    echo(getAccordion($event["name"],$content, ($start <= $now && $endend >= $now)));
   }
-
-
-
-  // check is_null($status["playoff"]) to see if made playoffs for the event
-  echo(getAccordion($event["name"],$content, ($start <= $now && $endend >= $now)));
 }
 
  ?>
