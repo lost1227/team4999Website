@@ -151,6 +151,13 @@ function getScoreTable($scores, $targetcolor, $winner) {
     $blue .= " target";
   }
 
+  if($scores["red"] == "-1") {
+    $scores["red"] = "?";
+  }
+  if($scores["blue"] == "-1") {
+    $scores["blue"] = "?";
+  }
+
   $out .= '<tr class="'.$red.'"><td>'.$scores["red"].'</tr></td>';
   $out .= '<tr class="'.$blue.'"><td>'.$scores["blue"].'</tr></td>';
 
