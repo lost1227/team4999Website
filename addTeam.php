@@ -24,6 +24,9 @@ require 'functions.php';
   	exit();
   }
   if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["team"])) {
+    if(!checkCSRFToken($_POST["token"])) {
+      die("Bad CSRF Token");
+    }
     $result = formatAndQuery('SELECT number FROM %s WHERE number = %sv', $TeamDataTable, $_POST["team"]);
   	if($result->num_rows == 0) {
       formatAndQuery('INSERT INTO %s VALUES (%sv,"","")', $TeamDataTable, $_POST["team"]);
@@ -39,6 +42,7 @@ require 'functions.php';
     <form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post" id="mainf">
       <input type="text" id="teaminput" name="team" <?php if(isset($_GET["team"])){echo('value="'.$_GET["team"].'"');} ?> >
       <input type="submit" id="submitbutton">
+      <input type="hidden" name="token" value="<?php echo(getCSRFToken()); ?>">
       <p id="exists" style="display: none;">Team alredy exists in database</p>
     </form>
   </div>

@@ -20,7 +20,16 @@ function checkPostVarsSet($postData, $expectedKeys) {
   }
   return True;
 }
+#check if logged in and redirect if not
+if (!(isset($_SESSION["loggedIn"]) && checkIfValidUser())) {
+	header( 'Location: '.getRootDir().'login.php?redirect=editusers.php');
+	exit();
+}
+#PROCESS FORM DATA
 if($_SERVER["REQUEST_METHOD"] == "POST" and checkIfValidUser()) {
+  if(!checkCSRFToken($_POST["token"])) {
+    die("Bad CSRF Token");
+  }
   $DB = createDBObject();
   if(isset($_POST["formtype"])) {
     if($_POST["formtype"] == "adduser" and checkPostVarsSet($_POST, array("user", "pass","name")) and !checkIfDBContainsUser($_POST["user"])) {
@@ -93,12 +102,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST" and checkIfValidUser()) {
         <td><input id="name" name="name" type="text" placeholder = "Name"><label><input type="checkbox" name="admin" value="true">Admin</label></td>
         <td><input id="submit" type="image" src="images/plus-4-xxl.png" width="15"></td>
         <input type="hidden" name="formtype" value="adduser">
+        <input type="hidden" name="token" value="<?php echo(getCSRFToken()); ?>">
       </form>
     </tr>
   </table>
   <form style="display: none;" id="deluserf" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" autocomplete="off">
     <input id="deluser" name="user" type="hidden" value="">
     <input type="hidden" name="formtype" value="deluser">
+    <input type="hidden" name="token" value="<?php echo(getCSRFToken()); ?>">
   </form>
 </body>
 </html>

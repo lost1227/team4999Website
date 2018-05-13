@@ -268,7 +268,12 @@ if(!checkTeamInDB($team)) {
 	$eventids = getIdsForYear($EventDataTable, $year["year"], $eventids);
 
 
+# PROCESS FORM DATA
 if($_SERVER["REQUEST_METHOD"] == "POST") {
+	
+	if(!checkCSRFToken($_POST["token"])) {
+		die("Bad CSRF Token");
+	}
 
 	if(isset($_POST["robot"])) {
 		$robotdata = $_POST["robot"];
@@ -433,6 +438,7 @@ $eventids = getIdsForYear($EventDataTable, $year["year"], $eventids);
 <?php
 echo('<input type="hidden" name="team" value="'.$team.'">');
 ?>
+<input type="hidden" name="token" value="<?php echo(getCSRFToken()); ?>">
 <input type="submit" value="Save">
 </form>
 </div>

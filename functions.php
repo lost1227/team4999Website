@@ -483,4 +483,37 @@ function rrmdir($dir) {
 		rmdir($dir);
 	}
 }
+
+/**
+ * Sets a random token used to preform CSRF verification on form requests
+*/
+function setCSRFToken() {
+	if(session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
+	$_SESSION["CSRF_token"] = clean(bin2hex(openssl_random_pseudo_bytes(16)));
+}
+
+/**
+ * Gets the current CSRF token
+ * @return String The current CSRF token
+ */
+ function getCSRFToken() {
+	 if(session_status() == PHP_SESSION_NONE) {
+		 session_start();
+	 }
+	 return $_SESSION["CSRF_token"];
+ }
+
+/**
+ * Checks if the given token matches the CSRF_token for the current session
+ * @param String $token The token to be checked against the saved token
+ */
+function checkCSRFToken($token) {
+	if(session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
+	return $_SESSION["CSRF_token"] === $token;
+}
+
 ?>

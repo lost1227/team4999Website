@@ -23,6 +23,7 @@
 				$_SESSION["pass"] = $pass;
 				$_SESSION["year"] = $year;
 				$_SESSION["loggedIn"] = True;
+				setCSRFToken();
 			} else {
 				$passFailed = True;
 			}

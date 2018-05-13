@@ -61,7 +61,13 @@ if(!file_exists("schema.json")) {
   $json = json_decode(file_get_contents("schema.json"), True);
 }
 
+# PROCESS FORM DATA
 if($_SERVER["REQUEST_METHOD"] == "POST" && checkIfValidUser()) {
+
+  if(!checkCSRFToken($_POST["token"])) {
+    die("Bad CSRF Token");
+  }
+
   $updated = array("year"=>$_POST["year"],"robotdata"=>array(), "matchdata"=>array());
   $year = $_POST["year"];
   $data = array();
@@ -301,6 +307,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && checkIfValidUser()) {
        <tr><td colspan="4"><button id="addmatchrow">Add row</button></tr>
      </table>
    </fieldset>
+  <input type="hidden" name="token" value="<?php echo(getCSRFToken()); ?>">
   <input type="submit">
 </form>
 
