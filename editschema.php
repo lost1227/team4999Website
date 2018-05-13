@@ -170,8 +170,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && checkIfValidUser()) {
 <html>
 <head>
   <title>Edit Information Collection</title>
-  <script src="<?php echo($appdir);?>scripts/jquery-3.1.1.min.js"></script>
-  <script src="<?php echo($appdir);?>scripts/editschema.js"></script>
+  <script src="scripts/jquery-3.1.1.min.js"></script>
+  <script src="scripts/editschema.js"></script>
   <script>
   var crindx = 0;
   var cmindx = 0;
@@ -208,109 +208,116 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && checkIfValidUser()) {
           ].join("\n");
   }
   </script>
-  <link rel="stylesheet" href="<?php global $appdir; echo($appdir);?>styles/editschema.css">
+  <script>
+		function setUrl(url) {
+			document.location.href = url;
+		}
+	</script>
+  <link rel="stylesheet" href="styles/editschema.css">
 </head>
 <body>
-  <?php
-  if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["year"])) {
-    $year = $_GET["year"];
-  } else if(!($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["year"]))) {
-    echo('<table><tr><th>Select year:</th></tr>');
-    if(count($json) > 0 ) {
-      foreach($json as $year) {
-        echo('<tr><td class="yearchoice" data-year='.$year["year"].'>'.$year["year"].'</td></tr>');
-      }
-    }
-    echo('<tr><td>
-      <input id="addyear" type="number" name="year">
-      <button id="addyearb">Add</button>
-      </td></tr>');
-    echo('</table>');
-    echo('
-    <form id="selectyearf" style="display: none;" action='.htmlentities($_SERVER['PHP_SELF']).' method="get" autocomplete="off">
-      <input id="selectyear" name="year" value="">
-    </form>
-    ');
-    echo('<script>
-    $(document).ready(function() {
-      $(".yearchoice").click(function(e) {
-        var year = $(e.target).data("year");
-        $("#selectyear").val(year);
-        $("#selectyearf").submit();
-      });
-      $("#addyearb").click(function(e) {
-        $("#selectyear").val($("#addyear").val());
-        $("#selectyearf").submit();
-      });
-    });
-    </script>');
-    exit();
-  }
-   ?>
-   <p id="YearTitle"><?php echo($year); ?></p>
-   <form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post" id="mainf">
-     <input type="hidden" name="year" value="<?php echo($year); ?>">
-     <fieldset>
-       <legend>Robot data</legend>
-       <table>
-         <tr>
-           <th>Key</th>
-           <th>Display Name</th>
-           <th>Type</th>
-           <th>Data</th>
-         </tr>
-         <?php
-         $yeard = $year;
-         $year = getYearData($json, $year);
-         if($year === false) {
-           $year = array("year"=>$yeard, "robotdata"=>array(), "matchdata"=>array());
-         } else {
-           $year = $year[1];
-         }
-         foreach($year["robotdata"] as $key => $data){
-           echo('
-            <tr>
-              <td><input type="text" name="robotdata['.$key.'][key]" value="'.$key.'" class="f_key"></td>
-              <td><input type="text" name="robotdata['.$key.'][display_name]" value="'.$data["display_name"].'" class="f_name"></td>
-              <td><select name="robotdata['.$key.'][type]" class="datatselector">
-                '.getTypeOptions($data["type"]).'</select></td>
-              <td class="datar">'.getSelectOptions($key, $data, "robotdata").'</td>
-            </tr>
-           ');
-         }
-        ?>
-        <tr><td colspan="4"><button id="addrobotrow">Add row</button></tr>
-      </table>
-    </fieldset>
-    <fieldset>
-      <legend>Match data</legend>
-      <table>
-        <tr>
-          <th>Key</th>
-          <th>Display Name</th>
-          <th>Type</th>
-          <th>Data</th>
-        </tr>
-        <?php
-        foreach($year["matchdata"] as $key => $data){
-          echo('
-           <tr>
-             <td><input type="text" name="matchdata['.$key.'][key]" value="'.$key.'" class="f_key"></td>
-             <td><input type="text" name="matchdata['.$key.'][display_name]" value="'.$data["display_name"].'" class="f_name" ></td>
-             <td><select name="matchdata['.$key.'][type]" class="datatselector">
-               '.getTypeOptions($data["type"]).'</select></td>
-             <td class="datar" >'.getSelectOptions($key, $data, "matchdata").'</td>
-           </tr>
-          ');
+  <div id="main">
+    <?php
+    if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["year"])) {
+      $year = $_GET["year"];
+    } else if(!($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["year"]))) {
+      echo('<img src="images/back.png" id="back" onclick="setUrl(\''.$appdir.'index.php\')">');
+      echo('<table><tr><th>Select year:</th></tr>');
+      if(count($json) > 0 ) {
+        foreach($json as $year) {
+          echo('<tr><td class="yearchoice" data-year='.$year["year"].'>'.$year["year"].'</td></tr>');
         }
-       ?>
-       <tr><td colspan="4"><button id="addmatchrow">Add row</button></tr>
-     </table>
-   </fieldset>
-  <input type="hidden" name="token" value="<?php echo(getCSRFToken()); ?>">
-  <input type="submit">
-</form>
-
-
+      }
+      echo('<tr><td>
+        <input id="addyear" type="number" name="year">
+        <button id="addyearb">Add</button>
+        </td></tr>');
+      echo('</table>');
+      echo('
+      <form id="selectyearf" style="display: none;" action='.htmlentities($_SERVER['PHP_SELF']).' method="get" autocomplete="off">
+        <input id="selectyear" name="year" value="">
+      </form>
+      ');
+      echo('<script>
+      $(document).ready(function() {
+        $(".yearchoice").click(function(e) {
+          var year = $(e.target).data("year");
+          $("#selectyear").val(year);
+          $("#selectyearf").submit();
+        });
+        $("#addyearb").click(function(e) {
+          $("#selectyear").val($("#addyear").val());
+          $("#selectyearf").submit();
+        });
+      });
+      </script>');
+      exit();
+    }
+     ?>
+     <img src="images/back.png" id="back" onclick="setUrl('<?php echo($appdir); ?>editschema.php')">
+     <h1 id="YearTitle"><?php echo($year); ?></h1>
+     <form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post" id="mainf">
+       <input type="hidden" name="year" value="<?php echo($year); ?>">
+       <fieldset>
+         <legend>Robot data</legend>
+         <table>
+           <tr>
+             <th>Key</th>
+             <th>Display Name</th>
+             <th>Type</th>
+             <th>Data</th>
+           </tr>
+           <?php
+           $yeard = $year;
+           $year = getYearData($json, $year);
+           if($year === false) {
+             $year = array("year"=>$yeard, "robotdata"=>array(), "matchdata"=>array());
+           } else {
+             $year = $year[1];
+           }
+           foreach($year["robotdata"] as $key => $data){
+             echo('
+              <tr>
+                <td><input type="text" name="robotdata['.$key.'][key]" value="'.$key.'" class="f_key"></td>
+                <td><input type="text" name="robotdata['.$key.'][display_name]" value="'.$data["display_name"].'" class="f_name"></td>
+                <td><select name="robotdata['.$key.'][type]" class="datatselector">
+                  '.getTypeOptions($data["type"]).'</select></td>
+                <td class="datar">'.getSelectOptions($key, $data, "robotdata").'</td>
+              </tr>
+             ');
+           }
+          ?>
+          <tr><td colspan="4"><button id="addrobotrow">Add row</button></tr>
+        </table>
+      </fieldset>
+      <fieldset>
+        <legend>Match data</legend>
+        <table>
+          <tr>
+            <th>Key</th>
+            <th>Display Name</th>
+            <th>Type</th>
+            <th>Data</th>
+          </tr>
+          <?php
+          foreach($year["matchdata"] as $key => $data){
+            echo('
+             <tr>
+               <td><input type="text" name="matchdata['.$key.'][key]" value="'.$key.'" class="f_key"></td>
+               <td><input type="text" name="matchdata['.$key.'][display_name]" value="'.$data["display_name"].'" class="f_name" ></td>
+               <td><select name="matchdata['.$key.'][type]" class="datatselector">
+                 '.getTypeOptions($data["type"]).'</select></td>
+               <td class="datar" >'.getSelectOptions($key, $data, "matchdata").'</td>
+             </tr>
+            ');
+          }
+         ?>
+         <tr><td colspan="4"><button id="addmatchrow">Add row</button></tr>
+       </table>
+     </fieldset>
+    <input type="hidden" name="token" value="<?php echo(getCSRFToken()); ?>">
+    <input type="submit" value="Save">
+  </form>
+</div>
 </body>
 </html>
