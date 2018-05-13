@@ -56,6 +56,11 @@ $(document).ready(function() {
     }
     return false;
   });
+
+  $("#delbut").click(function(e) {
+    $("#delf").submit();
+    return false;
+  });
 });
 function getId(prefix, callback) {
   var request = new XMLHttpRequest();

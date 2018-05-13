@@ -23,7 +23,7 @@ require 'functions.php';
   	header( 'Location: '.getRootDir().'login.php?redirect=addTeam.php');
   	exit();
   }
-  if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["team"])) {
+  if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["team"]) && !empty($_POST["team"])) {
     if(!checkCSRFToken($_POST["token"])) {
       die("Bad CSRF Token");
     }

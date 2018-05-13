@@ -209,7 +209,7 @@ function getRowConstructor($functionname, $prefix, $dataschema) {
 
 
 #check if logged in and redirect if not
-if (isset($_SESSION["loggedIn"])){
+if (isset($_SESSION["loggedIn"]) && checkUserPassword($_SESSION["user"],$_SESSION["pass"])){
 	$DB = createDBObject();
 } else {
 	if(isset($_GET["team"])){
@@ -238,7 +238,12 @@ if(!checkTeamInDB($team)) {
 }
 ?>
 <img src="images/back.png" id="back" onclick="setUrl('<?php require 'specificvars.php'; echo($appdir.'info.php?team='.clean($team)); ?>')">
+<div>
 <h1>Edit Team <?php echo(clean($team))?></h1>
+<div id="trashdiv">
+	<input id="delbut" type="image" src="images/red-trash-512.jpg">
+</div>
+</div>
 <form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post" id="mainf" enctype="multipart/form-data">
 
 <?php
@@ -441,6 +446,10 @@ echo('<input type="hidden" name="team" value="'.$team.'">');
 ?>
 <input type="hidden" name="token" value="<?php echo(getCSRFToken()); ?>">
 <input type="submit" value="Save">
+</form>
+<form id="delf" action="delteam.php" method="post" style="display: none;">
+	<input type="hidden" name="team" value="<?php echo($team); ?>">
+	<input type="hidden" name="token" value="<?php echo(getCSRFToken()); ?>">
 </form>
 </div>
 <script>
