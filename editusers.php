@@ -2,7 +2,7 @@
 <?php
 require 'functions.php';
 function checkIfValidUser() {
-  return (isset($_SESSION["loggedIn"]) and $_SESSION["loggedIn"] and checkUserPassword($_SESSION["user"], $_SESSION["pass"]) and checkIsAdmin($_SESSION["user"], $_SESSION["pass"]));
+  return (isset($_SESSION["loggedIn"]) and $_SESSION["loggedIn"] and checkIsAdmin($_SESSION["user"], $_SESSION["pass"]));
 }
 function checkIfDBContainsUser($user) {
   global $DB, $LoginTableName;

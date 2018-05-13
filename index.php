@@ -62,6 +62,12 @@
 			<li id="searchli">Search</li>
 			<li id="filterli">Filters</li>
 			<a href="addTeam.php"><li id="addli">Add Team</li></a>
+			<?php
+			if(isset($_SESSION["loggedIn"]) and $_SESSION["loggedIn"] and checkIsAdmin($_SESSION["user"], $_SESSION["pass"])) {
+				echo('<a href="editusers.php"><li id="usersli">Manage Users</li></a>');
+				echo('<a href="editschema.php"><li id="schemali">Edit Schema</li></a>');
+			}
+			 ?>
 		</ul>
 	</div>
 
