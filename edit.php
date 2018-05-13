@@ -270,7 +270,7 @@ if(!checkTeamInDB($team)) {
 
 # PROCESS FORM DATA
 if($_SERVER["REQUEST_METHOD"] == "POST") {
-	
+
 	if(!checkCSRFToken($_POST["token"])) {
 		die("Bad CSRF Token");
 	}
@@ -340,52 +340,53 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 		updateDBKeys($EventDataTable, clean($eventid), $changedKeyValues);
 	}
 
+	if(isset($_FILES["uploadImages"])) {
+		foreach($_FILES["uploadImages"]["tmp_name"] as $id=>$files) {
+			foreach($files as $idx=>$file) {
+				if(file_exists($file) && $_FILES["uploadImages"]["error"][$id][$idx] == UPLOAD_ERR_OK && is_uploaded_file($file)){
+					checkExists($image_root);
+					$image_dir = $image_root .$id.'/full/';
+					$thumb_dir = $image_root . $id.'/thumb/';
+					checkExists($image_dir);
+					checkExists($thumb_dir);
 
-	foreach($_FILES["uploadImages"]["tmp_name"] as $id=>$files) {
-		foreach($files as $idx=>$file) {
-			if(file_exists($file) && $_FILES["uploadImages"]["error"][$id][$idx] == UPLOAD_ERR_OK && is_uploaded_file($file)){
-				checkExists($image_root);
-				$image_dir = $image_root .$id.'/full/';
-				$thumb_dir = $image_root . $id.'/thumb/';
-				checkExists($image_dir);
-				checkExists($thumb_dir);
+					$filename = getUniqueFilename($image_dir);
+					$extension = strtolower(pathinfo(basename($_FILES["uploadImages"]["name"][$id][$idx]),PATHINFO_EXTENSION));
+					$targetfilepath = $image_dir . $filename . ".jpg";
+					$targetthumbpath = $thumb_dir . $filename . ".jpg";
 
-				$filename = getUniqueFilename($image_dir);
-				$extension = strtolower(pathinfo(basename($_FILES["uploadImages"]["name"][$id][$idx]),PATHINFO_EXTENSION));
-				$targetfilepath = $image_dir . $filename . ".jpg";
-				$targetthumbpath = $thumb_dir . $filename . ".jpg";
+					writeToLog("Saving " . $_FILES["uploadImages"]["name"][$id][$idx] ." to " . $targetfilepath, "images");
 
-				writeToLog("Saving " . $_FILES["uploadImages"]["name"][$id][$idx] ." to " . $targetfilepath, "images");
-
-				$imgsize = getimagesize($file);
-				if($imgsize === False || !in_array($extension,$acceptableFileTypes)) {
-					writeToLog($_FILES["uploadImages"]["name"][$id][$idx] . " is not a valid image", "images");
-					continue;
-				}
-
-				switch(strtolower($imgsize['mime'])) {
-					case 'img/bmp':
-						$img = imagecreatefrombmp($file);
-						break;
-					case 'image/png':
-						$img = imagecreatefrompng($file);
-						break;
-					case 'image/jpeg':
-						$img = imagecreatefromjpeg($file);
-						break;
-					case 'image/gif':
-						$img = imagecreatefromgif($file);
-						break;
-					default:
+					$imgsize = getimagesize($file);
+					if($imgsize === False || !in_array($extension,$acceptableFileTypes)) {
 						writeToLog($_FILES["uploadImages"]["name"][$id][$idx] . " is not a valid image", "images");
 						continue;
-				}
-				image_fix_orientation($img,$file);
-				if(!imagejpeg($img,$targetfilepath)){
-					writeToLog("Failed to save file ".$_FILES["uploadImages"]["name"][$id][$idx],"images");
-				}
-				if(!imagejpeg(imagescale($img,$thumbnail_width),$targetthumbpath)){
-					writeToLog("Failed to save thumbnail for ".$_FILES["uploadImages"]["name"][$id][$idx],"images");
+					}
+
+					switch(strtolower($imgsize['mime'])) {
+						case 'img/bmp':
+							$img = imagecreatefrombmp($file);
+							break;
+						case 'image/png':
+							$img = imagecreatefrompng($file);
+							break;
+						case 'image/jpeg':
+							$img = imagecreatefromjpeg($file);
+							break;
+						case 'image/gif':
+							$img = imagecreatefromgif($file);
+							break;
+						default:
+							writeToLog($_FILES["uploadImages"]["name"][$id][$idx] . " is not a valid image", "images");
+							continue;
+					}
+					image_fix_orientation($img,$file);
+					if(!imagejpeg($img,$targetfilepath)){
+						writeToLog("Failed to save file ".$_FILES["uploadImages"]["name"][$id][$idx],"images");
+					}
+					if(!imagejpeg(imagescale($img,$thumbnail_width),$targetthumbpath)){
+						writeToLog("Failed to save thumbnail for ".$_FILES["uploadImages"]["name"][$id][$idx],"images");
+					}
 				}
 			}
 		}
