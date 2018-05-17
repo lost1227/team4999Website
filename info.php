@@ -109,48 +109,53 @@
 
 	$DB = createDBObject();
 	$team = clean($_GET["team"]);
+
+	echo('<h1>Team '.$team.'</h1>');
+
 	$results = formatAndQuery("SELECT robotids,eventids FROM %s WHERE number = %d;",$TeamDataTable,$team);
-	if($results->num_rows <= 0) {
-		$robotids = array();
-		$eventids = array();
-	} else {
+	if($results->num_rows > 0) {
 		$result = $results->fetch_assoc();
 		$robotids = explode($explodeseparator,$result["robotids"]);
 		$eventids = explode($explodeseparator,$result["eventids"]);
-	}
 
-	if(file_exists("schema.json")) {
-		$json = json_decode(file_get_contents("schema.json"), True);
-		$year = getYearData($json, getDefaultYear())[1];
-		if($year === false) {
-			echo("<p>Schema for this year does not exist</p>");
+		if(file_exists("schema.json")) {
+			$json = json_decode(file_get_contents("schema.json"), True);
+			$year = getYearData($json, getDefaultYear())[1];
+			if($year === false) {
+				echo("<p>Schema for this year does not exist</p>");
+				exit();
+			}
+		} else {
+			echo("<p>schema.json does not exist!</p>");
 			exit();
 		}
-	} else {
-		echo("<p>schema.json does not exist!</p>");
-		exit();
-	}
 
-	$robotids = getIdsForYear($RobotDataTable, $year["year"], $robotids);
-	$eventids = getIdsForYear($EventDataTable, $year["year"], $eventids);
+		$robotids = getIdsForYear($RobotDataTable, $year["year"], $robotids);
+		$eventids = getIdsForYear($EventDataTable, $year["year"], $eventids);
 
-	echo('<p class="category">Robots</p>');
-	if(count($robotids) > 0) {
-		echo(formatContent($robotids,$year["robotdata"],$RobotDataTable));
-	} else {
-		echo("<p>No data!</p>");
-	}
+		echo('<p class="category">Robots</p>');
+		if(count($robotids) > 0) {
+			echo(formatContent($robotids,$year["robotdata"],$RobotDataTable));
+		} else {
+			echo("<p>No data!</p>");
+		}
 
-	echo('<p class="category">Matches</p>');
-	if(count($eventids) > 0 ) {
-		echo(formatContent($eventids,$year["matchdata"],$EventDataTable));
+		echo('<p class="category">Matches</p>');
+		if(count($eventids) > 0 ) {
+			echo(formatContent($eventids,$year["matchdata"],$EventDataTable));
+		} else {
+			echo("<p>No data!</p>");
+		}
+		echo('<a id="edit" href="edit.php?team=<?php echo($team); ?>">Edit</a>');
 	} else {
-		echo("<p>No data!</p>");
+		http_response_code(404);
+		echo('<p>No data!</p>');
+		echo('<a id="edit" href="edit.php?team=<?php echo($team); ?>">Add</a>');
 	}
 
 
 	?>
-	<a id="edit" href="edit.php?team=<?php echo($team); ?>">Edit</a>
+
 	<hr><div id="TBAheading"><span>The Blue Alliance info</span></div>
 	<div id="TBA">
 	  <div class="loader">
