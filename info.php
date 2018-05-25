@@ -146,11 +146,11 @@
 		} else {
 			echo("<p>No data!</p>");
 		}
-		echo('<a id="edit" href="edit.php?team=<?php echo($team); ?>">Edit</a>');
+		echo('<a id="edit" href="edit.php?team='.$team.'">Edit</a>');
 	} else {
 		http_response_code(404);
 		echo('<p>No data!</p>');
-		echo('<a id="edit" href="edit.php?team=<?php echo($team); ?>">Add</a>');
+		echo('<a id="edit" href="edit.php?team='.$team.'">Add</a>');
 	}
 
 
