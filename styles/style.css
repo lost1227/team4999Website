@@ -123,14 +123,8 @@ body {
 div.infoRow {
 	border-bottom: 1px dashed #06ceff;
 	border-radius: 0px;
-	padding-top: 15px;
-	padding-bottom: 15px;
-	padding-right: 15px;
-	padding-left: 20px;
-	margin-top: 0px;
-	margin-bottom: 0px;
-	margin-left: 0px;
-	margin-right: 0px;
+	padding: 15px 0px;
+	margin: 0px;
 	background-color: rgba(255, 255, 255, 0.67);
 
 }
