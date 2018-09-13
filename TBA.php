@@ -3,7 +3,7 @@ require 'functions.php';
 
 function readTBA($url) {
   global $TBAAuthKey;
-  $base = "www.thebluealliance.com/api/v3";
+  $base = "https://www.thebluealliance.com/api/v3";
   $fullurl = $base . $url;
 
   $ch = curl_init();
