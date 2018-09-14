@@ -66,47 +66,44 @@ function dbclean($data) {
 	return $data;
 }
 
-function checkUserPassword($user, $password) {
-	global $DBUser, $DBPass, $Database, $LoginTableName, $DB;
-	$DBtmp = $DB;
+/**
+ * Checks that a slack user is in the users table, and adds them if they are not
+ */
+function checkUserInTable($username, $userid) {
+	global $DBUser, $DBPass, $Database, $LoginTableName;
 	$DB = new mysqli("localhost", $DBUser, $DBPass, $Database);
-	$result = formatAndQuery("SELECT passhash FROM %s WHERE user LIKE %sv;",$LoginTableName, $user);
-	if($result->num_rows > 0) {
-		$result = $result->fetch_assoc();
-	} else {
-		return False;
+	$stmt = $DB->prepare("SELECT `name` FROM ".$LoginTableName." WHERE `userid` LIKE ?");
+	$stmt->bind_param("s",$userid);
+	$stmt->execute();
+	$userexists = false;
+	if($stmt->num_rows > 0) {
+		$userexists = true;
 	}
-	if(!isset($result["passhash"])) {
-		return False;
+	$stmt->close();
+	if($userexists) {
+		return;
 	}
-	$DB->close();
-	$DB = $DBtmp;
-	return password_verify($password, $result["passhash"]);
+	$stmt = $DB->prepare("INSERT INTO ".$LoginTableName." (`userid`, `name`) VALUES ( ?, ?)");
+	$stmt->bind_param("ss", $userid, $username);
+	$stmt->execute();
+	$stmt->close();
 }
 
-function checkIsAdmin($user, $password) {
-	global $DBUser, $DBPass, $Database, $LoginTableName, $DB;
-	if(!checkUserPassword($user, $password)) {
-		return False;
-	}
-	$DBTmp = $DB;
+function checkIsAdmin($userid) {
+	global $DBUser, $DBPass, $Database, $LoginTableName;
 	$DB = new mysqli("localhost", $DBUser, $DBPass, $Database);
-	$result = formatAndQuery("SELECT passhash, admin FROM %s WHERE user LIKE %sv;", $LoginTableName, $user);
-	if($result->num_rows > 0) {
-		$result = $result->fetch_assoc();
-	} else {
-		return False;
+	$stmt = $DB->prepare("SELECT `admin` FROM ".$LoginTableName." WHERE `userid` LIKE ?");
+	$stmt->bind_param("s", $userid);
+	$stmt->execute();
+	$stmt->bind_result($admin);
+	$out = false;
+	$stmt->fetch();
+	if(isset($admin)) {
+		$out = $admin;
 	}
-	if(!isset($result["passhash"])) {
-		return False;
-	}
-	if(password_verify($password, $result["passhash"]) && isset($result["admin"])) {
-		return $result["admin"];
-	} else {
-		return False;
-	}
+	$stmt->close();
 	$DB->close();
-	$DB = $DBtmp;
+	return $out;
 }
 
 /**
@@ -116,23 +113,7 @@ function getUserName() {
 	if(session_status() == PHP_SESSION_NONE) {
 		session_start();
 	}
-	if(isset($_SESSION["loggedIn"]) and $_SESSION["loggedIn"] and checkUserPassword($_SESSION["user"], $_SESSION["pass"])) {
-		global $DB, $DBTmp, $DBUser, $DBPass, $Database, $LoginTableName;
-		$DBtmp = $DB;
-		$DB = new mysqli("localhost", $DBUser, $DBPass, $Database);
-		$result = formatAndQuery("SELECT name FROM %s WHERE user LIKE %sv;", $LoginTableName, $_SESSION["user"]);
-		$DB->close();
-		$DB = $DBtmp;
-		if($result->num_rows > 0) {
-			$result = $result->fetch_assoc();
-		} else {
-			return False;
-		}
-		if(isset($result["name"])) {
-			return $result["name"];
-		}
-	}
-	return False;
+	return $_SESSION["name"];
 }
 
 function createDBObject() {
@@ -140,7 +121,7 @@ function createDBObject() {
 	if(session_status() == PHP_SESSION_NONE) {
 		session_start();
 	}
-	if (isset($_SESSION["loggedIn"]) and checkUserPassword($_SESSION["user"], $_SESSION["pass"])){
+	if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"]){
 		$DB = new mysqli("localhost",$DBUser,$DBPass,$Database);
 	} else {
 		$DB = new mysqli("localhost",$roDBUser,$roDBPass,$Database);
@@ -513,7 +494,7 @@ function checkCSRFToken($token) {
 	if(session_status() == PHP_SESSION_NONE) {
 		session_start();
 	}
-	return $_SESSION["CSRF_token"] === $token;
+	return hash_equals($_SESSION["CSRF_token"], $token);
 }
 
 ?>

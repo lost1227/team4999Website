@@ -209,19 +209,20 @@ function getRowConstructor($functionname, $prefix, $dataschema) {
 
 
 #check if logged in and redirect if not
-if (isset($_SESSION["loggedIn"]) && checkUserPassword($_SESSION["user"],$_SESSION["pass"])){
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"]){
 	$DB = createDBObject();
 } else {
 	if(isset($_GET["team"])){
-		header( 'Location: '.getRootDir().'login.php?redirect=edit.php?team='.$_GET["team"]);
+		header( 'Location: login.php?redirect=edit.php?team='.$_GET["team"]);
 	} else {
-		header( 'Location: '.getRootDir().'login.php?redirect=edit.php');
+		header( 'Location: login.php?redirect=edit.php');
 	}
 	exit();
 }
 if($_SERVER["REQUEST_METHOD"] == "GET") {
 	if(!isset($_GET["team"])) {
 		header( 'Location: '.getRootDir().'index.php');
+		exit();
 	} else {
 		$team = clean($_GET["team"]);
 	}
@@ -229,12 +230,14 @@ if($_SERVER["REQUEST_METHOD"] == "GET") {
 if($_SERVER["REQUEST_METHOD"] == "POST") {
 	if(!isset($_POST["team"])) {
 		header( 'Location: '.getRootDir().'index.php');
+		exit();
 	} else {
 		$team = clean($_POST["team"]);
 	}
 }
 if(!checkTeamInDB($team)) {
 	header('Location: '.getRootDir().'addTeam.php?team='.$team);
+	exit();
 }
 ?>
 <img src="images/back.png" id="back" onclick="setUrl('<?php require 'specificvars.php'; echo($appdir.'info.php?team='.clean($team)); ?>')">

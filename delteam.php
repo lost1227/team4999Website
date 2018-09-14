@@ -6,20 +6,21 @@ require 'functions.php';
 <head>
   <?php
   if(!(isset($_POST["team"]) && isset($_POST["token"]) && checkCSRFToken($_POST["token"])) ) {
-    header('Location: /index.php');
+    header('Location: index.php');
     exit();
   }
   #check if logged in and redirect if not
-  if (isset($_SESSION["loggedIn"])){
+  if (isset($_SESSION["loggedin"])){
   	$DB = createDBObject();
   } else {
-  	header( 'Location: '.getRootDir().'login.php?redirect=delteam.php?team='.$_GET["team"]);
+  	header( 'Location: login.php?redirect=delteam.php?team='.$_GET["team"]);
   	exit();
   }
   if(isset($_POST["confirm"]) && $_POST["confirm"]) {
     $data = getTeamIds($_POST["team"]);
   	if($data === false) {
-  		header('Location: '.getRootDir().'index.php');
+      header('Location: index.php');
+      exit();
   	} else {
   		$robotids = $data["robotids"];
   		$eventids = $data["eventids"];
@@ -43,7 +44,8 @@ require 'functions.php';
 
     formatAndQuery("DELETE FROM `%s` WHERE `number` = %s;", $TeamDataTable, $_POST["team"]);
 
-    header('Location: '.getRootDir().'index.php');
+    header('Location: index.php');
+    exit();
   }
 
   ?>

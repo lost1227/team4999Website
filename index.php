@@ -63,7 +63,7 @@
 			<li id="filterli">Filters</li>
 			<a href="addTeam.php"><li id="addli">Add Team</li></a>
 			<?php
-			if(isset($_SESSION["loggedIn"]) and $_SESSION["loggedIn"] and checkIsAdmin($_SESSION["user"], $_SESSION["pass"])) {
+			if(isset($_SESSION["loggedin"]) and $_SESSION["loggedin"] and checkIsAdmin($_SESSION["userid"])) {
 				echo('<a href="editusers.php"><li id="usersli">Manage Users</li></a>');
 				echo('<a href="editschema.php"><li id="schemali">Edit Schema</li></a>');
 			}
@@ -113,8 +113,8 @@
 	<div id="container">
 	</div>
 	<?php
-	if(isset($_SESSION["loggedIn"])) {
-		echo('<div id="loginbox"><p style="margin:2px;"><a id="logoutLink" href="logout.php">Log Out: '.$_SESSION["user"].'</a></p></div>');
+	if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"]) {
+		echo('<div id="loginbox"><p style="margin:2px;"><a id="logoutLink" href="logout.php">Log Out: '.$_SESSION["name"].'</a></p></div>');
 	}
 	?>
 

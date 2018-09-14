@@ -20,12 +20,18 @@ $thumbnail_width = ;
 
 $TBAAuthKey = "";
 
+
+$slack_clientid = "";
+$slack_clientsecret = "";
+
+$slack_teamids = array();
+
 /*
 The user is sent to slack, and slack returns information about the user. If the user is a member of the frcteam4999 workspace If they match, then the user has the LoggedIn flag set to true on their session.
 Then the user is allowed to use the $DBUser and $DBPass to view and change the scouting information.
 Users who have logged in will have their name and userid stored, in the $LoginTableName. Admins are users who have the admin field set to true in this table.
 
-The login table will have the following schema: (user VARCHAR(255) NOT NULL, passhash TEXT, name TEXT, admin BOOLEAN, PRIMARY KEY `user_index` (user))
+The login table will have the following schema: (name VARCHAR(255) PRIMARY KEY NOT NULL, userid VARCHAR(255), admin BOOLEAN)
 
 The TeamDataTable will associate teams with robotids. It will have the following schema:
 (number INTEGER NOT NULL, robotids VARCHAR(255), eventids VARCHAR(255), PRIMARY KEY `team_index` (number))

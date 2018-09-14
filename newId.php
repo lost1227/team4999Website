@@ -2,7 +2,7 @@
 session_start();
 
 require 'functions.php';
-if (isset($_SESSION["loggedIn"])){
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"]){
 	$DB = createDBObject();
 } else {
 	exit();

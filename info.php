@@ -2,6 +2,7 @@
 <?php
 	if(!isset($_GET["team"])) {
 		header( 'Location: https://frcteam4999.jordanpowers.net/index.php');
+		exit();
 	}
 ?>
 <html>
@@ -34,7 +35,7 @@
 	</head>
 	<body>
 	<div id="info">
-	<img src="images/back.png" id="back" onclick="setUrl('<?php require 'specificvars.php'; echo($appdir); ?>')">
+	<img src="images/back.png" id="back" onclick="setUrl('index.php')">
 	<?php
 	require 'functions.php';
 
