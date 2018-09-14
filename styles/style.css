@@ -86,7 +86,7 @@ body {
 
 #menuitems a{
 	text-decoration: none;
-	color: 0;
+	color: #000000;
 }
 
 #menuitems li:hover {
