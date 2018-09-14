@@ -1,9 +1,6 @@
 <?php session_start(); ?>
 <?php
 require 'functions.php';
-function checkIfValidUser() {
-  return (isset($_SESSION["loggedIn"]) and $_SESSION["loggedIn"] and checkIsAdmin($_SESSION["user"], $_SESSION["pass"]));
-}
 function checkIfDBContainsUser($user) {
   global $DB, $LoginTableName;
   $results = formatAndQuery("SELECT user FROM %s WHERE user = %sv;", $LoginTableName, $user );
@@ -21,10 +18,16 @@ function checkPostVarsSet($postData, $expectedKeys) {
   return True;
 }
 #check if logged in and redirect if not
-if (!(isset($_SESSION["loggedIn"]) && checkIfValidUser())) {
+if (!isset($_SESSION["loggedin"]) || !$_SESSION["loggedin"]) {
 	header( 'Location: '.getRootDir().'login.php?redirect=editusers.php');
 	exit();
 }
+
+if(!checkIsAdmin($_SESSION["userid"])) {
+  header('Location: index.php');
+  exit();
+}
+
 #PROCESS FORM DATA
 if($_SERVER["REQUEST_METHOD"] == "POST" and checkIfValidUser()) {
   if(!checkCSRFToken($_POST["token"])) {

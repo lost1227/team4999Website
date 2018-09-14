@@ -6,7 +6,7 @@ require 'functions.php';
 if(isset($_GET["redirect"])) {
   header('Location: '.clean($_GET["redirect"]));
 } else {
-  header( 'Location: '.getRootDir().'index.php');
+  header( 'Location: index.php');
 }
 ?>
 <html>

@@ -5,11 +5,14 @@ global $appdir;
 ?>
 <?php
 
-function checkIfValidUser() {
-  return (isset($_SESSION["loggedIn"]) and $_SESSION["loggedIn"] and checkIsAdmin($_SESSION["user"], $_SESSION["pass"]));
-}
-if(!checkIfValidUser()) {
+if(!isset($_SESSION["loggedin"]) || !$_SESSION["loggedin"]) {
   header( 'Location: login.php?redirect=editschema.php');
+  exit();
+}
+
+if(!checkIsAdmin($_SESSION["userid"])) {
+  header('Location: index.php');
+  exit();
 }
 
 
@@ -62,7 +65,7 @@ if(!file_exists("schema.json")) {
 }
 
 # PROCESS FORM DATA
-if($_SERVER["REQUEST_METHOD"] == "POST" && checkIfValidUser()) {
+if($_SERVER["REQUEST_METHOD"] == "POST") {
 
   if(!checkCSRFToken($_POST["token"])) {
     die("Bad CSRF Token");
@@ -221,7 +224,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && checkIfValidUser()) {
     if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["year"])) {
       $year = $_GET["year"];
     } else if(!($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["year"]))) {
-      echo('<img src="images/back.png" id="back" onclick="setUrl(\''.$appdir.'index.php\')">');
+      echo('<img src="images/back.png" id="back" onclick="setUrl(\'index.php\')">');
       echo('<table><tr><th>Select year:</th></tr>');
       if(count($json) > 0 ) {
         foreach($json as $year) {
@@ -254,7 +257,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && checkIfValidUser()) {
       exit();
     }
      ?>
-     <img src="images/back.png" id="back" onclick="setUrl('<?php echo($appdir); ?>editschema.php')">
+     <img src="images/back.png" id="back" onclick="setUrl('editschema.php')">
      <h1 id="YearTitle"><?php echo($year); ?></h1>
      <form action="<?php echo(htmlentities($_SERVER['PHP_SELF'])); ?>" method="post" id="mainf">
        <input type="hidden" name="year" value="<?php echo($year); ?>">

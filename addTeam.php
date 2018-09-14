@@ -19,8 +19,8 @@
 <?php
 require 'functions.php';
   #check if logged in and redirect if not
-  if (!isset($_SESSION["loggedIn"])) {
-  	header( 'Location: '.getRootDir().'login.php?redirect=addTeam.php');
+  if (!isset($_SESSION["loggedin"])) {
+  	header( 'Location: login.php?redirect=addTeam.php');
   	exit();
   }
   if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["team"]) && !empty($_POST["team"])) {
