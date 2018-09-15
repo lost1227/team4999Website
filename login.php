@@ -36,7 +36,6 @@ function getTokenFromVerificationCode($code) {
 function redirectToLogin() {
 	global $slack_clientid;
 	$_SESSION["oauth_state"] = bin2hex(openssl_random_pseudo_bytes(8));
-	writeToLog("Authenticating user with state ".$_SESSION["oauth_state"], "oauth");
 	header('Location: https://slack.com/oauth/authorize?scope=identity.basic&client_id='.$slack_clientid.'&state='.$_SESSION["oauth_state"]);
 	exit();
 }
@@ -88,7 +87,7 @@ if(isset($_GET["code"]) && isset($_GET["state"]) && $_GET["state"] === $_SESSION
 		}
 		exit();
 	} else {
-		writeToLog("User from workspace ".$userdata["team"]["id"]." attempted to log in", "oauth");
+		writeToLog("User from invalid workspace ".$userdata["team"]["id"]." attempted to log in", "oauth");
 		redirectToLogin();
 	}
 } else {
