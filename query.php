@@ -134,7 +134,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
 }
 
-echo('<a class="teamlink" href="logout.php?redirect=login.php"><div class="infoRow year"><p>'.clean(getDefaultYear()).'</p></div></a>');
+echo('<a class="teamlink" href="selectyear.php"><div class="infoRow year"><p>'.clean(getDefaultYear()).'</p></div></a>');
 if(count($teams) > 0){
 	sort($teams);
 	foreach($teams as $team) {

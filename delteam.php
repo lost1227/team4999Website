@@ -53,11 +53,11 @@ require 'functions.php';
   <style>
   @font-face{
   	font-family: "StormFaze";
-  	src: url("../fonts/stormfaze.ttf");
+  	src: url("fonts/stormfaze.ttf");
   }
   body {
       margin: 0;
-      background-image: url("../images/grey.png");
+      background-image: url("images/grey.png");
       background-attachment: fixed;
   }
   * {
@@ -87,6 +87,24 @@ require 'functions.php';
     text-align: center;
     display: block;
   }
+  #deny, #confirm {
+    display: inline-block;
+    margin: 0em 0.1em;
+    padding: 0em 0.2em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: helvetica, arial, sans-serif;
+    color: white;
+    border: 2px solid #06ceff;
+    text-align: center;
+    cursor: pointer;
+  }
+  #deny {
+    background-color: #00AA00;
+  }
+  #confirm {
+    background-color: #FF0000;
+  }
   </style>
 </head>
 <body>
@@ -103,24 +121,22 @@ require 'functions.php';
         $yearData = array();
         foreach($robotids as $robotid) {
           $data = retrieveKeys($RobotDataTable, $robotid, array("year"=>array()));
-          if(isset($yearData[$data["year"]["data_value"]]["robots"])) {
-            $yearData[$data["year"]["data_value"]]["robots"]++;
-          } else {
-            $yearData[$data["year"]["data_value"]]["robots"] = 1;
+          if(!isset($yearData[$data["year"]["data_value"]])) {
+            $yearData[$data["year"]["data_value"]] = array("robots"=>0,"matches"=>0);
           }
+          $yearData[$data["year"]["data_value"]]["robots"]++;
         }
         foreach($eventids as $eventid) {
           $data = retrieveKeys($EventDataTable, $eventid, array("year"=>array()));
-          if(isset($yearData[$data["year"]["data_value"]]["matches"])) {
-            $yearData[$data["year"]["data_value"]]["matches"]++;
-          } else {
-            $yearData[$data["year"]["data_value"]]["matches"] = 1;
+          if(!isset($yearData[$data["year"]["data_value"]])) {
+            $yearData[$data["year"]["data_value"]] = array("robots"=>0,"matches"=>0);
           }
+          $yearData[$data["year"]["data_value"]]["matches"]++;
         }
         echo('<p id="delhead">Data to be deleted:</p>');
         echo("<ul>");
         foreach($yearData as $year=>$data) {
-          echo("<li>".$year.": ".count($data["robots"])." robots, ".count($data["matches"])." matches</li>");
+          echo("<li>".$year.": ".$data["robots"]." robots, ".$data["matches"]." matches</li>");
         }
         echo("</ul>");
 
@@ -128,7 +144,7 @@ require 'functions.php';
     	}
        ?>
        <div id="confirmdiv">
-         <button id="confirm">Delete</button>
+         <button id="deny">Go Back</button><button id="confirm">Delete</button>
        </div>
       <input type="hidden" name="team" value="<?php echo(clean($_POST["team"])); ?>">
       <input type="hidden" name="token" value="<?php echo(getCSRFToken()); ?>">
@@ -144,6 +160,10 @@ require 'functions.php';
       }
       return false;
     });
+    $("#deny").click(function(e) {
+        window.location.href = "edit.php?team=<?php echo(clean($_POST["team"])); ?>";
+        return false;
+      })
   });
   </script>
 </body>

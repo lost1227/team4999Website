@@ -31,7 +31,7 @@ The user is sent to slack, and slack returns information about the user. If the 
 Then the user is allowed to use the $DBUser and $DBPass to view and change the scouting information.
 Users who have logged in will have their name and userid stored, in the $LoginTableName. Admins are users who have the admin field set to true in this table.
 
-The login table will have the following schema: (name VARCHAR(255) PRIMARY KEY NOT NULL, userid VARCHAR(255), admin BOOLEAN)
+The login table will have the following schema: (name VARCHAR(255) PRIMARY KEY NOT NULL, userid VARCHAR(255), admin BOOLEAN NOT NULL DEFAULT 0)
 
 The TeamDataTable will associate teams with robotids. It will have the following schema:
 (number INTEGER NOT NULL, robotids VARCHAR(255), eventids VARCHAR(255), PRIMARY KEY `team_index` (number))
